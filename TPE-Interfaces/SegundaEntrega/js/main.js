@@ -1,0 +1,1 @@
+const APIUrl = 'https://vj.interfaces.jima.com.ar/api/v2';

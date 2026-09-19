@@ -1,0 +1,33 @@
+body {
+    background-color: #0C122A;
+}
+
+header {
+    background-color: #B8461D;
+    width: 100%;
+    height: 30px;
+}
+
+footer {
+    background-color: #060915;
+    width: 100%;
+    height: 180px;
+}
+
+article p {
+    text-align: center;
+    color: aliceblue;
+}
+
+/* ---------- Responsive (escritorio) ---------- */ 
+@media (min-width: 900px) {
+
+header {
+    height: 60px;
+}
+
+footer {
+    height: 230px;
+}
+
+}
