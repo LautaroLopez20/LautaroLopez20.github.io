@@ -1,4 +1,9 @@
+* {
+    color: #DCDEE5;
+}
+
 body {
+    margin: 0px;
     background-color: #0C122A;
 }
 
@@ -9,18 +14,127 @@ header {
 }
 
 footer {
+    margin-top: 60px;
     background-color: #060915;
     width: 100%;
     height: 180px;
 }
 
-article p {
-    text-align: center;
-    color: aliceblue;
+/* ---- Hero Carrousel ---- */
+.heroCategory {
+    margin-top: 20px;
+    width: 100%;
+    height: 140px;
+    display: flex;
+    justify-content: center;
 }
 
+.heroGame {
+    border-radius: 5px;
+    width: 220px;
+    height: 140px;
+    background-image: url(/resources/images/ExampleImage.png);
+    background-size: cover;
+}
+.heroPlayBtn {
+    width: 50px;
+    height: 50px;
+    padding: 0px;
+    margin-left: 85px;
+    margin-top: 45px;
+    border: 0px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, .5);
+    font-size: 22px;
+    text-align: center;
+}
+.heroGame p {
+    margin: 0px;
+    margin-top: 25px;
+    background-color: rgba(0, 0, 0, .5);
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ---- Efecto hover de la Hero Card ---- */
+.heroGame p,
+.heroGame .heroPlayBtn {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.heroGame:hover p,
+.heroGame:hover .heroPlayBtn {
+    opacity: 1;
+}
+
+/* ---- Cateogrias y Juegos ---- */
+.category {
+    width: 100%;
+    height: 90px;
+}
+.categoryName {
+    text-align: left;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 12px;
+    margin-bottom: 5px;
+    margin-left: 46px;
+}
+.categoryGames {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+}
+.categoryNavigation {
+    text-align: center;
+}
+
+.game {
+    margin-left: 2px;
+    margin-right: 2px;
+    border-radius: 5px;
+    width: 90px;
+    height: 60px;
+    background-image: url(/resources/images/ExampleImage.png);
+    background-size: contain;
+}
+.playBtn {
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+    margin-left: 30px;
+    margin-top: 15px;
+    border: 0px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, .5);
+    font-size: 14px;
+    text-align: center;
+}
+.game p {
+    margin: 0px;
+    margin-top: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ---- Efecto hover de la card de juego ---- */
+.game p,
+.game .playBtn {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.game:hover p,
+.game:hover .playBtn {
+    opacity: 1;
+}
+
+
 /* ---------- Responsive (escritorio) ---------- */ 
-@media (min-width: 900px) {
+@media (min-width: 780px) {
 
 header {
     height: 60px;
