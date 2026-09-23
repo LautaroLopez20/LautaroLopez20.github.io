@@ -1,10 +1,15 @@
+/* ---- Configuracion global ---- */
 * {
     color: #DCDEE5;
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
 }
 
 body {
     margin: 0px;
     background-color: #0C122A;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 header {
@@ -20,120 +25,204 @@ footer {
     height: 180px;
 }
 
-/* ---- Hero Carrousel ---- */
-.heroCategory {
+/* ---- Hero Carrousel (destacados) ---- */
+.heroCarousel {
     margin-top: 20px;
-    width: 100%;
-    height: 140px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heroCategory {
+    width: 580px;
+    height: 230px;
+    overflow: hidden;
+}
+
+.heroTrack {
+    display: flex;
 }
 
 .heroGame {
     border-radius: 5px;
-    width: 220px;
-    height: 140px;
-    background-image: url(/resources/images/ExampleImage.png);
+    width: 340px;
+    height: 216px;
+    flex: 0 0 auto;
+    margin-left: -70px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    background-color: #1A2140;
     background-size: cover;
+    background-position: center;
+    transform: translateY(44px) scale(0.6);
+    transition: transform 0.45s ease;
 }
-.heroPlayBtn {
-    width: 50px;
-    height: 50px;
-    padding: 0px;
-    margin-left: 85px;
-    margin-top: 45px;
-    border: 0px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, .5);
-    font-size: 22px;
-    text-align: center;
+.heroGame.active {
+    z-index: 2;
+    transform: none;
 }
 .heroGame p {
     margin: 0px;
     margin-top: 25px;
+    width: 100%;
+    height: 22px;
+    line-height: 22px;
     background-color: rgba(0, 0, 0, .5);
     font-size: 18px;
     font-weight: bold;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-/* ---- Efecto hover de la Hero Card ---- */
-.heroGame p,
-.heroGame .heroPlayBtn {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-.heroGame:hover p,
-.heroGame:hover .heroPlayBtn {
-    opacity: 1;
+.heroNavigation {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
 }
 
-/* ---- Cateogrias y Juegos ---- */
+/* ---- Categorias y Juegos ---- */
+.categories {
+    width: 700px;
+    align-self: center;
+}
+
 .category {
+    margin-bottom: 5px;
     width: 100%;
     height: 90px;
+    display: flex;
+    flex-direction: column;
 }
 .categoryName {
+    margin: 0px;
+    margin-left: 24px;
+    width: 150px;
     text-align: left;
     font-weight: bold;
     text-decoration: underline;
     font-size: 12px;
-    margin-bottom: 5px;
-    margin-left: 46px;
-}
-.categoryGames {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-}
-.categoryNavigation {
-    text-align: center;
 }
 
+/* ---- Carrusel de categoria (flechas + fila de juegos) ---- */
+.categoryCarousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carouselArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: #66666E;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+.carouselArrow svg {
+    width: 18px;
+    height: 18px;
+}
+.carouselArrowLeft {
+    left: -3px;
+}
+.carouselArrowRight {
+    right: -3px;
+}
+.carouselArrow:hover:not(:disabled),
+.carouselArrow:focus-visible {
+    color: #FFFFFF;
+}
+.carouselArrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.categoryGames {
+    width: 658px;
+    flex: 0 0 658px;
+    height: 60px;
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.categoryGames::-webkit-scrollbar {
+    display: none;
+}
+
+/* ---- Indice de navegacion (dots) ---- */
+.categoryNavigation {
+    margin-top: 4px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.carouselDot {
+    width: 8px;
+    height: 8px;
+    padding: 0px;
+    border: none;
+    border-radius: 50%;
+    background-color: #66666E;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+.carouselDot:hover {
+    background-color: #8B8B95;
+}
+.carouselDot.active {
+    background-color: #FFFFFF;
+}
+
+/* ---- Card de juego ---- */
 .game {
     margin-left: 2px;
     margin-right: 2px;
     border-radius: 5px;
     width: 90px;
     height: 60px;
-    background-image: url(/resources/images/ExampleImage.png);
-    background-size: contain;
-}
-.playBtn {
-    width: 30px;
-    height: 30px;
-    padding: 0px;
-    margin-left: 30px;
-    margin-top: 15px;
-    border: 0px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, .5);
-    font-size: 14px;
-    text-align: center;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    background-color: #1A2140;
+    background-size: cover;
+    background-position: center;
 }
 .game p {
     margin: 0px;
-    margin-top: 4px;
+    width: 100%;
+    height: 15px;
+    line-height: 15px;
     background-color: rgba(0, 0, 0, .5);
     font-size: 10px;
     font-weight: bold;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-/* ---- Efecto hover de la card de juego ---- */
-.game p,
-.game .playBtn {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-.game:hover p,
-.game:hover .playBtn {
-    opacity: 1;
-}
-
-
-/* ---------- Responsive (escritorio) ---------- */ 
+/* ---------- Responsive (escritorio) ---------- */
 @media (min-width: 780px) {
 
 header {
