@@ -1,0 +1,91 @@
+/* Boton base: el estilo que comparten todos los botones */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 20px;
+    border-radius: 8px;
+    border: 1px solid #DCDEE5;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 14px;
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: #060915;
+    color: #DCDEE5;
+    text-decoration: none;
+}
+
+/* Variantes de boton: primario, secundario y acceso por redes */
+
+.btnPrimary {
+    width: 120px;
+    height: 35px;
+    background-color: #060915;
+    border-color: #DCDEE5;
+}
+
+.btnSecondary {
+    width: 120px;
+    height: 35px;
+    background-color: #B8461D;
+    border-color: #DCDEE5;
+}
+
+.btnSocial { /* los botones de acceso con Facebook y Google */
+    height: 30px;
+    padding: 0 12px;
+    background: transparent;
+    font-weight: 400;
+    font-size: 15px;
+    border-radius: 5px;
+}
+
+.btnSocial img {
+    height: 16px;
+    width: auto;
+}
+
+/* Campo de texto con forma de pildora (login y register) */
+
+.inputPill {
+    box-sizing: border-box;
+    width: 100%;
+    height: 38px;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    background-color: #F4E3DD;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #060915;
+}
+
+.inputPill::placeholder {
+    color: #66666E;
+    opacity: 50%;
+}
+
+/* Etiqueta de cada campo */
+
+.inputLabel {
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.inputLabel:first-of-type {
+    margin-top: 0;
+}
+
+/* Fila con los botones de acceso por redes sociales */
+
+.socialActions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}

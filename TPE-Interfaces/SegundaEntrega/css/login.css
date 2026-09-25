@@ -1,0 +1,64 @@
+body {
+    margin: 0;
+    background-color: #060915;
+    color: #DCDEE5;
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.authCard {
+    flex-direction: column;
+    background-color: #121B3F;
+    border-radius: 16px;
+    width: min(90vw, 600px);
+    border: 1px solid #F4E3DD;
+    padding: 32px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.loginTitle {
+    margin: 0 0 20px;
+    font-size: 24px;
+    text-align: left;
+    color: #FFFFFF;
+    font-weight: 400;
+}
+
+.formContainer {
+    width: 100%;
+}
+
+/* Formulario */
+
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Pie de la tarjeta: enlace de registro y botones de acceso */
+
+.loginFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 40px;
+}
+
+.loginLink {
+    font-size: 12px;
+    color: #DCDEE5;
+    text-decoration: underline;
+}
+
+.loginActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}

@@ -1,0 +1,146 @@
+/* Footer de sitio (home y juego) */
+
+footer {
+    margin-top: 60px;
+    background-color: #060915;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.footerTop {
+    display: flex;
+    gap: 72px;
+    padding: 40px 70px 32px;
+    box-sizing: border-box;
+    align-items: flex-start;
+}
+
+.footerColumns {
+    display: flex;
+    gap: 100px;
+    flex: 1;
+    min-width: 0;
+}
+
+.footerColumn {
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+.footerColumnWide {
+    flex: 0 0 auto;
+}
+
+.footerHeading {
+    display: inline-block;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    font-size: 22px;
+    font-weight: 400;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+.footerList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footerList a {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    color: #AEB6C4;
+}
+
+.footerSubColumns {
+    display: flex;
+    gap: 32px;
+}
+
+.footerSubColumn {
+    flex: 1;
+    min-width: 0;
+}
+
+.footerLanguages {
+    display: grid;
+    grid-template-columns: repeat(4, 48px);
+    grid-template-rows: repeat(2, 34px);
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.footerFlag {
+    width: 48px;
+    height: 34px;
+    border-radius: 4px;
+}
+
+.footerBottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 70px 14px;
+    box-sizing: border-box;
+}
+
+.footerCopyright {
+    font-size: 11px;
+    color: #9AA0B0;
+}
+
+.footerLogo {
+    width: 180px;
+    height: auto;
+}
+
+.footerSocials {
+    display: flex;
+    justify-content: space-between;
+    width: 228px;
+}
+
+.footerSocials img {
+    width: 32px;
+    height: 32px;
+}
+
+/* Movil: las columnas y la base se apilan */
+@media (max-width: 780px) {
+
+    .footerTop {
+        flex-direction: column;
+        padding: 32px 24px 24px;
+    }
+
+    .footerColumns {
+        flex-wrap: wrap;
+        gap: 24px;
+    }
+
+    .footerColumn {
+        flex: 1 1 40%;
+    }
+
+    .footerColumnWide {
+        flex: 1 1 100%;
+    }
+
+    .footerSubColumns {
+        flex-wrap: wrap;
+    }
+
+    .footerBottom {
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px 24px;
+    }
+
+}

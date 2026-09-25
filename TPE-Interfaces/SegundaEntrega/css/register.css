@@ -1,0 +1,152 @@
+body {
+    margin: 0;
+    background-color: #060915;
+    color: #DCDEE5;
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.authCard {
+    flex-direction: column;
+    background-color: #121B3F;
+    border-radius: 16px;
+    width: min(90vw, 600px);
+    border: 1px solid #F4E3DD;
+    padding: 32px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.authTitle {
+    margin: 0 0 20px;
+    font-size: 24px;
+    text-align: left;
+    color: #FFFFFF;
+    font-weight: 400;
+}
+
+/* Formulario */
+
+.register {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inputRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+/* Tarjeta de ayuda de contrasena */
+
+.passwordHint {
+    display: flex;
+    align-items: stretch;
+    width: 70%;
+    background-color: #182455;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.hintIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    font-size: 50px;
+    font-weight: bold;
+    color: #DCDEE5;
+    opacity: 75%;
+}
+
+.hintList {
+    margin: 0;
+    padding: 10px 1px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style: none;
+}
+
+.hintList li {
+    font-size: 12px;
+    font-style: italic;
+    color: #DCDEE5;
+    opacity: 75%;
+}
+
+/* Captcha */
+
+.captcha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    width: 40%;
+    background-color: #1A2140;
+    border: 1px solid #F4E3DD;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+.captchaLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #DCDEE5;
+    cursor: pointer;
+}
+
+.captchaCheckbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #DCDEE5;
+    border-radius: 3px;
+    background: darkgrey;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.captchaCheckbox:checked::after {
+    content: '✓';
+    color: #B8461D;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.captchaImage {
+    height: 48px;
+    width: auto;
+}
+
+/* Botones del formulario */
+
+.registerActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
