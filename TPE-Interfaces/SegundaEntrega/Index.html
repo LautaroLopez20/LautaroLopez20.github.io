@@ -8,10 +8,35 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
     <header>
-        <nav></nav>
+        <nav>
+            <button type="button" class="hamburguesa">
+                <span></span><span></span><span></span>
+            </button>
+
+            <a href="Index.html" class="logo">
+                <img src="img/LOGO.svg" alt="FastGames">
+            </a>
+            <div class="headerSearch">
+                <input type="text" class="searchPlaceholderMobile" placeholder="...">
+                <input type="text" class="searchPlaceholderDesktop" placeholder="Introduce tu busqueda...">
+                <button type="button">
+                    <img src="img/lupa.svg" alt="Buscar">
+                </button>
+            </div>
+            <div class="navIcons">
+                <button type="button">
+                    <img src="img/Cart-Button.svg" class="carrito" alt="Carrito">
+                </button>
+                <button type="button" class="userButton">
+                    <img src="img/User-Button.svg" alt="Usuario">
+                </button>
+            </div>
+        </nav>
     </header>
     <div class="heroCarousel">
         <div class="heroCategory">
@@ -271,7 +296,99 @@
         </article>
     </div>
     <footer>
-
+        <div class="footerTop">
+            <div class="footerColumns">
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Sobre Nosotros</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#">Inicios</a></li>
+                        <li><a href="#">Alcance</a></li>
+                        <li><a href="#">Direccion</a></li>
+                        <li><a href="#">Ideas</a></li>
+                        <li><a href="#">Desarrolladores</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Informacion</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Terminos de Uso</a></li>
+                        <li><a href="#">Politicas de Privacidad</a></li>
+                        <li><a href="#">Codigo de Conducta</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Opciones de Pago</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Agradecimientos</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Catedra de Interfaces</a></li>
+                        <li><a href="#">ChatGPT</a></li>
+                        <li><a href="#">TUDAI</a></li>
+                        <li><a href="#">UNICEN</a></li>
+                        <li><a href="#">Figma</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Cuenta</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Crear Cuenta</a></li>
+                        <li><a href="#">Iniciar Sesion</a></li>
+                        <li><a href="#">Mi Cuenta</a></li>
+                        <li><a href="#">Mis Juegos</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn footerColumnWide">
+                    <h4 class="footerHeading">Nuestros Titulos Destacados</h4>
+                    <div class="footerSubColumns">
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Peg Solitaire DBZ</a></li>
+                            <li><a href="#">Roblox</a></li>
+                            <li><a href="#">Super Mario 64</a></li>
+                            <li><a href="#">PvZ</a></li>
+                            <li><a href="#">Bomb Pong</a></li>
+                            <li><a href="#">Beastro</a></li>
+                        </ul>
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Rumble Club</a></li>
+                            <li><a href="#">Mago</a></li>
+                            <li><a href="#">Navy Moves</a></li>
+                            <li><a href="#">El Caudillo</a></li>
+                            <li><a href="#">Minecraft</a></li>
+                            <li><a href="#">Mario Party</a></li>
+                        </ul>
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Pictonico</a></li>
+                            <li><a href="#">Lego Party</a></li>
+                            <li><a href="#">Stick Fight</a></li>
+                            <li><a href="#">Zombie Rumble</a></li>
+                            <li><a href="#">Agar.io</a></li>
+                            <li><a href="#">Buscaminas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footerLanguages">
+                <img class="footerFlag" src="img/flag-mx.svg" alt="Mexico">
+                <img class="footerFlag" src="img/flag-jp.svg" alt="Japon">
+                <img class="footerFlag" src="img/flag-us.svg" alt="USA">
+                <img class="footerFlag" src="img/flag-uk.svg" alt="UK">
+                <img class="footerFlag" src="img/flag-fr.svg" alt="Francia">
+                <img class="footerFlag" src="img/flag-it.svg" alt="Italia">
+                <img class="footerFlag" src="img/flag-br.svg" alt="Brasil">
+                <img class="footerFlag" src="img/flag-es.svg" alt="Espana">
+            </div>
+        </div>
+        <div class="footerBottom">
+            <span class="footerCopyright">© Copyright 2026 FastGames.com</span>
+            <img class="footerLogo" src="img/LOGO_White.svg" alt="FastGames">
+            <div class="footerSocials">
+                <img src="img/icon-instagram.svg" alt="Instagram">
+                <img src="img/facebook.svg" alt="Facebook">
+                <img src="img/icon-twitter.svg" alt="Twitter">
+                <img src="img/icon-youtube.svg" alt="YouTube">
+            </div>
+        </div>
     </footer>
     <script src="js/main.js"></script>
 </body>

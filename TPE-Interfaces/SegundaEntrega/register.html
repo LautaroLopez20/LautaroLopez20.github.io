@@ -4,18 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastGames - Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/atoms.css">
+    <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
-    <section>
-        <div class="logoContainer">
-
-        </div>
+    <div class="authCard">
+        <h1 class="authTitle">Registrarse</h1>
         <div class="formContainer">
             <form action="" class="register">
-                
+                <div class="inputRow">
+                    <div class="field">
+                        <label class="inputLabel" for="nombre">Nombre</label>
+                        <input type="text" id="nombre" class="inputPill" placeholder="Inserte nombre...">
+                    </div>
+                    <div class="field">
+                        <label class="inputLabel" for="apellido">Apellido</label>
+                        <input type="text" id="apellido" class="inputPill" placeholder="Inserte apellido...">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="inputLabel" for="nickname">Nickname</label>
+                    <input type="text" id="nickname" class="inputPill" placeholder="Inserte nickname...">
+                </div>
+
+                <div class="field">
+                    <label class="inputLabel" for="edad">Edad</label>
+                    <input type="number" id="edad" class="inputPill" placeholder="Inserte edad...">
+                </div>
+
+                <div class="inputRow">
+                    <div class="field">
+                        <label class="inputLabel" for="contrasena">Contraseña</label>
+                        <input type="password" id="contrasena" class="inputPill" placeholder="Inserte contraseña...">
+                    </div>
+                    <div class="field">
+                        <label class="inputLabel" for="repetirContrasena">Repetir contraseña</label>
+                        <input type="password" id="repetirContrasena" class="inputPill" placeholder="Repetir la contraseña...">
+                    </div>
+                </div>
+
+                <div class="passwordHint">
+                    <div class="hintIcon">!</div>
+                    <ul class="hintList">
+                        <li>-La contraseña debe tener minimo 5 caracteres</li>
+                        <li>-Utilizar combinaciones de letras y numeros</li>
+                        <li>-Debe incluir un caracter especial (!,*,?,-)</li>
+                    </ul>
+                </div>
+
+                <div class="field">
+                    <label class="inputLabel" for="email">Correo electronico</label>
+                    <input type="email" id="email" class="inputPill" placeholder="Inserte email...">
+                </div>
+
+                <div class="captcha">
+                    <label class="captchaLabel">
+                        <input type="checkbox" class="captchaCheckbox">
+                        <span class="captchaText">I'm not a robot</span>
+                    </label>
+                    <img class="captchaImage" src="img/RecaptchaLogo.svg" alt="Captcha">
+                </div>
+
+                <div class="socialActions">
+                    <a href="Index.html" class="btn btnSocial">
+                        <img src="img/google.svg" alt="Google">
+                        Acceder con Google
+                    </a>
+                    <a href="Index.html" class="btn btnSocial">
+                        <img src="img/facebook.svg" alt="Facebook">
+                        Acceder con Facebook
+                    </a>
+                </div>
+
+                <div class="registerActions">
+                    <button type="button" class="btn btnSecondary">Cancelar</button>
+                    <a href="Index.html" class="btn btnPrimary">Finalizar</a>
+                </div>
             </form>
         </div>
-    </section>
-    <footer></footer>
+    </div>
 </body>
 </html>

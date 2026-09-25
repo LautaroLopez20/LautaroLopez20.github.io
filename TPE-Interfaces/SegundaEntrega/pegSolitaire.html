@@ -4,31 +4,249 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastGames - PegSolitaire</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/atoms.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/pegSolitaire.css">
+    <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
-    <header>
-        <nav></nav>
-    </header>
-    <section class="gameSection">
-        <div class="gameOnPlay"></div>
-        <div class="gameMedia"></div>
-        <div class="gameAbout"></div>
-    </section>
-    <section class="commentsSection">
-        <div class="commentsContainer">
-            <article class="comment"><p>=== Comentario Aca ===</p></article>
-            <article class="comment"><p>=== Comentario Aca ===</p></article>
-            <article class="comment"><p>=== Comentario Aca ===</p></article>
-            <article class="comment"><p>=== Comentario Aca ===</p></article>
-            <article class="comment"><p>=== Comentario Aca ===</p></article>
-            <article class="comment"><p>=== Comentario Aca ===</p></article>
-        </div>
-        <div class="formContainer">
-            <form action="" class="commentForm">
+<header>
+    <nav>
+        <button type="button" class="hamburguesa">
+            <span></span><span></span><span></span>
+        </button>
 
-            </form>
+        <a href="Index.html" class="logo">
+            <img src="img/LOGO.svg" alt="FastGames">
+        </a>
+        <div class="headerSearch">
+            <input type="text" class="searchPlaceholderMobile" placeholder="...">
+            <input type="text" class="searchPlaceholderDesktop" placeholder="Introduce tu busqueda...">
+            <button type="button">
+                <img src="img/lupa.svg" alt="Buscar">
+            </button>
+        </div>
+        <div class="navIcons">
+            <button type="button">
+                <img src="img/Cart-Button.svg" class="carrito" alt="Carrito">
+            </button>
+            <button type="button" class="userButton">
+                <img src="img/User-Button.svg" alt="Usuario">
+            </button>
+        </div>
+    </nav>
+</header>
+
+<nav class="breadcrumb" aria-label="Ruta de navegacion">
+    <a href="Index.html">Inicio</a>
+    <span class="breadcrumbSeparator">&gt;</span>
+    <span>Estrategia</span>
+    <span class="breadcrumbSeparator">&gt;</span>
+    <span>Dragon Ball Peg Solitaire</span>
+</nav>
+
+    <section class="gamePlay">
+        <div class="gameBoard"></div>
+        <div class="gameActions">
+            <div class="gameActionsLeft">
+                <button type="button" class="btn btnLike"><img src="img/thumbUp.svg" alt="">128</button>
+                <button type="button" class="btn btnDislike"><img src="img/thumbDown.svg" alt="">12</button>
+            </div>
+            <div class="gameActionsRight">
+                <button type="button" class="btn btnShare"><img src="img/share.svg" alt="">Compartir</button>
+            </div>
         </div>
     </section>
-    <footer></footer>
+
+    <div class="gameAbout">
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Gameplay</h2>
+            <div class="gameplayRow">
+                <div class="gameplaySlot"></div>
+                <div class="gameplaySlot"></div>
+                <div class="gameplaySlot"></div>
+                <div class="gameplaySlot"></div>
+            </div>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Ayuda — Dragon Ball Z: Peg Solitaire</h2>
+            <p class="aboutText">Juega a esta versión de Dragon Ball Z inspirada en el clásico juego de Peg Solitaire. ¿Podrás resolver el desafío y conseguir que quede una sola Bola de Dragón en el tablero?</p>
+            <p class="aboutText">El objetivo del juego es eliminar todas las Bolas de Dragón excepto una, realizando movimientos estratégicos sobre el tablero.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Reglas</h2>
+            <p class="aboutText">Al comenzar la partida, todos los espacios del tablero están ocupados por Bolas de Dragón, excepto uno.</p>
+            <p class="aboutText">Para realizar un movimiento, debes saltar una Bola de Dragón sobre otra que se encuentre junto a ella (horizontal o verticalmente) y aterrizar en un espacio vacío.</p>
+            <p class="aboutText">La Bola de Dragón sobre la que se realiza el salto será eliminada del tablero.</p>
+            <p class="aboutText">La partida se gana cuando solo queda una Bola de Dragón en el tablero, idealmente en el espacio central. Si el juego termina con más de una Bola de Dragón, habrás perdido.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Controles</h2>
+            <p class="aboutText">Usa el mouse para seleccionar las Bolas de Dragón y realizar los movimientos.</p>
+            <p class="aboutText">Haz clic sobre una Bola de Dragón para seleccionarla y luego haz clic sobre un espacio vacío válido para realizar el salto.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Enlaces e información del juego</h2>
+            <h3 class="aboutSubtitle">Creado por Dragon Games Team</h3>
+            <h3 class="aboutSubtitle">Sobre nosotros</h3>
+            <p class="aboutText">Dragon Games Team es un equipo independiente enfocado en la recreación y adaptación de juegos de mesa mecánicos a entornos digitales.</p>
+            <p class="aboutText">Este equipo nació como un colectivo independiente de tres desarrolladores enfocado en la revitalización de mecánicas de juego clásicas y de mesa en formatos digitales modernos.</p>
+            <p class="aboutText">Lo que comenzó como un proyecto de prueba para digitalizar juegos de estrategia tradicionales se convirtió en un estudio a tiempo completo tras el lanzamiento de su primer título en 2020.</p>
+            <h3 class="aboutSubtitle">Contacto</h3>
+            <p class="aboutText">dbteam-contacto@mail.com</p>
+        </section>
+    </div>
+
+    <section class="commentsSection">
+        <h2 class="aboutTitle">Comentarios</h2>
+        <div class="commentsContainer">
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/userLight.svg" alt="Usuario" class="commentAvatar">
+                    <span class="commentUser">GokuFan99</span>
+                </div>
+                <p class="commentText">Comentario de ejemplo uno. Aca va el texto del usuario sobre su experiencia con el juego.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/userLight.svg" alt="Usuario" class="commentAvatar">
+                    <span class="commentUser">VegetaPro</span>
+                </div>
+                <p class="commentText">Comentario de ejemplo dos. Aca va el texto del usuario sobre su experiencia con el juego.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/userLight.svg" alt="Usuario" class="commentAvatar">
+                    <span class="commentUser">BulmaTech</span>
+                </div>
+                <p class="commentText">Comentario de ejemplo tres. Aca va el texto del usuario sobre su experiencia con el juego.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/userLight.svg" alt="Usuario" class="commentAvatar">
+                    <span class="commentUser">Krilin_DEV</span>
+                </div>
+                <p class="commentText">Comentario de ejemplo cuatro. Aca va el texto del usuario sobre su experiencia con el juego.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/userLight.svg" alt="Usuario" class="commentAvatar">
+                    <span class="commentUser">PiccoloMaster</span>
+                </div>
+                <p class="commentText">Comentario de ejemplo cinco. Aca va el texto del usuario sobre su experiencia con el juego.</p>
+            </article>
+        </div>
+
+        <div class="commentForm">
+            <h2 class="aboutTitle commentFormTitle">Dejá tu Comentario</h2>
+            <div class="commentInputWrapper">
+                <textarea class="commentInput" placeholder="Escribe aqui tu comentario..."></textarea>
+                <button type="button" class="btn btnSubmitComment">Enviar</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footerTop">
+            <div class="footerColumns">
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Sobre Nosotros</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#">Inicios</a></li>
+                        <li><a href="#">Alcance</a></li>
+                        <li><a href="#">Direccion</a></li>
+                        <li><a href="#">Ideas</a></li>
+                        <li><a href="#">Desarrolladores</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Informacion</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Terminos de Uso</a></li>
+                        <li><a href="#">Politicas de Privacidad</a></li>
+                        <li><a href="#">Codigo de Conducta</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Opciones de Pago</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Agradecimientos</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Catedra de Interfaces</a></li>
+                        <li><a href="#">ChatGPT</a></li>
+                        <li><a href="#">TUDAI</a></li>
+                        <li><a href="#">UNICEN</a></li>
+                        <li><a href="#">Figma</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Cuenta</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Crear Cuenta</a></li>
+                        <li><a href="#">Iniciar Sesion</a></li>
+                        <li><a href="#">Mi Cuenta</a></li>
+                        <li><a href="#">Mis Juegos</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn footerColumnWide">
+                    <h4 class="footerHeading">Nuestros Titulos Destacados</h4>
+                    <div class="footerSubColumns">
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Peg Solitaire DBZ</a></li>
+                            <li><a href="#">Roblox</a></li>
+                            <li><a href="#">Super Mario 64</a></li>
+                            <li><a href="#">PvZ</a></li>
+                            <li><a href="#">Bomb Pong</a></li>
+                            <li><a href="#">Beastro</a></li>
+                        </ul>
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Rumble Club</a></li>
+                            <li><a href="#">Mago</a></li>
+                            <li><a href="#">Navy Moves</a></li>
+                            <li><a href="#">El Caudillo</a></li>
+                            <li><a href="#">Minecraft</a></li>
+                            <li><a href="#">Mario Party</a></li>
+                        </ul>
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Pictonico</a></li>
+                            <li><a href="#">Lego Party</a></li>
+                            <li><a href="#">Stick Fight</a></li>
+                            <li><a href="#">Zombie Rumble</a></li>
+                            <li><a href="#">Agar.io</a></li>
+                            <li><a href="#">Buscaminas</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footerLanguages">
+                <img class="footerFlag" src="img/flag-mx.svg" alt="Mexico">
+                <img class="footerFlag" src="img/flag-jp.svg" alt="Japon">
+                <img class="footerFlag" src="img/flag-us.svg" alt="USA">
+                <img class="footerFlag" src="img/flag-uk.svg" alt="UK">
+                <img class="footerFlag" src="img/flag-fr.svg" alt="Francia">
+                <img class="footerFlag" src="img/flag-it.svg" alt="Italia">
+                <img class="footerFlag" src="img/flag-br.svg" alt="Brasil">
+                <img class="footerFlag" src="img/flag-es.svg" alt="Espana">
+            </div>
+        </div>
+        <div class="footerBottom">
+            <span class="footerCopyright">© Copyright 2026 FastGames.com</span>
+            <img class="footerLogo" src="img/LOGO_White.svg" alt="FastGames">
+            <div class="footerSocials">
+                <img src="img/icon-instagram.svg" alt="Instagram">
+                <img src="img/facebook.svg" alt="Facebook">
+                <img src="img/icon-twitter.svg" alt="Twitter">
+                <img src="img/icon-youtube.svg" alt="YouTube">
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

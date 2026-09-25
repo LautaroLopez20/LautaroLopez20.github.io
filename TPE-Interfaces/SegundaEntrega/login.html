@@ -4,18 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastGames - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/atoms.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-    <section>
-        <div class="logoContainer">
-
-        </div>
+    <div class="authCard">
+        <h1 class="loginTitle">Iniciar Sesión</h1>
         <div class="formContainer">
             <form action="" class="login">
+                <label class="inputLabel" for="nickname">Nickname</label>
+                <input type="text" id="nickname" class="inputPill" placeholder="Inserte nickname...">
+                <label class="inputLabel" for="password">Contraseña</label>
+                <input type="password" id="password" class="inputPill" placeholder="Inserte contraseña...">
 
+                <div class="socialActions">
+                    <a href="Index.html" class="btn btnSocial">
+                        <img src="img/google.svg" alt="Google">
+                        Acceder con Google
+                    </a>
+                    <a href="Index.html" class="btn btnSocial">
+                        <img src="img/facebook.svg" alt="Facebook">
+                        Acceder con Facebook
+                    </a>
+                </div>
+
+                <div class="loginFooter">
+                    <a href="register.html" class="loginLink">No tenes cuenta? Registrate</a>
+                    <div class="loginActions">
+                        <button type="button" class="btn btnSecondary">Cancelar</button>
+                        <a href="Index.html" class="btn btnPrimary">Iniciar sesion</a>
+                    </div>
+                </div>
             </form>
         </div>
-    </section>
-    <footer></footer>
+    </div>
 </body>
 </html>

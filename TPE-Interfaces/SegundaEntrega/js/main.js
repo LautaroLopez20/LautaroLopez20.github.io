@@ -219,27 +219,36 @@ function initCategoryCarousel(categoryElement, viewport) {
     const navigation = categoryElement.querySelector('.categoryNavigation');
 
     const firstCard = viewport.querySelector('.game');
-    const cardStep = firstCard ? firstCard.offsetWidth + 4 : 94;
-    const pageStep = cardStep * GAMES_PER_PAGE;
-    // El viewport mide exactamente una pagina para que no queden juegos
-    // del dot anterior al desplazarse.
-    viewport.style.width = pageStep + 'px';
-    viewport.style.flexBasis = pageStep + 'px';
+    const cardStep = firstCard ? firstCard.offsetWidth + 4 : 88;
     const totalCards = viewport.querySelectorAll('.game').length;
-    const pageCount = Math.max(1, Math.ceil(totalCards / GAMES_PER_PAGE));
 
     let page = 0;
-    const dots = [];
+    let pageCount = 1;
+    let pageStep = 0;
+    let dots = [];
 
-    navigation.innerHTML = '';
-    for (let i = 0; i < pageCount; i++) {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'carouselDot';
-        dot.setAttribute('aria-label', 'Ir a la pagina ' + (i + 1));
-        dot.addEventListener('click', () => goToPage(i));
-        navigation.appendChild(dot);
-        dots.push(dot);
+    // El viewport es 100% fluido (scroll-snap en CSS). Una "pagina" es lo
+    // que entra en pantalla: N tarjetas, y el salto queda alineado a un
+    // borde de tarjeta para que el snap coincida con la pagina.
+    function computeLayout() {
+        const visible = Math.max(1, Math.round(viewport.clientWidth / cardStep));
+        pageStep = visible * cardStep;
+        pageCount = Math.max(1, Math.ceil(totalCards / visible));
+
+        navigation.innerHTML = '';
+        dots = [];
+        for (let i = 0; i < pageCount; i++) {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'carouselDot';
+            dot.setAttribute('aria-label', 'Ir a la pagina ' + (i + 1));
+            dot.addEventListener('click', () => goToPage(i));
+            navigation.appendChild(dot);
+            dots.push(dot);
+        }
+
+        page = Math.max(0, Math.min(pageCount - 1, page));
+        updateState();
     }
 
     function updateState() {
@@ -265,7 +274,9 @@ function initCategoryCarousel(categoryElement, viewport) {
         updateState();
     }, { passive: true });
 
-    updateState();
+    window.addEventListener('resize', computeLayout);
+
+    computeLayout();
 }
 
 /* ---- Fallback sin API: wirea el carrusel con las cards placeholder ---- */
