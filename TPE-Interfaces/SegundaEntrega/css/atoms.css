@@ -1,3 +1,5 @@
+/* ACÁ TODO LO BASE REUTILIZABLE EN CUANTO A ESTILOS*/ 
+
 /* Boton base: el estilo que comparten todos los botones */
 
 .btn {
@@ -49,7 +51,7 @@
     width: auto;
 }
 
-/* Campo de texto con forma de pildora (login y register) */
+/* Campo de texto input (login y register) */
 
 .inputPill {
     box-sizing: border-box;

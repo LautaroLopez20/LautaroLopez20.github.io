@@ -1,4 +1,4 @@
-/* Configuracion global */
+
 * {
     color: #DCDEE5;
     font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
@@ -98,7 +98,7 @@ body {
     font-size: 12px;
 }
 
-/* Carrusel de categoria (flechas + fila de juegos) */
+/* Carrusel de categoria (flechas y fila de juegos) */
 .categoryCarousel {
     position: relative;
     display: flex;
@@ -157,7 +157,7 @@ body {
     display: none;
 }
 
-/* Puntos que marcan la pagina actual del carrusel */
+/* Puntos que marcan la pagina del carrusel */
 .categoryNavigation {
     margin-top: 4px;
     display: flex;
@@ -220,7 +220,6 @@ header {
     height: 60px;
 }
 
-/* Hero duplicado */
 .heroCategory {
     max-width: 1160px;
     height: 460px;

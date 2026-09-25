@@ -41,7 +41,7 @@ body {
     gap: 8px;
 }
 
-/* Pie de la tarjeta: enlace de registro y botones de acceso */
+/* pie de tarjeta */
 
 .loginFooter {
     display: flex;

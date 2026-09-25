@@ -8,9 +8,9 @@ body {
     flex-direction: column;
 }
 
-/* La barra de arriba la comparte todo el sitio (viene de navbar.css) */
 
-/* Ruta actual de la pagina (breadcrumb) */
+
+/* breadcrumb re obvio jaj */
 
 .breadcrumb {
     display: flex;
@@ -33,7 +33,7 @@ body {
     color: #66666E;
 }
 
-/* Zona de juego: centrada, ocupa 70% del ancho de la pagina */
+/* Zona del juego */
 
 .gamePlay {
     width: 70%;
@@ -51,7 +51,7 @@ body {
     margin-bottom: 5px;
 }
 
-/* Acciones debajo del tablero: me gusta, no me gusta y compartir */
+/* botones de abajo de la zona del juego*/
 
 .gameActions {
     display: flex;
@@ -65,8 +65,6 @@ body {
     display: flex;
     gap: 12px;
 }
-
-/* Botones de la partida (se apoyan en el boton base .btn) */
 
 .btnLike,
 .btnDislike,
@@ -86,7 +84,7 @@ body {
 
 }
 
-/* Acerca del juego */
+/* about */
 
 .gameAbout {
     width: 100%;

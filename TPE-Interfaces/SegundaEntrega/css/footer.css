@@ -112,7 +112,7 @@ footer {
     height: 32px;
 }
 
-/* Movil: las columnas y la base se apilan */
+/* mobile : hace que las columnas y la base se apilen */
 @media (max-width: 780px) {
 
     .footerTop {

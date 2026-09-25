@@ -3,3 +3,6 @@
 .vscode/
 node_modules/
 .DS_Store
+# Requisitos / consignas de los TPE (no se versionan)
+*Requisitos*.txt
+*requisitos*.txt
