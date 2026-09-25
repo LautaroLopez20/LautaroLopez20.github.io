@@ -81,7 +81,13 @@ body {
 .btnShare img {
     width: 16px;
     height: 16px;
+}
 
+.btnLike:hover,
+.btnDislike:hover,
+.btnShare:hover,
+.btnSubmitComment:hover{
+    transform: scale(110%);
 }
 
 /* about */

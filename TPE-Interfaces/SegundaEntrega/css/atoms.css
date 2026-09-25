@@ -1,4 +1,4 @@
-/* ACÁ TODO LO BASE REUTILIZABLE EN CUANTO A ESTILOS*/ 
+/* ACÁ TODO LO BASE REUTILIZABLE EN CUANTO A ESTILOS*/
 
 /* Boton base: el estilo que comparten todos los botones */
 
@@ -30,11 +30,38 @@
     border-color: #DCDEE5;
 }
 
+.btnPrimary:hover{
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
 .btnSecondary {
     width: 120px;
     height: 35px;
     background-color: #B8461D;
     border-color: #DCDEE5;
+}
+
+@keyframes sacudida {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-6deg);
+    }
+    50% {
+        transform: rotate(6deg);
+    }
+    75% {
+        transform: rotate(-3deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.btnSecondary:hover{
+    animation: sacudida 0.5s ease-in-out infinite;
 }
 
 .btnSocial { /* los botones de acceso con Facebook y Google */
