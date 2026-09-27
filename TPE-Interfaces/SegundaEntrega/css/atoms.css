@@ -19,6 +19,7 @@
     background-color: #060915;
     color: #DCDEE5;
     text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 /* Variantes de boton: primario, secundario y acceso por redes */

@@ -97,9 +97,9 @@ body {
     display: flex;
     flex-direction: column;
 }
+/* El titulo arranca en el mismo borde que la primera card */
 .categoryName {
     margin: 0px;
-    margin-left: 24px;
     width: 150px;
     text-align: left;
     font-weight: bold;
@@ -263,12 +263,32 @@ header {
     margin-bottom: 10px;
 }
 
+/* El titulo se alinea con la primera card y sube un poco para separarse de la fila */
 .categoryName {
+    margin-left: 35px;
+    margin-top: -8px;
     font-size: 16px;
 }
 
+/* Las flechas quedan fuera de las cards: la fila deja un margen
+   a cada lado para ellas. */
 .categoryGames {
+    width: calc(100% - 70px);
+    margin: 0px 35px;
     height: 112px;
+}
+
+.carouselArrowLeft {
+    left: 0px;
+}
+
+.carouselArrowRight {
+    right: 0px;
+}
+
+/* Sobre el fondo de la pagina el gris viejo no se ve. */
+.carouselArrow {
+    color: #DCDEE5;
 }
 
 .game {

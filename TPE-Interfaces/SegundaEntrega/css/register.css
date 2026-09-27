@@ -150,3 +150,65 @@ body {
     gap: 12px;
     margin-top: 20px;
 }
+
+/* Aviso de registro correcto */
+
+.registerSuccess {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+}
+
+/* Al agregar .exito a la tarjeta se oculta el formulario y se muestra el aviso */
+
+.authCard.exito .authTitle,
+.authCard.exito .register {
+    display: none;
+}
+
+.authCard.exito .registerSuccess {
+    display: flex;
+}
+
+.registerSuccessIcon {
+    width: 76px;
+    height: 76px;
+    border: 3px solid #B8461D;
+    border-radius: 50%;
+    color: #B8461D;
+    font-size: 40px;
+    line-height: 70px;
+    animation: anilloEntra 0.5s ease-out;
+}
+
+.registerSuccessTitle {
+    margin: 0px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #FFFFFF;
+    animation: checkEntra 0.4s ease-out 0.25s backwards;
+}
+
+.registerSuccessText {
+    margin: 0px;
+    font-size: 14px;
+    color: #DCDEE5;
+    animation: checkEntra 0.4s ease-out 0.4s backwards;
+}
+
+.registerSuccess .btn {
+    animation: checkEntra 0.4s ease-out 0.55s backwards;
+}
+
+@keyframes anilloEntra {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+@keyframes checkEntra {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}

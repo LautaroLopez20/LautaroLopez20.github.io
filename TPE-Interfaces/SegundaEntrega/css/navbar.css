@@ -140,9 +140,22 @@ header nav {
 }
 
 .navIcons .userButton {
+    position: relative;
     border: 2px solid #060915;
     border-radius: 50%;
     padding: 1px;
+}
+
+/* Circulo de sesion iniciada */
+.userStatus {
+    position: absolute;
+    bottom: -3px;
+    left: 0px;
+    z-index: 1;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #5AC47D;
 }
 
 /* Menu de usuario */
@@ -258,6 +271,11 @@ header nav {
 
     .navIcons img {
         height: 32px;
+    }
+
+    .userStatus {
+        width: 10px;
+        height: 10px;
     }
 
     /* la busqueda queda centrada respecto a la pagina entera */
