@@ -33,10 +33,19 @@
             <button type="button">
                 <img src="img/Cart-Button.svg" class="carrito" alt="Carrito">
             </button>
-            <button type="button" class="userButton">
-                <img src="img/User-Button.svg" alt="Usuario">
-            </button>
-        </div>
+                <div class="userMenu">
+                    <button type="button" class="userButton">
+                        <img src="img/User-Button.svg" alt="Usuario">
+                    </button>
+                    <div class="userPanel hidden">
+                        <ul class="userPanelList">
+                            <li><a href="#">Mis juegos</a></li>
+                            <li><a href="#">Configuracion</a></li>
+                            <li class="userPanelLogout"><a href="login.html">Cerrar sesion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
     </nav>
 </header>
 
@@ -248,5 +257,6 @@
             </div>
         </div>
     </footer>
+    <script src="js/main.js"></script>
 </body>
 </html>

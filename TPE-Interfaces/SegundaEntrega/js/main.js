@@ -4,9 +4,16 @@ const GAMES_PER_PAGE = 7;
 const HERO_SLIDES = 4;
 const HERO_INTERVAL_MS = 4000;
 
+const LOADING_DURATION_MS = 5000;
+const LOADING_INTERVAL_MS = 50;
+
 document.addEventListener('DOMContentLoaded', init);
 
 async function init() {
+    startLoading();
+    initUserMenu();
+    initFooterAccordion();
+
     let games = null;
     try {
         const response = await fetch(APIUrl);
@@ -36,7 +43,89 @@ function hasAnyGenre(game, genreIds) {
     return game.genres.some((genre) => genreIds.includes(genre.id));
 }
 
-/* ---- Carrusel hero: 4 destacados, rotacion automatica con rebote ---- */
+/* Loading del home de 5s  (La barra)*/
+function startLoading() {
+    const bar = document.getElementById('progressBar');
+    const text = document.getElementById('progressText');
+    const overlay = document.getElementById('loadingOverlay');
+    if (!bar || !text || !overlay) return;
+
+    // 5000ms son 5 segundos
+    const totalSteps = LOADING_DURATION_MS / LOADING_INTERVAL_MS;
+    let currentStep = 0;
+
+    const loadingInterval = setInterval(() => {
+        currentStep++;
+        const percentage = Math.min(Math.round((currentStep / totalSteps) * 100), 100);
+
+        bar.style.width = percentage + '%';
+        text.textContent = percentage + '%';
+
+        if (percentage >= 100) {
+            clearInterval(loadingInterval);
+            // minipausa para que se vea el 100%
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 250);
+        }
+    }, LOADING_INTERVAL_MS);
+}
+
+/* Menu de usuario */
+function initUserMenu() {
+    const button = document.querySelector('.userButton');
+    const panel = document.querySelector('.userPanel');
+    if (!button || !panel) return;
+
+    button.addEventListener('click', () => {
+        panel.classList.toggle('hidden');
+    });
+
+    /* Click fuera */
+    document.addEventListener('click', (event) => {
+        if (panel.classList.contains('hidden')) return;
+        if (panel.contains(event.target) || button.contains(event.target)) return;
+        panel.classList.add('hidden');
+    });
+
+    /* Escape */
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') panel.classList.add('hidden');
+    });
+}
+
+/* Footer plegable */
+function initFooterAccordion() {
+    const headings = [...document.querySelectorAll('.footerHeading')];
+
+    headings.forEach((heading) => {
+        heading.setAttribute('role', 'button');
+        heading.setAttribute('tabindex', '0');
+        heading.setAttribute('aria-expanded', 'false');
+        heading.classList.add('cerrado');
+
+        const toggle = () => {
+            const estabaCerrado = heading.classList.contains('cerrado');
+
+            headings.forEach((otro) => {
+                otro.classList.add('cerrado');
+                otro.setAttribute('aria-expanded', 'false');
+            });
+
+            if (estabaCerrado) {
+                heading.classList.remove('cerrado');
+                heading.setAttribute('aria-expanded', 'true');
+            }
+        };
+
+        heading.addEventListener('click', toggle);
+        heading.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') toggle();
+        });
+    });
+}
+
+/* Carrusel hero: 4 destacados, rotacion automatica con rebote */
 function buildHero(games) {
     const heroCategory = document.querySelector('.heroCategory');
     const track = document.querySelector('.heroTrack');
@@ -50,15 +139,36 @@ function buildHero(games) {
     track.innerHTML = '';
     const slides = [];
     featured.forEach((game) => {
-        const slide = document.createElement('div');
+        const slide = document.createElement('a');
         slide.className = 'heroGame';
+        slide.href = 'pegSolitaire.html';
         slide.style.backgroundImage = "url('" + gameImage(game) + "')";
         const name = document.createElement('p');
         name.textContent = game.name;
         slide.appendChild(name);
-        track.appendChild(slide);
         slides.push(slide);
     });
+
+    /* Grupo real */
+    const FIRST_REAL = 2;
+    /* Copias de apoyo */
+    const deck = [];
+    /* Indice real */
+    const reales = [];
+    for (let i = 0; i < HERO_SLIDES + 4; i++) {
+        const real = (i + HERO_SLIDES - 2) % HERO_SLIDES;
+        const copia = i < 2 || i > HERO_SLIDES + 1;
+        const node = copia ? slides[real].cloneNode(true) : slides[real];
+        if (copia) {
+            /* Copia decorativa */
+            node.classList.add('heroGameCopy');
+            node.removeAttribute('href');
+            node.setAttribute('aria-hidden', 'true');
+        }
+        track.appendChild(node);
+        deck.push(node);
+        reales.push(real);
+    }
 
     const slideWidth = track.firstElementChild.offsetWidth;
     // Las cards se solapan con margen negativo, asi que el avance real
@@ -67,8 +177,8 @@ function buildHero(games) {
     const slideStep = slideWidth + slideMargin;
     // Compensacion para que el slide activo quede centrado en el viewport.
     const offset = heroCategory.clientWidth / 2 - slideMargin - slideWidth / 2;
-    // Arranca en el slide del medio para que el primer render sea simetrico.
-    let currentIndex = 1;
+    /* Slide central */
+    let currentIndex = FIRST_REAL + 1;
     let timer = null;
     let animation = null;
 
@@ -80,7 +190,7 @@ function buildHero(games) {
         dot.className = 'carouselDot';
         dot.setAttribute('aria-label', 'Ir al destacado ' + (i + 1));
         dot.addEventListener('click', () => {
-            goToSlide(i);
+            goToSlide(i + FIRST_REAL);
             restartTimer();
         });
         navigation.appendChild(dot);
@@ -89,13 +199,13 @@ function buildHero(games) {
 
     function updateDots() {
         dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentIndex);
+            dot.classList.toggle('active', index === reales[currentIndex]);
         });
     }
 
     // El slide del dot activo queda grande y arriba, los laterales chicos y bajos.
     function updateSlides() {
-        slides.forEach((slide, index) => {
+        deck.forEach((slide, index) => {
             slide.classList.toggle('active', index === currentIndex);
         });
     }
@@ -103,21 +213,24 @@ function buildHero(games) {
     function restartTimer() {
         if (timer) clearInterval(timer);
         timer = setInterval(() => {
-            goToSlide((currentIndex + 1) % HERO_SLIDES);
+            goToSlide(currentIndex + 1);
         }, HERO_INTERVAL_MS);
     }
 
-    // Animacion tipo rebote: sobrepasa el destino y vuelve a asentarse.
+    /* Rebote */
     function goToSlide(index) {
-        const target = ((index % HERO_SLIDES) + HERO_SLIDES) % HERO_SLIDES;
-        if (target === currentIndex) return;
+        let destino = index;
+        /* Camino corto */
+        while (destino - currentIndex > HERO_SLIDES / 2) destino -= HERO_SLIDES;
+        while (currentIndex - destino > HERO_SLIDES / 2) destino += HERO_SLIDES;
+        if (destino === currentIndex) return;
 
         const from = offset - currentIndex * slideStep;
-        const to = offset - target * slideStep;
+        const to = offset - destino * slideStep;
         const direction = Math.sign(to - from);
         const overshoot = to + direction * slideStep * 0.30;
 
-        currentIndex = target;
+        currentIndex = destino;
         updateDots();
         updateSlides();
 
@@ -138,11 +251,24 @@ function buildHero(games) {
             );
             animation.onfinish = () => {
                 animation = null;
+                saltarAReal();
             };
         } else {
             track.style.transition = 'transform 500ms ease';
             track.style.transform = 'translateX(' + to + 'px)';
+            saltarAReal();
         }
+    }
+
+    /* Salto invisible */
+    function saltarAReal() {
+        if (currentIndex >= FIRST_REAL && currentIndex < FIRST_REAL + HERO_SLIDES) return;
+        const real = FIRST_REAL + reales[currentIndex];
+        currentIndex = real;
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(' + (offset - real * slideStep) + 'px)';
+        updateDots();
+        updateSlides();
     }
 
     // Posicion inicial explicita: sin esto el track arranca desalineado
@@ -153,7 +279,7 @@ function buildHero(games) {
     restartTimer();
 }
 
-/* ---- Carruseles de categorias: construye las cards desde la API ---- */
+/* Carruseles de categorias: construye las cards desde la API */
 function buildCategories(games) {
     const definitions = [
         { name: 'Acción', pick: (game) => hasGenre(game, 4), sort: 'rating' },
@@ -177,8 +303,9 @@ function buildCategories(games) {
 
         viewport.innerHTML = '';
         selected.forEach((game) => {
-            const card = document.createElement('div');
+            const card = document.createElement('a');
             card.className = 'game';
+            card.href = 'pegSolitaire.html';
             card.style.backgroundImage = "url('" + gameImage(game) + "')";
             const label = document.createElement('p');
             label.textContent = game.name;
@@ -212,7 +339,7 @@ function selectGames(allGames, definition) {
     return core.concat(fillers).slice(0, GAMES_PER_PAGE * 2);
 }
 
-/* ---- Logica de un carrusel de categoria: flechas y dots ---- */
+/* Logica de un carrusel de categoria: flechas y dots */
 function initCategoryCarousel(categoryElement, viewport) {
     const leftArrow = categoryElement.querySelector('.carouselArrowLeft');
     const rightArrow = categoryElement.querySelector('.carouselArrowRight');
@@ -279,10 +406,18 @@ function initCategoryCarousel(categoryElement, viewport) {
     computeLayout();
 }
 
-/* ---- Fallback sin API: wirea el carrusel con las cards placeholder ---- */
+/* Fallback sin API: wirea el carrusel con las cards placeholder */
 function wireFallbackCarousels() {
     document.querySelectorAll('.category').forEach((categoryElement) => {
         const viewport = categoryElement.querySelector('.categoryGames');
         if (viewport) initCategoryCarousel(categoryElement, viewport);
+    });
+
+    // Los placeholders vienen como <div> en el HTML, asi que no tienen href.
+    // Se les pone la navegacion a mano para que el fallback sea igual de clicable.
+    document.querySelectorAll('.game, .heroGame').forEach((card) => {
+        card.addEventListener('click', () => {
+            window.location.href = 'pegSolitaire.html';
+        });
     });
 }

@@ -47,10 +47,19 @@ body {
     background-position: center;
     transform: translateY(44px) scale(0.6);
     transition: transform 0.45s ease;
+    /* Los destacados del hero tambien llevan al juego */
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 .heroGame.active {
     z-index: 2;
     transform: none;
+}
+/* Copias del hero */
+.heroGameCopy {
+    cursor: default;
+    pointer-events: none;
 }
 .heroGame p {
     margin: 0px;
@@ -195,10 +204,16 @@ body {
     display: flex;
     align-items: end;
     justify-content: center;
+    /* Las cards son enlaces al juego: sin subrayado y con cursor de mano.
+       El cursor tambien cubre a los placeholders, que son <div>. */
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
     background-color: #1A2140;
     background-size: cover;
     background-position: center;
 }
+
 .game p {
     margin: 0px;
     width: 100%;

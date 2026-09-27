@@ -1,0 +1,170 @@
+/* Overlay  */
+.loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: grid;
+    place-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Desvanecimiento */
+.loadingOverlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /*Evitar recibir los clicks*/
+}
+
+.loadingCard {
+    background-color: #121B3F;
+    border: 1px solid #F4E3DD;
+    color: #DCDEE5;
+    padding: 32px 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+}
+
+.squaresStage {
+    position: relative;
+    width: 180px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.square {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 0;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+.squareOrange {
+    background-color: #B8461D;
+    animation-name: squareOrangeMove;
+    animation-delay: 0s;
+}
+
+.squareBlue {
+    background-color: #2563EB;
+    animation-name: squareBlueMove;
+    animation-delay: -1s;
+}
+
+.squareLight {
+    background-color: #F4E3DD;
+    animation-name: squareLightMove;
+    animation-delay: -2s;
+}
+
+@keyframes squareOrangeMove { /*Este entra por la izquierda*/
+    0% {
+        transform: translate(-120px, 0);
+        opacity: 0;
+    }
+    4% {
+        opacity: 1;
+    }
+    33.33% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    66% {
+        transform: translate(0, -120px);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(0, -120px);
+        opacity: 0;
+    }
+}
+
+@keyframes squareBlueMove { /*El azul desde arriba */
+    0% {
+        transform: translate(0, -120px);
+        opacity: 0;
+    }
+    4% {
+        opacity: 1;
+    }
+    33.33% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    66% {
+        transform: translate(120px, 0);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(120px, 0);
+        opacity: 0;
+    }
+}
+
+@keyframes squareLightMove { /*El clarito entra desde la derecha*/
+    0% {
+        transform: translate(120px, 0);
+        opacity: 0;
+    }
+    4% {
+        opacity: 1;
+    }
+    33.33% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    66% {
+        transform: translate(0, 120px);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(0, 120px);
+        opacity: 0;
+    }
+}
+
+.progressContainer {
+    width: 220px;
+    height: 12px;
+    background-color: #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progressBar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    border-radius: 10px;
+    transition: width 0.06s linear;
+}
+
+.progressText {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+}

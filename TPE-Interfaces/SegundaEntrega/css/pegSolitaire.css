@@ -227,7 +227,31 @@ body {
     right: 12px;
     bottom: 12px;
     background-color: #1A2140;
+    /* Gradiente de dos tonos con corte duro, estirado al doble del ancho del
+       boton. El tono claro esta en la primera mitad de la imagen, asi al
+       desplazar la posicion del fondo la franja clara entra por la izquierda
+       y avanza hacia la derecha. */
+    background-image: linear-gradient(90deg, #2A3560 0 50%, #1A2140 50% 100%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
     color: #FFFFFF;
+}
+
+/* Enviar: barrido de una tonalidad mas clara, de izquierda a derecha y de
+   vuelta. El "alternate" hace que la animacion vaya y vuelva sin reiniciarse
+   de golpe, y queda activa mientras el cursor este encima. */
+.btnSubmitComment:hover {
+    animation: barridoEnviar 1.2s ease-in-out infinite alternate;
+    transform: scale(110%);
+}
+
+@keyframes barridoEnviar {
+    from {
+        background-position: 100% 0;
+    }
+    to {
+        background-position: 0% 0;
+    }
 }
 
 footer {

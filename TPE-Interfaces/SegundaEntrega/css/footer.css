@@ -126,7 +126,29 @@ footer {
     }
 
     .footerColumn {
-        flex: 1 1 40%;
+        flex: 1 1 100%;
+    }
+
+    .footerHeading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .footerHeading::after {
+        content: '▾';
+        transition: transform 0.2s ease;
+    }
+
+    .footerHeading.cerrado::after {
+        transform: rotate(-90deg);
+    }
+
+    .footerHeading.cerrado + .footerList,
+    .footerHeading.cerrado + .footerSubColumns {
+        display: none;
     }
 
     .footerColumnWide {

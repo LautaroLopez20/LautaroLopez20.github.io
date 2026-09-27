@@ -10,8 +10,24 @@
     <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/loading.css">
 </head>
 <body>
+    <!-- Loading simulado: el overlay va primero y visible para que no se vea
+         un flash del home antes de que aparezca el loader. -->
+    <div class="loadingOverlay" id="loadingOverlay">
+        <div class="loadingCard">
+            <div class="squaresStage">
+                <div class="square squareOrange"></div>
+                <div class="square squareBlue"></div>
+                <div class="square squareLight"></div>
+            </div>
+            <span class="progressText" id="progressText">0%</span>
+            <div class="progressContainer">
+                <div class="progressBar" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
     <header>
         <nav>
             <button type="button" class="hamburguesa">
@@ -32,9 +48,18 @@
                 <button type="button">
                     <img src="img/Cart-Button.svg" class="carrito" alt="Carrito">
                 </button>
-                <button type="button" class="userButton">
-                    <img src="img/User-Button.svg" alt="Usuario">
-                </button>
+                <div class="userMenu">
+                    <button type="button" class="userButton">
+                        <img src="img/User-Button.svg" alt="Usuario">
+                    </button>
+                    <div class="userPanel hidden">
+                        <ul class="userPanelList">
+                            <li><a href="#">Mis juegos</a></li>
+                            <li><a href="#">Configuracion</a></li>
+                            <li class="userPanelLogout"><a href="login.html">Cerrar sesion</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
