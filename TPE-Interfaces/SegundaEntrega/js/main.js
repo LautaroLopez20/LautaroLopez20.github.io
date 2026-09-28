@@ -7,12 +7,27 @@ const HERO_INTERVAL_MS = 4000;
 const LOADING_DURATION_MS = 5000;
 const LOADING_INTERVAL_MS = 50;
 
+/* Definicion de las categorias del home. El orden importa: es el mismo que
+   siguen los <article class="category"> del HTML, y el slug se usa para armar
+   los links del menu de categorias y el id de cada carrusel. */
+const CATEGORIES = [
+    { name: 'Acción', slug: 'accion', pick: (game) => hasGenre(game, 4), sort: 'rating' },
+    { name: 'Disparos', slug: 'disparos', pick: (game) => hasGenre(game, 2), sort: 'rating' },
+    { name: 'RPG', slug: 'rpg', pick: (game) => hasGenre(game, 5), sort: 'rating' },
+    { name: 'Jugar con amigos', slug: 'amigos', pick: (game) => hasAnyGenre(game, [59, 15, 6, 1, 11]), sort: 'rating', topUp: true },
+    { name: 'Un solo jugador', slug: 'un-jugador', pick: (game) => hasAnyGenre(game, [5, 3, 7, 83]), sort: 'rating', topUp: true },
+    { name: 'Clásicos', slug: 'clasicos', pick: () => true, sort: 'released' },
+    { name: 'Estrategia', slug: 'estrategia', pick: (game) => hasGenre(game, 10), sort: 'rating', topUp: true }
+];
+
 document.addEventListener('DOMContentLoaded', init);
 
 async function init() {
     startLoading();
     initUserMenu();
+    initCategoryMenu();
     initFooterAccordion();
+    initGameActions();
 
     let games = null;
     try {
@@ -91,6 +106,146 @@ function initUserMenu() {
     /* Escape */
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') panel.classList.add('hidden');
+    });
+}
+
+/* Menu de categorias (hamburguesa): arma la lista desde CATEGORIES y lleva al
+   carrusel correspondiente. Fuera del home los links van al home con el ancla,
+   porque alli no estan los carruseles. */
+function initCategoryMenu() {
+    const button = document.querySelector('.hamburguesa');
+    const panel = document.getElementById('categoryPanel');
+    const list = document.getElementById('categoryPanelList');
+    if (!button || !panel || !list) return;
+
+    const enHome = Boolean(document.querySelector('.heroCarousel'));
+
+    list.innerHTML = '';
+    CATEGORIES.forEach((category) => {
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.textContent = category.name;
+        link.href = enHome ? '#cat-' + category.slug : 'Index.html#cat-' + category.slug;
+        item.appendChild(link);
+        list.appendChild(item);
+    });
+
+    const abrir = () => {
+        button.classList.add('abierta');
+        button.setAttribute('aria-expanded', 'true');
+        panel.classList.remove('hidden');
+    };
+
+    const cerrar = () => {
+        button.classList.remove('abierta');
+        button.setAttribute('aria-expanded', 'false');
+        panel.classList.add('hidden');
+    };
+
+    const estaCerrado = () => panel.classList.contains('hidden');
+
+    button.addEventListener('click', () => {
+        if (estaCerrado()) abrir();
+        else cerrar();
+    });
+
+    /* Click fuera */
+    document.addEventListener('click', (event) => {
+        if (estaCerrado()) return;
+        if (panel.contains(event.target) || button.contains(event.target)) return;
+        cerrar();
+    });
+
+    /* Escape */
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') cerrar();
+    });
+
+    /* En el home el link es un ancla: se deja actuar el scroll suave en vez de
+       saltar de golpe, y se actualiza la url para que quede compartida. */
+    if (enHome) {
+        list.addEventListener('click', (event) => {
+            const link = event.target.closest('a');
+            if (!link) return;
+
+            const destino = document.querySelector(link.getAttribute('href'));
+            if (destino) {
+                event.preventDefault();
+                destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                try {
+                    history.replaceState(null, '', link.getAttribute('href'));
+                } catch (error) {
+                    // En file:// el replaceState no esta permitido: el scroll ya
+                    // se hizo igual, solo queda sin actualizar la url.
+                }
+            }
+            cerrar();
+        });
+    }
+}
+
+/* Acciones del juego: me gusta, no me gusta y compartir.
+   Cada boton es independiente: se activan por separado y mientras mas de uno
+   este activo, el borde lo marca cada uno. */
+
+function initGameActions() {
+    const like = document.querySelector('.btnLike');
+    const dislike = document.querySelector('.btnDislike');
+    const share = document.querySelector('.btnShare');
+
+    if (like) initCountButton(like, 'isLiked');
+    if (dislike) initCountButton(dislike, 'isDisliked');
+    if (share) initShareButton(share);
+}
+
+function initCountButton(button, activeClass) {
+    const count = button.querySelector('.actionCount');
+
+    button.addEventListener('click', () => {
+        const activo = button.classList.toggle(activeClass);
+        button.setAttribute('aria-pressed', String(activo));
+        if (!count) return;
+
+        count.textContent = String(Number(count.textContent) + (activo ? 1 : -1));
+
+        // Sacar la clase y releer el layout reinicia la animacion del contador,
+        // asi el pop se repite en cada clic.
+        count.classList.remove('pop');
+        void count.offsetWidth;
+        count.classList.add('pop');
+    });
+}
+
+function initShareButton(button) {
+    const label = button.querySelector('.actionLabel');
+    const original = label ? label.textContent : 'Compartir';
+    let restaurando = null;
+
+    button.addEventListener('click', async () => {
+        button.classList.add('isShared');
+
+        // En celular el sistema ofrece su propio menu de compartir.
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: document.title, url: window.location.href });
+            } catch (error) {
+                return; // el usuario cancelo el menu
+            }
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+        } catch (error) {
+            console.warn('No se pudo copiar el enlace:', error);
+        }
+
+        if (!label) return;
+        label.textContent = 'Enlace copiado';
+        if (restaurando) clearTimeout(restaurando);
+        restaurando = setTimeout(() => {
+            label.textContent = original;
+        }, 2000);
     });
 }
 
@@ -281,21 +436,14 @@ function buildHero(games) {
 
 /* Carruseles de categorias: construye las cards desde la API */
 function buildCategories(games) {
-    const definitions = [
-        { name: 'Acción', pick: (game) => hasGenre(game, 4), sort: 'rating' },
-        { name: 'Disparos', pick: (game) => hasGenre(game, 2), sort: 'rating' },
-        { name: 'RPG', pick: (game) => hasGenre(game, 5), sort: 'rating' },
-        { name: 'Jugar con amigos', pick: (game) => hasAnyGenre(game, [59, 15, 6, 1, 11]), sort: 'rating', topUp: true },
-        { name: 'Un solo jugador', pick: (game) => hasAnyGenre(game, [5, 3, 7, 83]), sort: 'rating', topUp: true },
-        { name: 'Clásicos', pick: () => true, sort: 'released' },
-        { name: 'Estrategia', pick: (game) => hasGenre(game, 10), sort: 'rating', topUp: true }
-    ];
-
     const categoryElements = document.querySelectorAll('.category');
     categoryElements.forEach((categoryElement, index) => {
-        const definition = definitions[index];
+        const definition = CATEGORIES[index];
         if (!definition) return;
 
+        // El id sale del slug de CATEGORIES para que el menu de categorias y el
+        // ancla #cat-<slug> apunten siempre al mismo carrusel.
+        categoryElement.id = 'cat-' + definition.slug;
         categoryElement.querySelector('.categoryName').textContent = definition.name;
 
         const viewport = categoryElement.querySelector('.categoryGames');

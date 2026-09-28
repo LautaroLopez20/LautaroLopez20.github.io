@@ -30,7 +30,7 @@
     </div>
     <header>
         <nav>
-            <button type="button" class="hamburguesa">
+            <button type="button" class="hamburguesa" aria-expanded="false" aria-controls="categoryPanel" aria-label="Ver categorias">
                 <span></span><span></span><span></span>
             </button>
 
@@ -63,6 +63,9 @@
                 </div>
             </div>
         </nav>
+        <div class="categoryPanel hidden" id="categoryPanel">
+            <ul class="categoryPanelList" id="categoryPanelList"></ul>
+        </div>
     </header>
     <div class="heroCarousel">
         <div class="heroCategory">
@@ -75,7 +78,7 @@
         <div class="heroNavigation"></div>
     </div>
     <div class="categories">
-        <article class="category">
+        <article class="category" id="cat-accion">
             <p class="categoryName">Categoria</p>
             <div class="categoryCarousel">
                 <button class="carouselArrow carouselArrowLeft" type="button" aria-label="Anteriores juegos">
@@ -110,7 +113,7 @@
             </div>
             <div class="categoryNavigation"></div>
         </article>
-        <article class="category">
+        <article class="category" id="cat-disparos">
             <p class="categoryName">Categoria</p>
             <div class="categoryCarousel">
                 <button class="carouselArrow carouselArrowLeft" type="button" aria-label="Anteriores juegos">
@@ -145,7 +148,7 @@
             </div>
             <div class="categoryNavigation"></div>
         </article>
-        <article class="category">
+        <article class="category" id="cat-rpg">
             <p class="categoryName">Categoria</p>
             <div class="categoryCarousel">
                 <button class="carouselArrow carouselArrowLeft" type="button" aria-label="Anteriores juegos">
@@ -180,7 +183,7 @@
             </div>
             <div class="categoryNavigation"></div>
         </article>
-        <article class="category">
+        <article class="category" id="cat-amigos">
             <p class="categoryName">Categoria</p>
             <div class="categoryCarousel">
                 <button class="carouselArrow carouselArrowLeft" type="button" aria-label="Anteriores juegos">
@@ -215,7 +218,7 @@
             </div>
             <div class="categoryNavigation"></div>
         </article>
-        <article class="category">
+        <article class="category" id="cat-un-jugador">
             <p class="categoryName">Categoria</p>
             <div class="categoryCarousel">
                 <button class="carouselArrow carouselArrowLeft" type="button" aria-label="Anteriores juegos">
@@ -250,7 +253,7 @@
             </div>
             <div class="categoryNavigation"></div>
         </article>
-        <article class="category">
+        <article class="category" id="cat-clasicos">
             <p class="categoryName">Categoria</p>
             <div class="categoryCarousel">
                 <button class="carouselArrow carouselArrowLeft" type="button" aria-label="Anteriores juegos">
@@ -285,7 +288,7 @@
             </div>
             <div class="categoryNavigation"></div>
         </article>
-        <article class="category">
+        <article class="category" id="cat-estrategia">
             <p class="categoryName">Categoria</p>
             <div class="categoryCarousel">
                 <button class="carouselArrow carouselArrowLeft" type="button" aria-label="Anteriores juegos">
@@ -371,13 +374,13 @@
                             <li><a href="#">Peg Solitaire DBZ</a></li>
                             <li><a href="#">Roblox</a></li>
                             <li><a href="#">Super Mario 64</a></li>
-                            <li><a href="#">PvZ</a></li>
+                            <li><a href="#">Plants vs. Zombies</a></li>
                             <li><a href="#">Bomb Pong</a></li>
                             <li><a href="#">Beastro</a></li>
                         </ul>
                         <ul class="footerList footerSubColumn">
                             <li><a href="#">Rumble Club</a></li>
-                            <li><a href="#">Mago</a></li>
+                            <li><a href="#">Machinarium</a></li>
                             <li><a href="#">Navy Moves</a></li>
                             <li><a href="#">El Caudillo</a></li>
                             <li><a href="#">Minecraft</a></li>
@@ -385,11 +388,11 @@
                         </ul>
                         <ul class="footerList footerSubColumn">
                             <li><a href="#">Pictonico</a></li>
-                            <li><a href="#">Lego Party</a></li>
+                            <li><a href="#">LEGO Marvel Super Heroes</a></li>
                             <li><a href="#">Stick Fight</a></li>
                             <li><a href="#">Zombie Rumble</a></li>
                             <li><a href="#">Agar.io</a></li>
-                            <li><a href="#">Buscaminas</a></li>
+                            <li><a href="#">Minesweeper</a></li>
                         </ul>
                     </div>
                 </div>
