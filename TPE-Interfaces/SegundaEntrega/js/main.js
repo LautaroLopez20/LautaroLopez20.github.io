@@ -185,8 +185,8 @@ function initCategoryMenu() {
 }
 
 /* Acciones del juego: me gusta, no me gusta y compartir.
-   Cada boton es independiente: se activan por separado y mientras mas de uno
-   este activo, el borde lo marca cada uno. */
+   Cada boton se activa en el primer clic y no puede desactivarse; like y
+   dislike ademas suman +1 al contador. */
 
 function initGameActions() {
     const like = document.querySelector('.btnLike');
@@ -195,57 +195,25 @@ function initGameActions() {
 
     if (like) initCountButton(like, 'isLiked');
     if (dislike) initCountButton(dislike, 'isDisliked');
-    if (share) initShareButton(share);
+    if (share) initCountButton(share, 'isShared');
 }
 
 function initCountButton(button, activeClass) {
     const count = button.querySelector('.actionCount');
 
     button.addEventListener('click', () => {
-        const activo = button.classList.toggle(activeClass);
-        button.setAttribute('aria-pressed', String(activo));
+        if (button.classList.contains(activeClass)) return;
+        button.classList.add(activeClass);
+        button.setAttribute('aria-pressed', 'true');
         if (!count) return;
 
-        count.textContent = String(Number(count.textContent) + (activo ? 1 : -1));
+        count.textContent = String(Number(count.textContent) + 1);
 
         // Sacar la clase y releer el layout reinicia la animacion del contador,
-        // asi el pop se repite en cada clic.
+        // asi el pop se repite en cada clic (mientras el boton no este activo).
         count.classList.remove('pop');
         void count.offsetWidth;
         count.classList.add('pop');
-    });
-}
-
-function initShareButton(button) {
-    const label = button.querySelector('.actionLabel');
-    const original = label ? label.textContent : 'Compartir';
-    let restaurando = null;
-
-    button.addEventListener('click', async () => {
-        button.classList.add('isShared');
-
-        // En celular el sistema ofrece su propio menu de compartir.
-        if (navigator.share) {
-            try {
-                await navigator.share({ title: document.title, url: window.location.href });
-            } catch (error) {
-                return; // el usuario cancelo el menu
-            }
-            return;
-        }
-
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-        } catch (error) {
-            console.warn('No se pudo copiar el enlace:', error);
-        }
-
-        if (!label) return;
-        label.textContent = 'Enlace copiado';
-        if (restaurando) clearTimeout(restaurando);
-        restaurando = setTimeout(() => {
-            label.textContent = original;
-        }, 2000);
     });
 }
 
