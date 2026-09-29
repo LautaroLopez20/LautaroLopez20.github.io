@@ -178,7 +178,10 @@ header nav {
     border: none;
     outline: none;
     background: transparent;
-    font-size: 11px;
+    /* el placeholder completo necesita 118px a 11px y el input en mobile es de
+       ~93px a 375, asi que la letra va mas chica para que entre. desktop lo
+       vuelve a 12px mas abajo */
+    font-size: 9px;
     color: #060915;
 }
 
@@ -209,7 +212,9 @@ header nav {
     width: 12px;
     height: 12px;
     display: block;
-    margin-right: 5px;
+    /* la lupa se corre un poco mas a la derecha en mobile (desktop lo vuelve
+       a 5px mas abajo) */
+    margin-right: 12px;
 }
 
 /* Iconos de usuario y carrito */
@@ -218,7 +223,10 @@ header nav {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 6px;
+    /* separa el carrito del icono de usuario: como el grupo esta anclado a la
+       derecha, agrandar el gap corre el carrito hacia la izquierda (desktop lo
+       vuelve a 16px mas abajo) */
+    gap: 12px;
     flex: 1 1 30%;
     min-width: 0;
     height: 100%;
@@ -234,7 +242,7 @@ header nav {
 }
 
 .navIcons img {
-    height: 16px;
+    height: 19px;
     width: auto;
     display: block;
 }
@@ -465,5 +473,6 @@ header nav {
         width: 14px;
         height: 14px;
         transform: scale(200%);
+        margin-right: 5px;
     }
 }

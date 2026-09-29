@@ -164,6 +164,19 @@ body {
     aspect-ratio: 16 / 10;
     border-radius: 12px;
     background-color: #1A2140;
+    /* sin esto el border-radius no recorta la imagen de adentro */
+    overflow: hidden;
+}
+
+/* las capturas llenan el slot. cover y no contain porque las imagenes son 3:2
+   y el slot es 16:10: contain dejaria las bandas del color de fondo. cover
+   recorta un poco del alto pero no deforma. mismo patron que .gameBoardImage */
+.gameplaySlot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .aboutTitle {
