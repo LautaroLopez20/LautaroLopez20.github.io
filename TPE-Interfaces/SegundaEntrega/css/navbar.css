@@ -70,7 +70,9 @@ header nav {
     border-top: none;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-    transform: translateY(-10px);
+    /* Abierto queda al ras del borde inferior del header (top: 100%). El
+       corrimiento es solo del estado oculto, que entra deslizandose. */
+    transform: none;
 }
 
 /* Estado oculto: se corre para arriba mientras se desvanece, en vez de
@@ -271,7 +273,11 @@ header nav {
 
 .userPanel {
     position: absolute;
-    top: calc(100% + 8px);
+    /* Pegado al borde inferior del header, igual que el panel de categorias.
+       Ojo: este 100% es del alto de .userMenu, que solo coincide con el del
+       header porque .userMenu va con align-self: stretch y .navIcons con
+       height: 100%. Si se toca alguno de los dos, hay que revisar este offset. */
+    top: 100%;
     right: 0;
     z-index: 100;
     min-width: 190px;
@@ -279,6 +285,7 @@ header nav {
     box-sizing: border-box;
     background-color: #121B3F;
     border: 1px solid #F4E3DD;
+    border-top: none;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     transition: opacity 0.2s ease, visibility 0.2s ease;
 }

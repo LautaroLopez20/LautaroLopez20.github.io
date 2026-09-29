@@ -32,6 +32,11 @@ body {
 }
 
 .heroGame {
+    /* --gameBar es la huella de la barra de titulo (alto del <p> mas su margen
+       superior) y --playSize el lado del play. El play se dibuja en el area
+       libre que deja --gameBar, asi que los dos deben andar juntos. */
+    --gameBar: 47px;
+    --playSize: 72px;
     border-radius: 5px;
     width: 340px;
     height: 216px;
@@ -99,7 +104,8 @@ body {
 }
 /* El titulo arranca en el mismo borde que la primera card */
 .categoryName {
-    margin: 0px;
+    margin-bottom: 5px;
+    margin-left: 3px;
     width: 150px;
     text-align: left;
     font-weight: bold;
@@ -193,9 +199,14 @@ body {
 
 /* Card de juego */
 .game {
+    /* Huella de la barra de titulo y lado del play. La barra usa --gameBar
+       como alto, asi los dos numeros no se desincronican. */
+    --gameBar: 15px;
+    --playSize: 32px;
     margin-left: 2px;
     margin-right: 2px;
     border-radius: 5px;
+    position: relative;
     width: 84px;
     height: 54px;
     flex: 0 0 auto;
@@ -217,8 +228,8 @@ body {
 .game p {
     margin: 0px;
     width: 100%;
-    height: 15px;
-    line-height: 15px;
+    height: var(--gameBar);
+    line-height: var(--gameBar);
     background-color: rgba(0, 0, 0, .5);
     font-size: 10px;
     font-weight: bold;
@@ -226,6 +237,50 @@ body {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+/* Play sobre la card */
+
+.game::before,
+.heroGame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.game::after,
+.heroGame::after {
+    content: '';
+    position: absolute;
+    /* El play se dibuja en el area libre de arriba de la barra de titulo, y
+       queda centrado dentro de ella con background-position. */
+    inset: 0px 0px var(--gameBar) 0px;
+    /* Va como background y no como content:url() porque un pseudo con
+       content:url() no escala la imagen al ancho declarado: la dibuja a su
+       tamano intrinseco (24x24) pegada en la esquina de la caja. */
+    background-image: url('../img/play.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: var(--playSize) var(--playSize);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.game:hover::before,
+.game:hover::after,
+.heroGame:hover::before,
+.heroGame:hover::after {
+    opacity: 1;
+}
+
+/* El nombre queda arriba del velo y se lee siempre */
+.game p,
+.heroGame p {
+    position: relative;
 }
 
 /* Escritorio */
@@ -241,6 +296,9 @@ header {
 }
 
 .heroGame {
+    /* La barra del hero pasa a 40px de alto, mas los 25px de margen. */
+    --gameBar: 65px;
+    --playSize: 140px;
     width: 680px;
     height: 432px;
     margin-left: -140px;
@@ -267,7 +325,8 @@ header {
 .categoryName {
     margin-left: 35px;
     margin-top: -8px;
-    font-size: 16px;
+    margin-bottom: 5px;
+    font-size: 18px;
 }
 
 /* Las flechas quedan fuera de las cards: la fila deja un margen
@@ -292,13 +351,13 @@ header {
 }
 
 .game {
+    --gameBar: 22px;
+    --playSize: 64px;
     width: 168px;
     height: 108px;
 }
 
 .game p {
-    height: 22px;
-    line-height: 22px;
     font-size: 14px;
 }
 

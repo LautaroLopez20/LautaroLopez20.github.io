@@ -69,6 +69,7 @@ footer {
     min-width: 0;
 }
 
+
 .footerLanguages {
     display: grid;
     grid-template-columns: repeat(4, 48px);
@@ -76,7 +77,6 @@ footer {
     gap: 12px;
     flex-shrink: 0;
 }
-
 .footerFlag {
     width: 48px;
     height: 34px;
@@ -123,6 +123,12 @@ footer {
     .footerColumns {
         flex-wrap: wrap;
         gap: 24px;
+    }
+
+    /* Apiladas, las banderas quedan pegadas a la izquierda: el grid mide 228px
+       fijos y sobra espacio a la derecha. Se centran en el eje transversal. */
+    .footerLanguages {
+        align-self: center;
     }
 
     .footerColumn {

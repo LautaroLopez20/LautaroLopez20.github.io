@@ -168,3 +168,14 @@
     font-weight: bold;
     color: #FFFFFF;
 }
+
+/* Bloqueo de scroll durante la carga */
+body.cargando {
+    overflow: hidden;
+}
+
+/* Al bloquear el scroll desaparece el scrollbar y el contenido centrado se
+   corre ~8px. Reservando el canalon el ancho no cambia al terminar la carga. */
+html {
+    scrollbar-gutter: stable;
+}

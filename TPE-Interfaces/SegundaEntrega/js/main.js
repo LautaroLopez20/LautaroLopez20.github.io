@@ -81,6 +81,7 @@ function startLoading() {
             // minipausa para que se vea el 100%
             setTimeout(() => {
                 overlay.classList.add('hidden');
+                document.body.classList.remove('cargando');
             }, 250);
         }
     }, LOADING_INTERVAL_MS);
