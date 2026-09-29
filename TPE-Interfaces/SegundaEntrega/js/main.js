@@ -7,6 +7,11 @@ const HERO_INTERVAL_MS = 4000;
 const LOADING_DURATION_MS = 5000;
 const LOADING_INTERVAL_MS = 50;
 
+/* Contador del carrito del nav. Placeholder: solo sube con cada click, no hay
+   logica de carrito real. */
+let carritoTotal = 0;
+let cartCountElement = null;
+
 /* Definicion de las categorias del home. El orden importa: es el mismo que
    siguen los <article class="category"> del HTML, y el slug se usa para armar
    los links del menu de categorias y el id de cada carrusel. */
@@ -28,6 +33,7 @@ async function init() {
     initCategoryMenu();
     initFooterAccordion();
     initGameActions();
+    initCart();
 
     let games = null;
     try {
@@ -111,8 +117,7 @@ function initUserMenu() {
 }
 
 /* Menu de categorias (hamburguesa): arma la lista desde CATEGORIES y lleva al
-   carrusel correspondiente. Fuera del home los links van al home con el ancla,
-   porque alli no estan los carruseles. */
+   carrusel correspondiente. Fuera del home los links van al home con el ancla */
 function initCategoryMenu() {
     const button = document.querySelector('.hamburguesa');
     const panel = document.getElementById('categoryPanel');
@@ -430,6 +435,7 @@ function buildCategories(games) {
             viewport.appendChild(card);
         });
 
+        marcarPremium(viewport.querySelectorAll('.game'));
         initCategoryCarousel(categoryElement, viewport);
     });
 }
@@ -454,6 +460,73 @@ function selectGames(allGames, definition) {
     core.sort(sortGames);
     fillers.sort(sortGames);
     return core.concat(fillers).slice(0, GAMES_PER_PAGE * 2);
+}
+
+/* Cards premium: la API no distingue gratis/pagos, asi que la marca es
+   simulada al generar cada categoria. Entre 1 y 4 cards por pagina (bloque de
+   GAMES_PER_PAGE), con corona en la esquina, precio y boton de carrito en el
+   hover que reemplaza al play. */
+function marcarPremium(cards) {
+    for (let inicio = 0; inicio < cards.length; inicio += GAMES_PER_PAGE) {
+        const grupo = Array.from(cards).slice(inicio, inicio + GAMES_PER_PAGE);
+        const cantidad = Math.min(1 + Math.floor(Math.random() * 4), grupo.length);
+        const elegidos = new Set();
+        while (elegidos.size < cantidad) elegidos.add(Math.floor(Math.random() * grupo.length));
+
+        elegidos.forEach((posicion) => {
+            const card = grupo[posicion];
+            card.classList.add('premium');
+
+            // Precio simulado: el campo no viene en la API.
+            const precio = Math.floor(Math.random() * 40) + 20 + '.99';
+
+            const crown = document.createElement('span');
+            crown.className = 'premiumCrown';
+            crown.setAttribute('aria-hidden', 'true');
+            crown.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l4.2 4L12 5.5 16.8 13 21 9l-1.5 11h-15L3 9z"/></svg>';
+            card.prepend(crown);
+
+            const price = document.createElement('span');
+            price.className = 'premiumPrice';
+            price.textContent = '$' + precio;
+            card.appendChild(price);
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'gameCart';
+            button.setAttribute('aria-label', 'Agregar al carrito');
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                agregarAlCarrito();
+            });
+            card.appendChild(button);
+        });
+    }
+}
+
+/* Circulo rojo con la cantidad sobre el icono del carrito del nav */
+function initCart() {
+    const icon = document.querySelector('.carrito');
+    if (!icon) return;
+
+    const holder = icon.closest('button') || icon.parentElement;
+    if (!holder) return;
+    holder.style.position = 'relative';
+
+    cartCountElement = document.createElement('span');
+    cartCountElement.className = 'cartCount hidden';
+    cartCountElement.setAttribute('aria-hidden', 'true');
+    cartCountElement.textContent = String(carritoTotal);
+    holder.appendChild(cartCountElement);
+}
+
+/* Cada click en un carrito de una card premium suma uno al contador */
+function agregarAlCarrito() {
+    carritoTotal++;
+    if (!cartCountElement) return;
+    cartCountElement.textContent = String(carritoTotal);
+    cartCountElement.classList.remove('hidden');
 }
 
 /* Logica de un carrusel de categoria: flechas y dots */

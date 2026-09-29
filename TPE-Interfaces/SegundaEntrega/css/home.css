@@ -283,6 +283,64 @@ body {
     position: relative;
 }
 
+/* Card premium: el precio siempre visible arriba a la izquierda y la corona
+   arriba a la derecha; en el hover aparece el boton de carrito en el lugar
+   del play. */
+.game.premium::after {
+    display: none;
+}
+
+.premiumCrown {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #C9A227;
+    color: #0C122A;
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.premiumCrown svg {
+    width: 9px;
+    height: 9px;
+}
+
+.premiumPrice {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 3;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: #F4E3DD;
+    font-size: 8px;
+    font-weight: bold;
+    line-height: 13px;
+}
+
+.gameCart {
+    position: absolute;
+    inset: 0 0 var(--gameBar) 0;
+    z-index: 3;
+    padding: 0;
+    border: none;
+    background: transparent url('../img/cart-light.svg') no-repeat center;
+    background-size: var(--playSize) var(--playSize);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+.game.premium:hover .gameCart {
+    opacity: 1;
+}
+
 /* Escritorio */
 @media (min-width: 780px) {
 
@@ -359,6 +417,25 @@ header {
 
 .game p {
     font-size: 14px;
+}
+
+.premiumCrown {
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+}
+.premiumCrown svg {
+    width: 14px;
+    height: 14px;
+}
+
+.premiumPrice {
+    top: 7px;
+    left: 6px;
+    padding: 2px 6px;
+    font-size: 11px;
+    line-height: 17px;
 }
 
 }
