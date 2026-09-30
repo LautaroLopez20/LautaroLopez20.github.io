@@ -1,12 +1,11 @@
 # FastGames
 
-Pagina del Trabajo Practico de Interfaces de Usuario (UNICEN).
+Web de videojuegos online.
 
 ## Como se navega el repositorio
 
 Al ingresar a la URL del repositorio, GitHub Pages abre el `index.html`
-ubicado en la raiz, que actua como indice de entregas (sin redirect
-automatico: el evaluador elige a donde ir).
+ubicado en la raiz, que actua como indice de entregas.
 
 - **Primera Entrega** → `TPE-Interfaces/PrimeraEntrega/index.html`
   (prototipo y wireframes en Figma).
