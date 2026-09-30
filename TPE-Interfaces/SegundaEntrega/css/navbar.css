@@ -422,12 +422,18 @@ header nav {
         flex: none;
     }
 
+    /* El logo se hace fluido en desktop porque con el ancho fijo (268px) la
+       barra de 380px centrada en el nav solo entra desde 1280px. A 22vw llega
+       al ancho original desde los 1218px, asi que en cualquier monitor de 1280
+       o mas se ve igual que antes. */
     .logo img {
-        width: auto;
-        height: 100%;
+        width: clamp(150px, 22vw, 268px);
+        height: auto;
         max-height: none;
     }
 
+    /* Sin margin-left: auto el grupo queda pegado al logo, porque la barra
+       sale del flujo y no ocupa el espacio que la empujaba. */
     .navIcons {
         gap: 16px;
         justify-content: flex-end;
@@ -455,14 +461,19 @@ header nav {
         height: 10px;
     }
 
-    /* la busqueda queda centrada respecto a la pagina entera */
+    /* Centrada respecto del nav: left:50% mas el translateX(-50%) la dejan en el
+       centro real, no en el centro del hueco libre (el logo descentra la pagina
+       asi que esas dos cosas no coinciden). El ancho es fluido porque a 780px
+       con 380px fijos se montaba sobre el logo; a 30vw llega al ancho original
+       desde los 1267px. El border-box hace falta para que el clamp mida la
+       barra entera y no la caja de contenido mas los 16px de padding. */
     .headerSearch {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 100%;
-        max-width: 380px;
+        box-sizing: border-box;
+        width: clamp(230px, 30vw, 380px);
         height: 35px;
     }
 
