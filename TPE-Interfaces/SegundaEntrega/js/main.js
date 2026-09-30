@@ -7,6 +7,11 @@ const HERO_INTERVAL_MS = 4000;
 const LOADING_DURATION_MS = 5000;
 const LOADING_INTERVAL_MS = 50;
 
+/* Tiempo que queda el boton mostrando el sobre antes de volver a "Enviar".
+   Tiene que ser mayor que la sacudida de .btnSubmitComment.enviado en el CSS
+   (0.5s) para que el boton quede quieto antes de reiniciarse. */
+const COMMENT_RESET_MS = 1200;
+
 /* Contador del carrito del nav. Placeholder: solo sube con cada click, no hay
    logica de carrito real. */
 let carritoTotal = 0;
@@ -34,6 +39,7 @@ async function init() {
     initFooterAccordion();
     initGameActions();
     initCart();
+    initCommentSubmit();
 
     let games = null;
     try {
@@ -221,6 +227,92 @@ function initCountButton(button, activeClass) {
         void count.offsetWidth;
         count.classList.add('pop');
     });
+}
+
+/* Envio del comentario: al hacer click el boton corre el barrido una sola vez
+   y recien cuando termina cambia el texto "Enviar" por el sobre. El comentario
+   se agrega al final de la lista con la fecha del dia, la caja se limpia y el
+   boton vuelve a su estado inicial para poder mandar otro. */
+function initCommentSubmit() {
+    const input = document.querySelector('.commentInput');
+    const button = document.querySelector('.btnSubmitComment');
+    if (!input || !button) return;
+
+    button.addEventListener('click', () => {
+        // Solo bloquea mientras corre la animacion, para que un segundo click no
+        // se solape con el barrido.
+        if (button.disabled) return;
+
+        const texto = input.value.trim();
+
+        button.classList.add('enviando');
+        button.disabled = true;
+
+        // El swap arranca cuando el barrido termina, no en paralelo. Se filtra
+        // por nombre porque el boton puede tener otras animaciones.
+        button.addEventListener('animationend', function alTerminar(evento) {
+            if (evento.animationName !== 'barridoEnviar') return;
+            button.removeEventListener('animationend', alTerminar);
+
+            button.classList.remove('enviando');
+            button.classList.add('enviado');
+
+            if (texto) agregarComentario(texto);
+            input.value = '';
+
+            // El sobre es solo la confirmacion de que se mando: despues el
+            // boton vuelve a decir "Enviar" y acepta otro comentario.
+            setTimeout(function reiniciarBoton() {
+                button.classList.remove('enviado');
+                button.disabled = false;
+            }, COMMENT_RESET_MS);
+        });
+    });
+}
+
+/* Arma el comentario nuevo con el mismo markup de los fijos y lo pone al final
+   de la lista. Todo el texto va por textContent: lo que escribio el usuario
+   nunca se interpreta como HTML. */
+function agregarComentario(texto) {
+    const lista = document.querySelector('.commentsContainer');
+    if (!lista) return;
+
+    const comment = document.createElement('article');
+    comment.className = 'comment';
+
+    const header = document.createElement('div');
+    header.className = 'commentHeader';
+
+    const avatar = document.createElement('img');
+    avatar.src = 'img/userLight.svg';
+    avatar.alt = 'Usuario';
+    avatar.className = 'commentAvatar';
+
+    const user = document.createElement('span');
+    user.className = 'commentUser';
+    user.textContent = 'Usuario';
+
+    const date = document.createElement('span');
+    date.className = 'commentDate';
+    date.textContent = fechaDeHoy();
+
+    const body = document.createElement('p');
+    body.className = 'commentText';
+    body.textContent = texto;
+
+    header.append(avatar, user, date);
+    comment.append(header, body);
+    lista.append(comment);
+}
+
+/* Fecha de hoy en dd/mm/yy. Se arma a mano y no con toLocaleDateString porque
+   el orden de los componentes depende de la configuracion de cada navegador. */
+function fechaDeHoy() {
+    const hoy = new Date();
+    const dia = String(hoy.getDate()).padStart(2, '0');
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const anio = String(hoy.getFullYear()).slice(-2);
+    return dia + '/' + mes + '/' + anio;
 }
 
 /* Footer plegable */

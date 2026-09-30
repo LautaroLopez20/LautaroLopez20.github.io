@@ -20,6 +20,13 @@ footer {
     gap: 100px;
     flex: 1;
     min-width: 0;
+    /* Red de seguridad: si igual no entra en una fila, que saltea de linea en
+       vez de desbordar la pagina. */
+    flex-wrap: wrap;
+    /* Como el div es flex: 1 crece hasta el final y el sobrante quedaba juntado
+       al final, dejando ~100px de vacio entre la ultima columna y las banderas.
+       space-between reparte ese sobrante entre las columnas. */
+    justify-content: space-between;
 }
 
 .footerColumn {
@@ -110,6 +117,59 @@ footer {
 .footerSocials img {
     width: 32px;
     height: 32px;
+}
+
+/* A medida que se achica la pantalla se van apretando los gaps y la letra para
+   intentar dejar todo en una sola fila. Cada valor arranca en el original y baja
+   segun cuanta resolucion se perdio, con (1920px - 100vw) como unidad. El clamp
+   es el piso, para que nunca quede ilegible. Sin esto el footer necesita 1885px
+   y desborda la pagina en 1366x768, 1440x900 y 1600x900. */
+@media (min-width: 781px) {
+
+    .footerTop {
+        gap: clamp(24px, calc(72px - (1920px - 100vw) * 0.068), 72px);
+        padding: 40px clamp(20px, calc(70px - (1920px - 100vw) * 0.0786), 70px) 32px;
+    }
+
+    .footerBottom {
+        padding: 2px clamp(20px, calc(70px - (1920px - 100vw) * 0.0786), 70px) 14px;
+    }
+
+    .footerColumns {
+        gap: clamp(14px, calc(100px - (1920px - 100vw) * 0.132), 100px);
+    }
+
+    .footerSubColumns {
+        gap: clamp(12px, calc(32px - (1920px - 100vw) * 0.0214), 32px);
+    }
+
+    .footerList a {
+        font-size: clamp(12px, calc(13px - (1920px - 100vw) * 0.00192), 13px);
+    }
+
+    /* El titulo manda el ancho de cada columna (es mas ancho que los links), asi
+       que es lo unico que hace que las columnas ocupen el espacio disponible en
+       vez de dejar casi 200px de sobrante. Se lo deja en 22px hasta 1380px para
+       que el gap entre columnas no se dispare al achicar la pantalla, y recien
+       ahi arranca a encogerse, con 17px de piso. El 1380 es el valor mas juste
+       que todavia deja el footer en una sola fila: bajarlo mas (1350) obliga a
+       pegSolitaire a partirse en dos filas entre 1350 y 1370. */
+    .footerHeading {
+        font-size: clamp(17px, calc(22px - (1380px - 100vw) * 0.02), 22px);
+        margin-bottom: clamp(10px, calc(14px - (1920px - 100vw) * 0.0043), 14px);
+        padding-bottom: clamp(5px, calc(8px - (1920px - 100vw) * 0.0026), 8px);
+    }
+
+    .footerLanguages {
+        grid-template-columns: repeat(4, clamp(28px, calc(48px - (1920px - 100vw) * 0.025), 48px));
+        grid-template-rows: repeat(2, clamp(18px, calc(34px - (1920px - 100vw) * 0.0179), 34px));
+        gap: clamp(5px, calc(12px - (1920px - 100vw) * 0.0071), 12px);
+    }
+
+    .footerFlag {
+        width: clamp(28px, calc(48px - (1920px - 100vw) * 0.025), 48px);
+        height: clamp(18px, calc(34px - (1920px - 100vw) * 0.0179), 34px);
+    }
 }
 
 /* mobile : hace que las columnas y la base se apilen */

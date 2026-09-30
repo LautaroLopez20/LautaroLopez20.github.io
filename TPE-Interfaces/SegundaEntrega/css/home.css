@@ -41,7 +41,10 @@ body {
     width: 340px;
     height: 216px;
     flex: 0 0 auto;
-    margin-left: -70px;
+    /* Este margen negativo ES el solapamiento del hero: cuanto mas negativo
+       sea, menos avanza cada card y mas se mete debajo de la de adelante. El
+       avance real entre cards es "width + margin-left". */
+    margin-left: -87px;
     position: relative;
     z-index: 1;
     display: flex;
@@ -51,7 +54,12 @@ body {
     background-size: cover;
     background-position: center;
     transform: translateY(44px) scale(0.6);
-    transition: transform 0.45s ease;
+    /* El filter va en la transicion para que el cambio de card cada 4s no sea
+       un salto de opacidad a secas. */
+    transition: transform 0.45s ease, filter 0.3s ease;
+    /* Las cards que no son la de adelante quedan al 60%: el fondo se ve bien y
+       las de los costados se leen como si estuvieran detras. */
+    filter: brightness(0.6);
     /* Los destacados del hero tambien llevan al juego */
     text-decoration: none;
     color: inherit;
@@ -60,6 +68,10 @@ body {
 .heroGame.active {
     z-index: 2;
     transform: none;
+    /* La de adelante va sin filtro, con su brillo normal. "none" interpola
+       contra brightness(0.6), asi que la transicion funciona en los dos
+       sentidos. */
+    filter: none;
 }
 /* Copias del hero */
 .heroGameCopy {
@@ -359,7 +371,8 @@ header {
     --playSize: 140px;
     width: 680px;
     height: 432px;
-    margin-left: -140px;
+    /* El solapamiento del hero, ajustado a la medida de escritorio */
+    margin-left: -170px;
     transform: translateY(88px) scale(0.6);
 }
 
