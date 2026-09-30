@@ -1,4 +1,4 @@
-# LautaroLopez20.github.io
+# FastGames
 
 Pagina del Trabajo Practico de Interfaces de Usuario (UNICEN).
 
