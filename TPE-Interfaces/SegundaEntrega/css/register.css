@@ -50,6 +50,20 @@ body {
     margin-top: 6px;
 }
 
+/* Input con error: el borde pasa al naranja de marca. .inputPill viene con
+   "border: none", asi que este es el primer borde que ve el campo. Como tiene
+   box-sizing: border-box y height fijo, el recuadro no cambia de tamano. */
+.inputPill.error {
+    border: 2px solid #B8461D;
+}
+
+/* Aviso que se cuelga debajo del input. El hueco de 6px lo da el "gap" de
+   .field, asi que no hace falta margen propio. */
+.inputError {
+    font-size: 12px;
+    color: #B8461D;
+}
+
 /* Tarjeta de ayuda de contraseña */
 
 .passwordHint {

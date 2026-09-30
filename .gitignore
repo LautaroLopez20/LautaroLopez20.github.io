@@ -6,3 +6,5 @@ node_modules/
 # Requisitos / consignas de los TPE (no se versionan)
 *Requisitos*.txt
 *requisitos*.txt
+# Notas personales de revision (no se versionan)
+/TPE-Interfaces/SegundaEntrega/para revisar.txt

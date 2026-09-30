@@ -206,11 +206,28 @@ body {
     padding-right: 70px;
     margin: 40px 0 60px;
     box-sizing: border-box;
+    /* Linea divisoria: separa los comentarios de las secciones de arriba sin
+       necesidad de cambiar el fondo de la pagina. Se dibuja sobre la caja de
+       borde, que es "width: 100%", asi que va de borde a borde del viewport y
+       pasa por debajo de los 70px de padding lateral. */
+    border-top: 1px solid rgba(220, 222, 229, 0.15);
+    /* Sin esto la linea quedaria pegada contra el titulo. Queda simetrico:
+       40px del texto a la linea, 40px de la linea al titulo. */
+    padding-top: 40px;
 }
 
 .commentsSection .aboutTitle {
-    font-size: 28px;
+    font-size: 34px;
+    color: #FFFFFF;
     margin-bottom: 30px;
+}
+
+/* El titulo del formulario vuelve a su tamano base. Esta DENTRO de
+   .commentsSection, asi que sin esta regla heredaria el tamaño grande de
+   arriba y competiria con el titulo de la seccion. */
+.commentsSection .commentFormTitle {
+    font-size: 20px;
+    color: rgba(220, 222, 229, 0.9);
 }
 
 .commentsContainer {
@@ -220,7 +237,11 @@ body {
 }
 
 .comment {
-    background-color: #060915;
+    /* Antes era #060915, que es el fondo del login y ademas mas oscuro que la
+       pagina (#0C122A), asi que las cards se leian como agujeros calados. Con
+       #182455 quedan por encima de la pagina, mismo matiz, y ya se usa en el
+       proyecto (register.css, .passwordHint). */
+    background-color: #182455;
     border: 1px solid #DCDEE5;
     border-radius: 12px;
     padding: 12px 16px;
@@ -245,6 +266,13 @@ body {
     color: #DCDEE5;
 }
 
+/* Fecha: mismo tono y tamano que el nombre pero con la mitad de opacidad,
+   para que el dato acomane y no compita con el usuario. */
+.commentDate {
+    font-size: 12px;
+    color: rgba(220, 222, 229, 0.5);
+}
+
 .commentText {
     margin: 10px 0 0;
     font-size: 15px;
@@ -261,19 +289,20 @@ body {
     margin-bottom: 16px;
 }
 
-.commentInputWrapper {
-    position: relative;
+.commentFormRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
     width: 50%;
 }
 
 .commentInput {
-    width: 100%;
+    flex: 1;
     min-height: 200px;
-    background-color: #A2A7BB;
+    background-color: rgba(162, 167, 187,0.5);
     border: none;
     border-radius: 12px;
     padding: 12px 16px;
-    padding-bottom: 56px;
     box-sizing: border-box;
     font-family: inherit;
     font-size: 15px;
@@ -286,10 +315,10 @@ body {
 }
 
 .btnSubmitComment {
-    position: absolute;
-    right: 12px;
-    bottom: 12px;
     background-color: #1A2140;
+    /* min-width para que el boton no cambie de tamano al pasar de "Enviar" a
+       el sobre. */
+    min-width: 90px;
     /* Gradiente de dos tonos con corte duro, estirado al doble del ancho del
        boton. El tono claro esta en la primera mitad de la imagen, asi al
        desplazar la posicion del fondo la franja clara entra por la izquierda
@@ -300,12 +329,52 @@ body {
     color: #FFFFFF;
 }
 
-/* Enviar: barrido de una tonalidad mas clara, de izquierda a derecha y de
-   vuelta. El "alternate" hace que la animacion vaya y vuelva sin reiniciarse
-   de golpe, y queda activa mientras el cursor este encima. */
-.btnSubmitComment:hover {
-    animation: barridoEnviar 1.2s ease-in-out infinite alternate;
+/* El texto y el sobre conviven en el boton: el CSS decide cual se ve segun el
+   estado, asi el cambio de uno a otro no tiene que crear ni borrar nodos. El
+   texto sigue a la vista mientras corre el barrido. */
+.btnSubmitIcon {
+    display: none;
+    width: 24px;
+    height: 24px;
+}
+
+.btnSubmitComment.enviado .btnSubmitLabel {
+    display: none;
+}
+
+.btnSubmitComment.enviado .btnSubmitIcon {
+    display: block;
+}
+
+/* Enviar: barrido de una tonalidad mas clara, de izquierda a derecha. En vez
+   de quedar en loop con el cursor encima, corre una sola vez al hacer click.
+   El "forwards" deja el fondo en el tono claro para que el sobre no aparezca
+   sobre el color oscuro. */
+.btnSubmitComment.enviando {
+    animation: barridoEnviar 1.2s ease-in-out 1 forwards;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Estado de confirmacion: el texto ya paso al sobre y el fondo queda en el tono
+   claro del barrido. El background-position va explicito porque al sacar la
+   animacion del barrido se pierde su "forwards". La sacudida arranca sola con
+   esta clase y dura menos que COMMENT_RESET_MS, asi que el boton queda quieto
+   antes de reiniciarse. Reusa el keyframe "sacudida" de atoms.css, el mismo
+   que usa .btnSecondary. */
+.btnSubmitComment.enviado {
+    background-position: 0% 0;
+    cursor: default;
+    animation: sacudida 0.5s ease-in-out 1;
+}
+
+/* En hover solo queda el escalado. El barrido ya no depende del cursor. */
+.btnSubmitComment:hover:not(:disabled) {
     transform: scale(110%);
+}
+
+.btnSubmitComment:disabled {
+    cursor: default;
 }
 
 @keyframes barridoEnviar {
