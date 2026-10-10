@@ -63,7 +63,7 @@ main{
   justify-content: center;
   align-items: center;
   padding: 10px;
-  gap: 20px;
+  gap: 12px;
   opacity: 0.9;
 }
 
@@ -90,4 +90,23 @@ button{
 img {
   width: 15%;
   height: 15%;
+}
+
+/* SELECCIÓN DE JUEGO */
+.game-image.seleccionado{ /*Este viene de script.js*/
+  outline: 3px solid var(--color-luz);
+}
+
+/* Se aplica a la imagen finalista */
+.game-image.elegida {
+  outline: 3px solid var(--color-luz);
+  animation: sarandeo 0.25s ease-in-out infinite alternate;
+  transform: translateY(2px);
+  transform: scale(1.05);
+  z-index: 9999;
+}
+
+@keyframes sarandeo {
+  from { transform: translateX(-8px); }
+  to   { transform: translateX(8px); }
 }
