@@ -101,8 +101,9 @@
         transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
         animation: subir .7s ease both;
     }
-    .entrega:first-child { animation-delay: .24s; }
-    .entrega:last-child  { animation-delay: .34s; }
+    .entrega:nth-child(1) { animation-delay: .24s; }
+    .entrega:nth-child(2) { animation-delay: .29s; }
+    .entrega:nth-child(3) { animation-delay: .34s; }
     .entrega:hover {
         transform: translateY(-4px);
         border-color: var(--dorado);
@@ -201,6 +202,25 @@
                 </span>
                 <h2>Segunda Entrega</h2>
                 <p>Pagina web FastGames</p>
+                <span class="abrir">Abrir entrega
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </a>
+
+            <a class="entrega" href="TPE-Interfaces/TerceraEntrega/index.html">
+                <span class="numero">03</span>
+                <span class="icono">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="13" y="3" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="3" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </span>
+                <h2>Tercera Entrega</h2>
+                <p>Juego BLOCKA</p>
                 <span class="abrir">Abrir entrega
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

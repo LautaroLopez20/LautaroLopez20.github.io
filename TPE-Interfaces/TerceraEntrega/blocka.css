@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* =================================================== 
+   VARIABLES Y PALETA DE COLORES REQUERIDA 
+   =================================================== */ 
+:root { 
+  --color-primario: #182455;   /* Azul Marino Profundo */ 
+  --color-secundario: #B8461D; /* Terracota / Naranja Oscuro */ 
+  --color-luz: #F4E3DD;     /* Crema Suave */ 
+  --color-blanco-puro: #ffffff; 
+  --font-family: 'Roboto'; 
+} 
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--color-primario);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-family), sans-serif;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+main{
+  background-color: var(--color-secundario);
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.game-container {
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 50%;
+}
+
+/* El contenido interno deja ver el fondo secundario del cubo */
+.game-container div:not(.image-gallery),
+.game-container p {
+  background-color: transparent;
+  margin: 2px;
+}
+
+.image-gallery {
+  background-color: var(--color-primario);
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 20px;
+  opacity: 0.9;
+}
+
+.btn-seccion {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+}
+
+button{
+  background-color: var(--color-primario);
+  color: var(--color-blanco-puro);
+  border: 2px solid var(--color-blanco-puro);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+img {
+  width: 15%;
+  height: 15%;
+}
