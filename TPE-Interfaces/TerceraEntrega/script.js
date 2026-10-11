@@ -51,27 +51,32 @@ document.addEventListener("DOMContentLoaded", () => { //event listener para todo
   let imagenElegida = null;
 
   btnStart.addEventListener("click", () => {
-    btnStart.disabled = true; // asi no se toca dos veces
+  btnStart.disabled = true; // asi no se toca dos veces
+
+    let imagenActiva = null;
 
     //RULETA
     const intervalo = setInterval(() => {
-      const azar = Math.floor(Math.random() * imagenes.length);
-      let imagen = imagenes[azar];
-      imagen.classList.add("seleccionado");
-      timeout = setTimeout(() => {
-        imagen.classList.remove("seleccionado");
-      }, 400); 
-      //TODO: CAMBIAR ESTO PARA QUE QUEDE BIEN ALINEADO LOS TIEMPOS
+      if (imagenActiva) {
+        imagenActiva.classList.remove("seleccionado");
+      } 
+
+    const azar = Math.floor(Math.random() * imagenes.length);
+    imagenActiva = imagenes[azar];
+    imagenActiva.classList.add("seleccionado");
     }, 400);
 
-    //SELECCION
     setTimeout(() => {
       clearInterval(intervalo); //corto ruleta
 
-      const azar = Math.floor(Math.random() * imagenes.length);
-      imagenElegida = imagenes[azar];
+      if (imagenActiva){
+        imagenActiva.classList.remove("seleccionado");
+      }
+
+      const azarFinal = Math.floor(Math.random() * imagenes.length);
+      imagenElegida = imagenes[azarFinal];
       imagenElegida.classList.add("elegida");
-    }, 2600);
+    },2600); //duración de la ruleta
 
   });
 
