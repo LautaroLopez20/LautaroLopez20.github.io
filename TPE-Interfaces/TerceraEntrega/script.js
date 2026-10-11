@@ -56,14 +56,14 @@ document.addEventListener("DOMContentLoaded", () => { //event listener para todo
     let imagenActiva = null;
 
     //RULETA
-    const intervalo = setInterval(() => {
-      if (imagenActiva) {
+    const intervalo = setInterval(() => { 
+      if (imagenActiva) { //verifico asi despues no estan todas iluminadas
         imagenActiva.classList.remove("seleccionado");
       } 
 
     const azar = Math.floor(Math.random() * imagenes.length);
     imagenActiva = imagenes[azar];
-    imagenActiva.classList.add("seleccionado");
+    imagenActiva.classList.add("seleccionado"); //Defino como activa
     }, 400);
 
     setTimeout(() => {
@@ -76,9 +76,14 @@ document.addEventListener("DOMContentLoaded", () => { //event listener para todo
       const azarFinal = Math.floor(Math.random() * imagenes.length);
       imagenElegida = imagenes[azarFinal];
       imagenElegida.classList.add("elegida");
+
+      sessionStorage.setItem("imagenElegida", imagenElegida.src); //Lo guardo para el juego
+
+      setTimeout(() => {
+        window.location.href = "play.html"; //asi se redirige a la página de juego
+      }, 2000); //tiempo para mostrar la imagen elegida
     },2600); //duración de la ruleta
 
   });
 
 });
-
