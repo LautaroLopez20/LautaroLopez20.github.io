@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => { //event listener para todo
   const IMAGENES_VISIBLES = 6;
 
   // Mostrar imágenes aleatorias en la galería
-  const gallery = document.getElementById("image-gallery"); //definimos "gallery" como el contenedor de la galería de imágenes en el HTML
+  const gallery = document.getElementById("image-gallery"); //se define "gallery" como el contenedor de la galería de imágenes en el HTML
   
   let i = 0;
   const elegidas = []; // URLs de las imágenes que ya se mostraron
@@ -31,12 +31,12 @@ document.addEventListener("DOMContentLoaded", () => { //event listener para todo
     const url = imageBank[indice]; //URL de la imagen seleccionada en base al indice del banco
 
     if (!elegidas.includes(url)) { //si la imagen todavía no fue elegida
-      elegidas.push(url); //la anotamos para no repetirla
+      elegidas.push(url); //se anota para no repetirla
 
-      const img = document.createElement("img"); //acá se crea un elemento de imagen para cada imagen que se va a mostrar en la galería
-      img.src = url; //asignar la URL de la imagen seleccionada
+      const img = document.createElement("img"); //se crea un elemento de imagen para cada imagen que se va a mostrar en la galería
+      img.src = url; //asigna la URL de la imagen seleccionada
       img.className = "game-image";
-      gallery.appendChild(img); //agregamos la imagen al contenedor de la galería
+      gallery.appendChild(img); //agrega la imagen al contenedor de la galería
       i++;
     }
     //Sinó se puede hacer mezclar el arreglo de imágenes y hacer un slice de las primeras 6 imágenes ya que de por si el banco no las repite.
@@ -57,17 +57,17 @@ document.addEventListener("DOMContentLoaded", () => { //event listener para todo
 
     //RULETA
     const intervalo = setInterval(() => { 
-      if (imagenActiva) { //verifico asi despues no estan todas iluminadas
+      if (imagenActiva) { //verifica asi despues no estan todas iluminadas
         imagenActiva.classList.remove("seleccionado");
       } 
 
     const azar = Math.floor(Math.random() * imagenes.length);
     imagenActiva = imagenes[azar];
-    imagenActiva.classList.add("seleccionado"); //Defino como activa
+    imagenActiva.classList.add("seleccionado"); //Define como activa
     }, 400);
 
     setTimeout(() => {
-      clearInterval(intervalo); //corto ruleta
+      clearInterval(intervalo); //corta ruleta
 
       if (imagenActiva){
         imagenActiva.classList.remove("seleccionado");
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => { //event listener para todo
       imagenElegida = imagenes[azarFinal];
       imagenElegida.classList.add("elegida");
 
-      sessionStorage.setItem("imagenElegida", imagenElegida.src); //Lo guardo para el juego
+      sessionStorage.setItem("imagenElegida", imagenElegida.src); //se guarda para el juego
 
       setTimeout(() => {
         window.location.href = "play.html"; //asi se redirige a la página de juego

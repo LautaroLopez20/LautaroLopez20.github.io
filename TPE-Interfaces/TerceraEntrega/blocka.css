@@ -111,6 +111,33 @@ img {
   to   { transform: translateX(8px); }
 }
 
+/*TEMPORIZADOR Y MENSAJE DE VICTORIA*/
+
+#hud {
+  flex-direction: row; /*pisa la regla global de div (column) para centrar el reloj en fila*/
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+#tiempo {
+  background-color: var(--color-primario);
+  color: var(--color-blanco-puro);
+  font-size: 28px;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-variant-numeric: tabular-nums; /*evita que el ancho salte mientras el reloj corre*/
+}
+
+#mensaje {
+  color: var(--color-blanco-puro);
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
 /*CANVAS DEL JUEGO*/
 
 #canvas-container {
