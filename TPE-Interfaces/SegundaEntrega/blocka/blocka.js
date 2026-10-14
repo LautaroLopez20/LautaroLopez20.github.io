@@ -142,6 +142,8 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     girarPorClick(evento, 90);
   });
 
+  // |FILTROS| //
+
   //FILTRO BLANCO Y NEGRO (aplicado sobre un canvas offscreen)
   function filtroByN(img){
     const off = document.createElement("canvas"); //canvas auxiliar que no se muestra en pantalla
@@ -172,6 +174,41 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
         data[i + 1] = gray;
         data[i + 2] = gray;
         //El alfa no se modifica ya que no hace falta si solo se pasan los colores a gris
+      }
+    }
+    offContexto.putImageData(imageData, 0, 0);
+
+    return off; //devuelve el canvas ya filtrado
+  }
+
+  //FILTRO NEGATIVO
+  function filtroNegativo(img){
+    const off = document.createElement("canvas");
+    off.width = img.naturalWidth;
+    off.height = img.naturalHeight;
+
+    const offContexto = off.getContext("2d");
+    offContexto.drawImage(img, 0, 0);
+
+    let width = off.width;
+    let height = off.height;
+
+    let imageData = offContexto.getImageData(0, 0, width, height);
+    let data = imageData.data;
+
+    //Recorre la imagen con el doble ciclo
+    for (let y = 0; y < height; y++){
+      for (let x = 0; x < width; x++){
+        let i = (x + y * width) * 4; //indice del pixel en el arreglo de datos
+
+        let r = data[i];
+        let g = data[i + 1];
+        let b = data[i + 2];
+
+        //Aplica el filtro negativo
+        data[i] = 255 - r;
+        data[i + 1] = 255 - g;
+        data[i + 2] = 255 - b;
       }
     }
     offContexto.putImageData(imageData, 0, 0);
