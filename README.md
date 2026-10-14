@@ -11,8 +11,8 @@ ubicado en la raiz, que actua como indice de entregas.
   (prototipo y wireframes en Figma).
 - **Segunda Entrega** → `TPE-Interfaces/SegundaEntrega/login.html`
   (pagina web FastGames; la navegacion arranca por el login).
-- **Tercera Entrega** → `TPE-Interfaces/TerceraEntrega/index.html`
-  (juego BLOCKA).
+- **Tercera Entrega** → `TPE-Interfaces/SegundaEntrega/blocka.html`
+  (juego blocka)
 
 ## Ramas
 
