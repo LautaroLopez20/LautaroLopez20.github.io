@@ -20,13 +20,72 @@
 
 /* Al usar display flex en las fases, el atributo hidden quedaria pisado por
    esa regla. Se fuerza el ocultado para que la fase inactiva no se vea. */
+.faseMenu[hidden],
 .faseSeleccion[hidden],
 .faseJuego[hidden],
-#mensaje[hidden] {
+#resultadoTop[hidden],
+#resultadoBottom[hidden],
+#hud[hidden] {
   display: none;
 }
 
-/* FASE 1: SELECCION DE IMAGEN */
+/* Los botones del juego se ajustan al contenido: .btnPrimary/.btnSecondary
+   traen ancho fijo y textos como "Siguiente nivel" o "Volver al menu" no entran. */
+.faseMenu .btn,
+.faseSeleccion .btn,
+.faseJuego .btn {
+  width: auto;
+}
+
+/* FASE 1: MENU PRINCIPAL (nivel + dificultad) */
+
+.faseMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.selectorNiveles,
+.selectorDificultad {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.opcionNivel,
+.opcionDificultad {
+  background-color: var(--color-primario);
+  color: var(--color-blanco-puro);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.opcionNivel:hover,
+.opcionDificultad:hover {
+  transform: translateY(-2px);
+}
+
+.opcionNivel.activo,
+.opcionDificultad.activo {
+  background-color: var(--color-secundario);
+  border-color: var(--color-luz);
+}
+
+/* FASE 2: SELECCION DE IMAGEN */
 
 .faseSeleccion {
   display: flex;
@@ -48,20 +107,22 @@
 }
 
 .image-gallery {
-  display: inline-flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 10px;
   background-color: var(--color-primario);
   opacity: 0.9;
 }
 
+/* Miniaturas uniformes: mismo recuadro para todas, sin importar la
+   proporcion real de la foto (cover recorta lo que sobra). */
 .image-gallery img {
-  width: 15%;
-  height: auto;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
 }
 
 /* Imagen que la ruleta va iluminando */
@@ -82,7 +143,7 @@
   to   { transform: translateX(8px); }
 }
 
-/* FASE 2: JUEGO */
+/* FASE 3: JUEGO */
 
 .faseJuego {
   display: flex;
@@ -96,7 +157,7 @@
   box-sizing: border-box;
 }
 
-/* Temporizador y mensaje de victoria */
+/* Temporizador */
 
 #hud {
   display: flex;
@@ -114,11 +175,9 @@
   font-variant-numeric: tabular-nums; /* evita que el ancho salte mientras corre el reloj */
 }
 
-#mensaje {
-  color: var(--color-blanco-puro);
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
+/* En el nivel con limite, el reloj se pinta en rojo cuando queda poco tiempo. */
+#tiempo.peligro {
+  background-color: var(--color-secundario);
 }
 
 /* Tablero del juego */
@@ -126,7 +185,57 @@
 #imagen-juego {
   display: block;
   max-width: 90%;
-  max-height: 420px;
+  max-height: 480px;
   border: 4px solid var(--color-luz);
   border-radius: 8px;
+}
+
+/* FASE 4: RESULTADO (se muestra sobre el tablero) */
+
+#resultadoTop,
+#resultadoBottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  z-index: 2;
+}
+
+.resultadoTitulo {
+  color: var(--color-blanco-puro);
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.resultadoTiempo {
+  color: var(--color-luz);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.resultadoTexto {
+  color: var(--color-luz);
+  font-size: 18px;
+  margin: 0;
+}
+
+.resultadoAcciones {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* .btn trae display:inline-flex, que pisa el atributo hidden de la misma
+   especificidad. Se fuerza el ocultado del boton que no corresponde mostrar. */
+.faseJuego .btn[hidden] {
+  display: none;
 }
