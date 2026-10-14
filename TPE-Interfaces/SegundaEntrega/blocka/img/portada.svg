@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500" role="img" aria-label="Blocka">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#B8461D"/>
+      <stop offset="1" stop-color="#8A3516"/>
+    </linearGradient>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F4E3DD"/>
+      <stop offset="1" stop-color="#C9B6B0"/>
+    </linearGradient>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3A4A8A"/>
+      <stop offset="1" stop-color="#182455"/>
+    </linearGradient>
+    <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C9A227"/>
+      <stop offset="1" stop-color="#8A6F16"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="500" height="500" fill="#182455"/>
+
+  <g>
+    <g transform="translate(125,125) rotate(90)">
+      <rect x="-106" y="-106" width="212" height="212" rx="12" fill="url(#bg1)"/>
+      <circle cx="-68" cy="-68" r="16" fill="#0C122A" opacity="0.45"/>
+    </g>
+    <g transform="translate(375,125) rotate(180)">
+      <rect x="-106" y="-106" width="212" height="212" rx="12" fill="url(#bg2)"/>
+      <circle cx="-68" cy="-68" r="16" fill="#0C122A" opacity="0.45"/>
+    </g>
+    <g transform="translate(125,375) rotate(270)">
+      <rect x="-106" y="-106" width="212" height="212" rx="12" fill="url(#bg3)"/>
+      <circle cx="-68" cy="-68" r="16" fill="#F4E3DD" opacity="0.45"/>
+    </g>
+    <g transform="translate(375,375) rotate(90)">
+      <rect x="-106" y="-106" width="212" height="212" rx="12" fill="url(#bg4)"/>
+      <circle cx="-68" cy="-68" r="16" fill="#0C122A" opacity="0.45"/>
+    </g>
+  </g>
+</svg>

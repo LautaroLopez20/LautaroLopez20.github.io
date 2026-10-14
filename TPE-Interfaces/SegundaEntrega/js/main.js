@@ -4,6 +4,15 @@ const GAMES_PER_PAGE = 7;
 const HERO_SLIDES = 4;
 const HERO_INTERVAL_MS = 4000;
 
+/* Destacado fijo del hero: Blocka es un juego local del sitio y no viene de la
+   API, asi que su card se arma a mano. Ocupa el primer slide y los otros tres
+   salen de los juegos mejor puntuados. */
+const BLOCKA_HERO = {
+    name: 'Blocka',
+    href: 'blocka.html',
+    image: 'blocka/img/portada.svg'
+};
+
 const LOADING_DURATION_MS = 5000;
 const LOADING_INTERVAL_MS = 50;
 
@@ -353,17 +362,20 @@ function buildHero(games) {
     const navigation = document.querySelector('.heroNavigation');
     if (!heroCategory || !track || !navigation) return;
 
-    const featured = [...games]
-        .sort((a, b) => b.rating - a.rating)
-        .slice(0, HERO_SLIDES);
+    const featured = [BLOCKA_HERO].concat(
+        [...games]
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, HERO_SLIDES - 1)
+    );
 
     track.innerHTML = '';
     const slides = [];
     featured.forEach((game) => {
         const slide = document.createElement('a');
         slide.className = 'heroGame';
-        slide.href = 'pegSolitaire.html';
-        slide.style.backgroundImage = "url('" + gameImage(game) + "')";
+        slide.href = game.href || 'pegSolitaire.html';
+        const image = game.image || gameImage(game);
+        slide.style.backgroundImage = "url('" + image + "')";
         const name = document.createElement('p');
         name.textContent = game.name;
         slide.appendChild(name);
@@ -697,7 +709,9 @@ function wireFallbackCarousels() {
 
     // Los placeholders vienen como <div> en el HTML, asi que no tienen href.
     // Se les pone la navegacion a mano para que el fallback sea igual de clicable.
+    // Las cards con href real (Blocka) navegan solas, asi que se saltean.
     document.querySelectorAll('.game, .heroGame').forEach((card) => {
+        if (card.getAttribute('href')) return;
         card.addEventListener('click', () => {
             window.location.href = 'pegSolitaire.html';
         });

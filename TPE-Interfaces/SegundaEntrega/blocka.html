@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastGames - Blocka</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/atoms.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/pegSolitaire.css">
+    <link rel="stylesheet" href="blocka/blocka.css">
+    <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+<header>
+    <nav>
+        <button type="button" class="hamburguesa" aria-expanded="false" aria-controls="categoryPanel" aria-label="Ver categorias">
+            <span></span><span></span><span></span>
+        </button>
+
+        <a href="Index.html" class="logo">
+            <img src="img/LOGO.svg" alt="FastGames">
+        </a>
+        <div class="headerSearch">
+                <input type="text" class="searchPlaceholderMobile" placeholder="Introduce tu busqueda...">
+            <input type="text" class="searchPlaceholderDesktop" placeholder="Introduce tu busqueda...">
+            <button type="button">
+                <img src="img/lupa.svg" alt="Buscar">
+            </button>
+        </div>
+        <div class="navIcons">
+            <button type="button">
+                <img src="img/Cart-Button.svg" class="carrito" alt="Carrito">
+            </button>
+                <div class="userMenu">
+                    <button type="button" class="userButton">
+                        <img src="img/User-Button.svg" alt="Usuario">
+                        <span class="userStatus" aria-hidden="true"></span>
+                    </button>
+                    <div class="userPanel hidden">
+                        <ul class="userPanelList">
+                            <li><a href="#">Mis juegos</a></li>
+                            <li><a href="#">Configuracion</a></li>
+                            <li class="userPanelLogout"><a href="login.html">Cerrar sesion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </nav>
+    <div class="categoryPanel hidden" id="categoryPanel">
+        <ul class="categoryPanelList" id="categoryPanelList"></ul>
+    </div>
+</header>
+
+<nav class="breadcrumb" aria-label="Ruta de navegacion">
+    <a href="Index.html">Inicio</a>
+    <span class="breadcrumbSeparator">&gt;</span>
+    <span>Rompecabezas</span>
+    <span class="breadcrumbSeparator">&gt;</span>
+    <span>Blocka</span>
+</nav>
+
+    <section class="gamePlay">
+        <div class="gameBoard" id="gameBoard">
+
+            <!-- Fase 1: seleccion de imagen (galeria + ruleta) -->
+            <div class="faseSeleccion" id="faseSeleccion">
+                <p class="faseTitulo">Elegi la imagen con la que vas a jugar</p>
+                <div class="image-gallery" id="image-gallery">
+                    <!-- Las imagenes se generan desde blocka.js -->
+                </div>
+                <button id="btn-start" type="button" class="btn btnPrimary">Comenzar juego</button>
+            </div>
+
+            <!-- Fase 2: el juego (canvas + temporizador) -->
+            <div class="faseJuego" id="faseJuego" hidden>
+                <div id="hud">
+                    <span id="tiempo">00:00.0</span>
+                </div>
+                <canvas id="imagen-juego"></canvas>
+                <p id="mensaje" hidden>¡Imagen armada! Tu tiempo: <span id="tiempo-final"></span></p>
+            </div>
+
+        </div>
+        <div class="gameActions">
+            <div class="gameActionsLeft">
+                <button type="button" class="btn btnLike" aria-pressed="false">
+                    <img src="img/thumbUp.svg" alt="">
+                    <span class="actionCount">86</span>
+                </button>
+                <button type="button" class="btn btnDislike" aria-pressed="false">
+                    <img src="img/thumbDown.svg" alt="">
+                    <span class="actionCount">4</span>
+                </button>
+            </div>
+            <div class="gameActionsRight">
+                <button type="button" class="btn btnShare" aria-pressed="false">
+                    <img src="img/share.svg" alt="">
+                    Compartir
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div class="gameAbout">
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Gameplay</h2>
+            <div class="gameplayRow">
+                <div class="gameplaySlot">
+                    <img src="blocka/img/gameplay-1.svg" alt="Captura de gameplay de Blocka 1 de 4">
+                </div>
+                <div class="gameplaySlot">
+                    <img src="blocka/img/gameplay-2.svg" alt="Captura de gameplay de Blocka 2 de 4">
+                </div>
+                <div class="gameplaySlot">
+                    <img src="blocka/img/gameplay-3.svg" alt="Captura de gameplay de Blocka 3 de 4">
+                </div>
+                <div class="gameplaySlot">
+                    <img src="blocka/img/gameplay-4.svg" alt="Captura de gameplay de Blocka 4 de 4">
+                </div>
+            </div>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Ayuda — Blocka</h2>
+            <p class="aboutText">Blocka es un juego de rompecabezas basado en imagenes. Al iniciar el nivel, la imagen aparece dividida en cuatro partes, cada una rotada respecto a su posicion original.</p>
+            <p class="aboutText">El objetivo es rotar cada subimagen hasta que las cuatro partes queden de forma correcta y conformen la imagen final.</p>
+            <p class="aboutText">Para aumentar la dificultad, la imagen aparece desordenada y con un filtro aplicado. Cuando terminas de armar la imagen, los filtros se quitan y se observa la imagen original en color.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Reglas</h2>
+            <p class="aboutText">Elegi una imagen de la galeria y presiona "Comenzar juego". La imagen se divide en fragmentos y cada uno arranca en una rotacion distinta.</p>
+            <p class="aboutText">Cada fragmento gira en pasos de 90 grados. La imagen se resuelve cuando los cuatro fragmentos quedan en su orientacion original.</p>
+            <p class="aboutText">El temporizador arranca al comenzar el nivel y se detiene al armar la imagen, marcando el record de ese nivel. A mayor nivel, los filtros cambian y cada subimagen puede tener un filtro distinto.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Controles</h2>
+            <p class="aboutText">Usa el mouse sobre el tablero. El click izquierdo gira el fragmento hacia la izquierda y el click derecho lo gira hacia la derecha.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Enlaces e informacion del juego</h2>
+            <h3 class="aboutSubtitle">Creado por Lopez Lautaro y Wilson Benito Ezequiel</h3>
+            <h3 class="aboutSubtitle">Sobre nosotros</h3>
+            <p class="aboutText">Equipo de desarrollo del Trabajo Practico de Interfaces de Usuario (TUDAI - UNICEN).</p>
+            <h3 class="aboutSubtitle">Contacto</h3>
+            <p class="aboutText">blocka-contacto@mail.com</p>
+        </section>
+    </div>
+
+    <section class="commentsSection">
+        <h2 class="aboutTitle">Comentarios</h2>
+        <div class="commentsContainer">
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/userLight.svg" alt="Usuario" class="commentAvatar">
+                    <span class="commentUser">PuzzleLover</span>
+                    <span class="commentDate">02/09/26</span>
+                </div>
+                <p class="commentText">La ruleta para elegir la imagen es un lujo. Impecable el detalle de que el reloj arranque recien cuando empieza el nivel.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/userLight.svg" alt="Usuario" class="commentAvatar">
+                    <span class="commentUser">PixelMaster</span>
+                    <span class="commentDate">11/09/26</span>
+                </div>
+                <p class="commentText">Con el filtro en escala de grises cuesta el doble. Pro tip: guiate por las esquinas de cada fragmento.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/userLight.svg" alt="Usuario" class="commentAvatar">
+                    <span class="commentUser">Cuadricula</span>
+                    <span class="commentDate">23/09/26</span>
+                </div>
+                <p class="commentText">Click derecho para girar a la derecha y listo. Simple y adictivo.</p>
+            </article>
+        </div>
+
+        <div class="commentForm">
+            <h2 class="aboutTitle commentFormTitle">Deja tu Comentario</h2>
+            <div class="commentFormRow">
+                <textarea class="commentInput" placeholder="Escribe aqui tu comentario..."></textarea>
+                <button type="button" class="btn btnSubmitComment">
+                    <span class="btnSubmitLabel">Enviar</span>
+                    <img class="btnSubmitIcon" src="img/mail.svg" alt="">
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footerTop">
+            <div class="footerColumns">
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Sobre Nosotros</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#">Inicios</a></li>
+                        <li><a href="#">Alcance</a></li>
+                        <li><a href="#">Direccion</a></li>
+                        <li><a href="#">Ideas</a></li>
+                        <li><a href="#">Desarrolladores</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Informacion</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Terminos de Uso</a></li>
+                        <li><a href="#">Politicas de Privacidad</a></li>
+                        <li><a href="#">Codigo de Conducta</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Opciones de Pago</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Agradecimientos</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Catedra de Interfaces</a></li>
+                        <li><a href="#">ChatGPT</a></li>
+                        <li><a href="#">TUDAI</a></li>
+                        <li><a href="#">UNICEN</a></li>
+                        <li><a href="#">Figma</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Cuenta</h4>
+                    <ul class="footerList">
+                        <li><a href="register.html">Crear Cuenta</a></li>
+                        <li><a href="login.html">Iniciar Sesion</a></li>
+                        <li><a href="#">Mi Cuenta</a></li>
+                        <li><a href="#">Mis Juegos</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn footerColumnWide">
+                    <h4 class="footerHeading">Nuestros Titulos Destacados</h4>
+                    <div class="footerSubColumns">
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="blocka.html">Blocka</a></li>
+                            <li><a href="#">Roblox</a></li>
+                            <li><a href="#">Super Mario 64</a></li>
+                            <li><a href="#">Plants vs. Zombies</a></li>
+                            <li><a href="#">Bomb Pong</a></li>
+                            <li><a href="pegSolitaire.html">Peg Solitaire DBZ</a></li>
+                        </ul>
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Rumble Club</a></li>
+                            <li><a href="#">Machinarium</a></li>
+                            <li><a href="#">Navy Moves</a></li>
+                            <li><a href="#">El Caudillo</a></li>
+                            <li><a href="#">Minecraft</a></li>
+                            <li><a href="#">Mario Party</a></li>
+                        </ul>
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Pictonico</a></li>
+                            <li><a href="#">LEGO Marvel Super Heroes</a></li>
+                            <li><a href="#">Stick Fight</a></li>
+                            <li><a href="#">Zombie Rumble</a></li>
+                            <li><a href="#">Agar.io</a></li>
+                            <li><a href="#">Minesweeper</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footerLanguages">
+                <img class="footerFlag" src="img/flag-mx.svg" alt="Mexico">
+                <img class="footerFlag" src="img/flag-jp.svg" alt="Japon">
+                <img class="footerFlag" src="img/flag-us.svg" alt="USA">
+                <img class="footerFlag" src="img/flag-uk.svg" alt="UK">
+                <img class="footerFlag" src="img/flag-fr.svg" alt="Francia">
+                <img class="footerFlag" src="img/flag-it.svg" alt="Italia">
+                <img class="footerFlag" src="img/flag-br.svg" alt="Brasil">
+                <img class="footerFlag" src="img/flag-es.svg" alt="Espana">
+            </div>
+        </div>
+        <div class="footerBottom">
+            <span class="footerCopyright">© Copyright 2026 FastGames.com</span>
+            <img class="footerLogo" src="img/LOGO_White.svg" alt="FastGames">
+            <div class="footerSocials">
+                <img src="img/icon-instagram.svg" alt="Instagram">
+                <img src="img/facebook.svg" alt="Facebook">
+                <img src="img/icon-twitter.svg" alt="Twitter">
+                <img src="img/icon-youtube.svg" alt="YouTube">
+            </div>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+    <script src="blocka/blocka.js"></script>
+</body>
+</html>
