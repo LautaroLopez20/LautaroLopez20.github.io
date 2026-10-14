@@ -10,7 +10,7 @@ const HERO_INTERVAL_MS = 4000;
 const BLOCKA_HERO = {
     name: 'Blocka',
     href: 'blocka.html',
-    image: 'blocka/img/portada.svg'
+    image: 'blocka/img/portada.png'
 };
 
 const LOADING_DURATION_MS = 5000;
