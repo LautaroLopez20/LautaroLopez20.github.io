@@ -216,6 +216,41 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     return off; //devuelve el canvas ya filtrado
   }
 
+  //FILTRO Brillo +30%
+  function filtroBrillo(img){
+    const off = document.createElement("canvas");
+    off.width = img.naturalWidth;
+    off.height = img.naturalHeight;
+
+    const offContexto = off.getContext("2d");
+    offContexto.drawImage(img, 0, 0);
+
+    let width = off.width;
+    let height = off.height;
+
+    let imageData = offContexto.getImageData(0, 0, width, height);
+    let data = imageData.data;
+
+    //Recorre la imagen con el doble ciclo
+    for (let y = 0; y < height; y++){
+      for (let x = 0; x < width; x++){
+        let i = (x + y * width) * 4; //indice del pixel en el arreglo de datos
+
+        let r = data[i];
+        let g = data[i + 1];
+        let b = data[i + 2];
+
+        //Aplica el filtro de brillo
+        data[i] = Math.min(255, r * 1.3);
+        data[i + 1] = Math.min(255, g * 1.3);
+        data[i + 2] = Math.min(255, b * 1.3);
+      }
+    }
+    offContexto.putImageData(imageData, 0, 0);
+
+    return off; //devuelve el canvas ya filtrado
+  }
+
   //SETUP DEL NIVEL: reparte los angulos aleatorios y dibuja
   function iniciarNivel(){
     angulos = [];
