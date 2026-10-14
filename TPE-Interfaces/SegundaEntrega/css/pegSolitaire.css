@@ -5,6 +5,7 @@ body {
     font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
     min-height: 100vh;
     display: flex;
+    align-items: center;
     flex-direction: column;
 }
 
@@ -14,8 +15,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 100%;
-    padding-left: 70px;
+    width: 70%;
     margin: 12px 0 0;
     box-sizing: border-box;
     font-size: 13px;
@@ -141,14 +141,13 @@ body {
 /* about */
 
 .gameAbout {
-    width: 100%;
-    padding-left: 70px;
-    padding-right: 70px;
+    width: 70%;
     margin: 40px 0 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 28px;
+
 }
 
 .gameplayRow {
@@ -199,9 +198,7 @@ body {
 /* Comentarios */
 
 .commentsSection {
-    width: 100%;
-    padding-left: 70px;
-    padding-right: 70px;
+    width: 70%;
     margin: 40px 0 60px;
     box-sizing: border-box;
     /* Linea divisoria: separa los comentarios de las secciones de arriba sin
@@ -251,24 +248,35 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(220, 222, 229, 0.15);
 }
 
 .commentAvatar {
-    width: 24px;
-    height: 24px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    /* Los avatares son cuadrados: cover los recorta en el cuadrado de 34x34
+       en lugar de deformarlos, igual que en .gameBoardImage. */
+    object-fit: cover;
+    /* .commentHeader es flex, asi que sin esto el avatar se achica cuando el
+       nombre o la fecha son largos. */
+    flex: 0 0 auto;
 }
 
 .commentUser {
-    font-style: italic;
-    font-size: 12px;
+    font-weight: bold;
+    font-size: 14px;
     color: #DCDEE5;
 }
 
 /* Fecha: mismo tono y tamano que el nombre pero con la mitad de opacidad,
    para que el dato acomane y no compita con el usuario. */
 .commentDate {
+    display: inline-block;
     font-size: 12px;
     color: rgba(220, 222, 229, 0.5);
+    margin-left: auto; 
 }
 
 .commentText {

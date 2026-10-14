@@ -22,7 +22,7 @@ body {
 
 .heroCategory {
     width: 100%;
-    max-width: 580px;
+    max-width: 460px;
     height: 230px;
     overflow: hidden;
 }
@@ -53,7 +53,7 @@ body {
     background-color: #1A2140;
     background-size: cover;
     background-position: center;
-    transform: translateY(44px) scale(0.6);
+    transform: scale(0.6);
     /* El filter va en la transicion para que el cambio de card cada 4s no sea
        un salto de opacidad a secas. */
     transition: transform 0.45s ease, filter 0.3s ease;
@@ -361,7 +361,7 @@ header {
 }
 
 .heroCategory {
-    max-width: 1160px;
+    max-width: 960px;
     height: 460px;
 }
 
@@ -372,8 +372,8 @@ header {
     width: 680px;
     height: 432px;
     /* El solapamiento del hero, ajustado a la medida de escritorio */
-    margin-left: -170px;
-    transform: translateY(88px) scale(0.6);
+    margin-left: -300px; /*uso de margin para ocultar la card detras de la main*/
+    transform: scale(0.6);
 }
 
 .heroGame p {
