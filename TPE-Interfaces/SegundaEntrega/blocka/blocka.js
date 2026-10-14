@@ -27,13 +27,16 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   const fases = {
     menu: document.getElementById("faseMenu"),
     seleccion: document.getElementById("faseSeleccion"),
-    juego: document.getElementById("faseJuego")
+    juego: document.getElementById("faseJuego"),
+    instrucciones: document.getElementById("faseInstrucciones")
   };
 
   /* SELECTORES DEL MENU */
   const botonesNivel = document.querySelectorAll(".opcionNivel");
   const botonesDificultad = document.querySelectorAll(".opcionDificultad");
   const btnMenuComenzar = document.getElementById("btn-menu-comenzar");
+  const btnComoJugar = document.getElementById("btn-como-jugar");
+  const btnCerrarInstrucciones = document.getElementById("btn-cerrar-instrucciones");
 
   /* ELEMENTOS DE LA SELECCION DE IMAGEN */
   const btnStart = document.getElementById("btn-start");
@@ -202,6 +205,10 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   });
 
   btnMenuComenzar.addEventListener("click", irASeleccionDeImagen);
+
+  /* MENU: abre las instrucciones y vuelve al menu principal */
+  btnComoJugar.addEventListener("click", () => mostrarFase("instrucciones"));
+  btnCerrarInstrucciones.addEventListener("click", () => mostrarFase("menu"));
 
   /* Pasa de la seleccion al juego con el nivel y la dificultad elegidos */
   function arrancarJuego(url) {

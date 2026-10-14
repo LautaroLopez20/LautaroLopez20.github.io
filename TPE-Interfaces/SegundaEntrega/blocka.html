@@ -79,7 +79,10 @@
                     <button type="button" class="opcionDificultad" data-fragmentos="6" aria-pressed="false">Medio — 6 piezas</button>
                     <button type="button" class="opcionDificultad" data-fragmentos="8" aria-pressed="false">Dificil — 8 piezas</button>
                 </div>
-                <button id="btn-menu-comenzar" type="button" class="btn btnPrimary">Comenzar</button>
+                <div class="menuAcciones">
+                    <button id="btn-menu-comenzar" type="button" class="btn btnPrimary">Comenzar</button>
+                    <button id="btn-como-jugar" type="button" class="btn btnPrimary">Como Jugar</button>
+                </div>
             </div>
 
             <!-- Fase 2: seleccion de imagen (galeria + ruleta) -->
@@ -108,6 +111,22 @@
                         <button id="btn-menu" type="button" class="btn btnPrimary">Volver al menu</button>
                     </div>
                 </div>
+            </div>
+
+            <!-- Fase 5: instrucciones (se abre desde el menu principal) -->
+            <div class="faseInstrucciones" id="faseInstrucciones" hidden>
+                <p class="faseTitulo">COMO JUGAR</p>
+                <div class="instruccionesContenido">
+                    <p class="instruccionesTexto">Blocka es un rompecabezas con imagenes. Cada nivel parte una imagen en fragmentos y los desordena girandolos, y tu tarea es dejarla como estaba.</p>
+                    <p class="instruccionesSubtitulo">Como se juega</p>
+                    <p class="instruccionesTexto">Primero elegi un nivel y una dificultad. Cuanta mas dificultad, mas fragmentos tendra la imagen.</p>
+                    <p class="instruccionesTexto">Despues se elige una imagen al azar con la ruleta y cada fragmento comienza rotando. Ganas cuando todos los fragmentos se encuentren en su posicion original.</p>
+                    <p class="instruccionesSubtitulo">Controles</p>
+                    <p class="instruccionesTexto">Usa el mouse sobre el tablero. El click izquierdo gira el fragmento hacia la izquierda y el click derecho lo gira hacia la derecha.</p>
+                    <p class="instruccionesSubtitulo">Niveles</p>
+                    <p class="instruccionesTexto">En el nivel 1 la imagen se ve en blanco y negro, en el nivel 2 se ve con mas brillo y en el nivel 3 se ve en negativo. Ademas, en el nivel 3 tenes tiempo limitado, si se acaba antes de armar la imagen, pierdes.</p>
+                </div>
+                <button id="btn-cerrar-instrucciones" type="button" class="btn btnSecondary">Volver</button>
             </div>
 
         </div>

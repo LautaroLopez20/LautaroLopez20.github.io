@@ -23,6 +23,7 @@
 .faseMenu[hidden],
 .faseSeleccion[hidden],
 .faseJuego[hidden],
+.faseInstrucciones[hidden],
 #resultadoTop[hidden],
 #resultadoBottom[hidden],
 #hud[hidden] {
@@ -33,7 +34,8 @@
    traen ancho fijo y textos como "Siguiente nivel" o "Volver al menu" no entran. */
 .faseMenu .btn,
 .faseSeleccion .btn,
-.faseJuego .btn {
+.faseJuego .btn,
+.faseInstrucciones .btn {
   width: auto;
 }
 
@@ -53,6 +55,16 @@
 
 .selectorNiveles,
 .selectorDificultad {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Botones de accion del menu: "Comenzar" y "Como Jugar" uno al lado del otro. */
+.menuAcciones {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -238,4 +250,46 @@
    especificidad. Se fuerza el ocultado del boton que no corresponde mostrar. */
 .faseJuego .btn[hidden] {
   display: none;
+}
+
+/* FASE 5: INSTRUCCIONES (se abre desde el menu principal) */
+
+.faseInstrucciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* "safe center": si el texto no entra, se alinea arriba en vez de recortar
+     el comienzo, que quedaria inalcanzable al scrollear. */
+  justify-content: safe center;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  /* El tablero recorta con overflow:hidden, asi que el texto scrollea
+     dentro de la fase para no perderse en pantallas bajas. */
+  overflow-y: auto;
+}
+
+.instruccionesContenido {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+}
+
+.instruccionesSubtitulo {
+  color: var(--color-luz);
+  font-size: 17px;
+  font-weight: 700;
+  margin: 10px 0 0;
+}
+
+.instruccionesTexto {
+  color: var(--color-blanco-puro);
+  font-size: 15px;
+  margin: 0;
 }
