@@ -40,7 +40,10 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
 
   /* ELEMENTOS DE LA SELECCION DE IMAGEN */
   const btnStart = document.getElementById("btn-start");
-  let imagenes = []; //se rellena al construir la galeria
+  let imagenes = []; //elementos img visibles de la galeria
+  let imagenesPrecargadas = []; //imagenes y filtros preparados para esta galeria
+  let idsUsados = []; //imagenes que ya fueron seleccionadas durante esta partida
+  let dificultadGaleria = null;
 
   /* ELEMENTOS DEL JUEGO */
   const canvas = document.getElementById("imagen-juego");
@@ -76,8 +79,10 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   let intervalo = null; //manejador del setInterval que actualiza el reloj
   let enCurso = false;
   let terminado = true; //arranca en true: no se juega hasta que empiece un nivel
+  let fuentePrecargada = null;
+  let urlFuentePrecargada = "";
 
-  const imagen = new Image();
+  let imagen = new Image();
   imagen.crossOrigin = "anonymous"; //esto evita el error de CORS al usar la imagen en el canvas
   imagen.onload = prepararNivel; //primero carga la imagen y recien ahi se arma el nivel
 
@@ -107,6 +112,8 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   function irAlMenu(){
     detenerReloj();
     terminado = true;
+    idsUsados = [];
+    construirGaleria();
     contexto.clearRect(0, 0, canvas.width, canvas.height);
     if (hud) hud.hidden = false;
     resultadoTop.hidden = true;
@@ -125,13 +132,23 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     resultadoTop.hidden = true;
     resultadoBottom.hidden = true;
     contexto.clearRect(0, 0, canvas.width, canvas.height);
-    construirGaleria();
+    if (dificultadGaleria !== dificultadSeleccionada) {
+      construirGaleria();
+    }
     mostrarFase("seleccion");
   }
 
   /* GALERIA: elige imagenes al azar sin repetir y las muestra */
   function construirGaleria(){
     galeria.innerHTML = "";
+    imagenesPrecargadas = [];
+    dificultadGaleria = dificultadSeleccionada;
+
+    //Cuando ya no quedan seis imagenes nuevas, se habilita un nuevo ciclo
+    //para mantener la galeria completa sin entrar en un bucle infinito.
+    if (imageBank.length - idsUsados.length < IMAGENES_VISIBLES) {
+      idsUsados = [];
+    }
 
     //La proporcion de la foto depende de la dificultad elegida, asi las
     //miniaturas (y el tablero) ya vienen con el aspect que necesita el juego.
@@ -140,26 +157,117 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     const elegidas = []; //IDs de las imagenes que ya se mostraron
     let i = 0;
     while (i < IMAGENES_VISIBLES) {
-      const id = imageBank[Math.floor(Math.random() * imageBank.length)]; //ID de la imagen elegida
+      const disponibles = imageBank.filter((id) =>
+        !idsUsados.includes(id) && !elegidas.includes(id)
+      );
+      const id = disponibles[Math.floor(Math.random() * disponibles.length)];
 
-      if (!elegidas.includes(id)) { //si la imagen todavia no fue elegida
+      if (id !== undefined) {
         elegidas.push(id); //se anota para no repetirla
 
-        const img = document.createElement("img"); //se crea un elemento de imagen para cada imagen de la galeria
-        img.src = urlImagen(id, grilla.cols, grilla.rows); //URL con la proporcion de la grilla
-        img.className = "game-image";
-        galeria.appendChild(img); //agrega la imagen al contenedor de la galeria
+        agregarImagenGaleria(id, grilla);
         i++;
       }
-      //Sino se puede mezclar el arreglo y hacer un slice de las primeras 6, ya que el banco no repite.
     }
 
     imagenes = galeria.querySelectorAll("img");
   }
 
+  /* AGREGA UNA IMAGEN A LA GALERIA Y LA DESCARGA EN SEGUNDO PLANO */
+  function agregarImagenGaleria(id, grilla){
+    const url = urlImagen(id, grilla.cols, grilla.rows);
+    const imagenPrecargada = new Image();
+    imagenPrecargada.crossOrigin = "anonymous";
+    imagenPrecargada.src = url;
+
+    imagenesPrecargadas.push({
+      id: id,
+      url: url,
+      imagen: imagenPrecargada,
+      fuentesFiltradas: [],
+      cargasFiltros: []
+    });
+
+    const img = document.createElement("img");
+    img.src = url;
+    img.className = "game-image";
+    galeria.appendChild(img);
+  }
+
+  /* REMPLAZA LA IMAGEN ELEGIDA MIENTRAS SE ESTA JUGANDO */
+  function reponerImagenGaleria(indice, grilla){
+    const disponibles = imageBank.filter((id) =>
+      !idsUsados.includes(id) &&
+      !imagenesPrecargadas.some((imagenPrecargada) => imagenPrecargada.id === id)
+    );
+
+    if (disponibles.length === 0) return;
+
+    const idNueva = disponibles[Math.floor(Math.random() * disponibles.length)];
+    const nuevaImagen = {
+      id: idNueva,
+      url: urlImagen(idNueva, grilla.cols, grilla.rows),
+      imagen: new Image(),
+      fuentesFiltradas: [],
+      cargasFiltros: []
+    };
+
+    imagenesPrecargadas[indice] = nuevaImagen;
+    nuevaImagen.imagen.crossOrigin = "anonymous";
+    nuevaImagen.imagen.src = nuevaImagen.url;
+    return nuevaImagen;
+  }
+
+  /* ESPERA A QUE TERMINE DE CARGAR UNA IMAGEN */
+  function esperarImagenCargada(imagenPrecargada){
+    if (imagenPrecargada.imagen.complete &&
+        imagenPrecargada.imagen.naturalWidth > 0) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+      imagenPrecargada.imagen.addEventListener("load", resolve, { once: true });
+      imagenPrecargada.imagen.addEventListener("error", () => {
+        reject(new Error("No se pudo cargar la imagen " + imagenPrecargada.url));
+      }, { once: true });
+    });
+  }
+
+  /* PREPARA Y DEVUELVE LA VERSION FILTRADA DE LA IMAGEN GANADORA */
+  function precargarFiltro(imagenPrecargada, nivel){
+    if (imagenPrecargada.fuentesFiltradas[nivel]) {
+      return Promise.resolve(imagenPrecargada.fuentesFiltradas[nivel]);
+    }
+
+    if (!imagenPrecargada.cargasFiltros[nivel]) {
+      imagenPrecargada.cargasFiltros[nivel] = esperarImagenCargada(imagenPrecargada)
+        .then(() => {
+          const fuenteFiltrada = aplicarFiltro(imagenPrecargada.imagen, nivel);
+          imagenPrecargada.fuentesFiltradas[nivel] = fuenteFiltrada;
+          return fuenteFiltrada;
+        });
+    }
+
+    return imagenPrecargada.cargasFiltros[nivel];
+  }
+
   /* RULETA: elige la imagen y arranca la partida */
   btnStart.addEventListener("click", () => {
     btnStart.disabled = true; //asi no se toca dos veces
+
+    const azarFinal = Math.floor(Math.random() * imagenesPrecargadas.length);
+    const imagenGanadora = imagenesPrecargadas[azarFinal];
+    const elementoGanador = imagenes[azarFinal];
+    idsUsados.push(imagenGanadora.id);
+    const nivelDeLaPartida = nivelSeleccionado;
+    const cargaImagenJugable = Promise.all([
+      esperarImagenCargada(imagenGanadora),
+      precargarFiltro(imagenGanadora, nivelDeLaPartida)
+    ]);
+    const imagenNueva = reponerImagenGaleria(
+      azarFinal,
+      calcularGrilla(dificultadSeleccionada)
+    );
 
     let imagenActiva = null;
 
@@ -180,12 +288,29 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
         imagenActiva.classList.remove("seleccionado");
       }
 
-      const azarFinal = Math.floor(Math.random() * imagenes.length);
       const imagenElegida = imagenes[azarFinal];
       imagenElegida.classList.add("elegida");
+      const inicioSacudida = Date.now();
 
-      //Se espera un momento para que se vea la imagen elegida y recien ahi se juega.
-      setTimeout(() => arrancarJuego(imagenElegida.src), 1200);
+      //La imagen se mantiene visible como minimo 1200ms y el juego espera
+      //ademas a que la fuente filtrada este lista.
+      const tiempoSacudidaMinimo = 1200;
+      const tiempoTranscurrido = Date.now() - inicioSacudida;
+      const esperaMinima = Math.max(0, tiempoSacudidaMinimo - tiempoTranscurrido);
+
+      Promise.all([
+        cargaImagenJugable,
+        new Promise((resolve) => setTimeout(resolve, esperaMinima))
+      ]).then(() => {
+        if (imagenNueva) {
+          elementoGanador.src = imagenNueva.url;
+          elementoGanador.classList.remove("seleccionado", "elegida");
+        }
+        arrancarJuego(imagenGanadora);
+      }).catch((error) => {
+        console.error("No se pudo preparar la imagen del nivel:", error);
+        btnStart.disabled = false;
+      });
     }, 2600); //duracion de la ruleta
   });
 
@@ -201,6 +326,7 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     boton.addEventListener("click", () => {
       dificultadSeleccionada = Number(boton.dataset.fragmentos);
       sincronizarMenu();
+      construirGaleria(); //la proporcion cambia, se re-precarga la galeria
     });
   });
 
@@ -211,10 +337,12 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   btnCerrarInstrucciones.addEventListener("click", () => mostrarFase("menu"));
 
   /* Pasa de la seleccion al juego con el nivel y la dificultad elegidos */
-  function arrancarJuego(url) {
+  function arrancarJuego(imagenGanadora) {
     nivelActual = nivelSeleccionado;
     fragmentosActuales = dificultadSeleccionada;
     tieneLimite = nivelActual === 3;
+    fuentePrecargada = imagenGanadora.fuentesFiltradas[nivelActual] || null;
+    urlFuentePrecargada = imagenGanadora.url;
 
     if (hud) hud.hidden = false;
     resultadoTop.hidden = true;
@@ -223,11 +351,13 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
 
     mostrarFase("juego");
 
-    //Si ya es la misma imagen cargada no se dispara onload, asi que se prepara a mano.
-    if (imagen.src === url && imagen.complete && imagen.naturalWidth > 0) {
+    //Se reutiliza la instancia que ya se precargo para evitar una segunda carga.
+    imagen = imagenGanadora.imagen;
+
+    if (imagen.complete && imagen.naturalWidth > 0) {
       prepararNivel();
     } else {
-      imagen.src = url; //dispara imagen.onload -> prepararNivel
+      imagen.addEventListener("load", prepararNivel, { once: true });
     }
   }
 
@@ -254,7 +384,11 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     celdaW = canvas.width / cols;
     celdaH = canvas.height / rows;
 
-    fuente = aplicarFiltro(imagen, nivelActual); //genera la imagen filtrada una sola vez
+    if (urlFuentePrecargada === imagen.src && fuentePrecargada) {
+      fuente = fuentePrecargada;
+    } else {
+      fuente = aplicarFiltro(imagen, nivelActual); //genera la imagen filtrada una sola vez
+    }
 
     iniciarNivel(); //reparte los angulos al azar y dibuja el tablero
     iniciarTemporizador(); //se arranca el reloj apenas carga el nivel
@@ -512,5 +646,6 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   /* ARRANQUE: se muestra el menu con la seleccion por defecto */
   sincronizarMenu();
   mostrarFase("menu");
+  construirGaleria(); //descarga la galeria mientras el usuario esta en el menu
 
 });
