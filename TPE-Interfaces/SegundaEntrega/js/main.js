@@ -461,7 +461,7 @@ function buildHero(games) {
         const from = offset - currentIndex * slideStep;
         const to = offset - destino * slideStep;
         const direction = Math.sign(to - from);
-        const overshoot = to + direction * slideStep * 0.30;
+        const overshoot = to + (direction) * slideStep * 0.30;
 
         currentIndex = destino;
         updateDots();

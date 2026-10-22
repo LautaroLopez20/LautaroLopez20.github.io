@@ -67,20 +67,43 @@
 
             <!-- Fase 1: menu principal (selector de nivel y dificultad) -->
             <div class="faseMenu" id="faseMenu">
-                <p class="faseTitulo">NIVEL</p>
-                <div class="selectorNiveles" id="selectorNiveles">
-                    <button type="button" class="opcionNivel" data-nivel="1" aria-pressed="false">Nivel 1</button>
-                    <button type="button" class="opcionNivel" data-nivel="2" aria-pressed="false">Nivel 2</button>
-                    <button type="button" class="opcionNivel" data-nivel="3" aria-pressed="false">Nivel 3</button>
+                <h1 class="faseLogoJuego">Blocka</h1>
+
+                <div class="menuOpciones">
+                    <p class="menuEtiqueta">Nivel</p>
+                    <div class="selectorNiveles" id="selectorNiveles">
+                        <button type="button" class="opcionNivel" data-nivel="1" aria-pressed="false">
+                            <span class="opcionThumb nivelFiltro1" aria-hidden="true"></span>
+                            <span class="opcionLabel">Nivel 1</span>
+                        </button>
+                        <button type="button" class="opcionNivel" data-nivel="2" aria-pressed="false">
+                            <span class="opcionThumb nivelFiltro2" aria-hidden="true"></span>
+                            <span class="opcionLabel">Nivel 2</span>
+                        </button>
+                        <button type="button" class="opcionNivel" data-nivel="3" aria-pressed="false">
+                            <span class="opcionThumb nivelFiltro3" aria-hidden="true"></span>
+                            <span class="opcionLabel">Nivel 3</span>
+                        </button>
+                    </div>
+                    <p class="menuEtiqueta">Dificultad</p>
+                    <div class="selectorDificultad" id="selectorDificultad">
+                        <button type="button" class="opcionDificultad" data-fragmentos="4" aria-pressed="false">
+                            <span class="opcionThumb puzzle4" aria-hidden="true"></span>
+                            <span class="opcionLabel">Facil</span>
+                        </button>
+                        <button type="button" class="opcionDificultad" data-fragmentos="6" aria-pressed="false">
+                            <span class="opcionThumb puzzle6" aria-hidden="true"></span>
+                            <span class="opcionLabel">Medio</span>
+                        </button>
+                        <button type="button" class="opcionDificultad" data-fragmentos="8" aria-pressed="false">
+                            <span class="opcionThumb puzzle8" aria-hidden="true"></span>
+                            <span class="opcionLabel">Dificil</span>
+                        </button>
+                    </div>
                 </div>
-                <p class="faseTitulo">DIFICULTAD</p>
-                <div class="selectorDificultad" id="selectorDificultad">
-                    <button type="button" class="opcionDificultad" data-fragmentos="4" aria-pressed="false">Facil — 4 piezas</button>
-                    <button type="button" class="opcionDificultad" data-fragmentos="6" aria-pressed="false">Medio — 6 piezas</button>
-                    <button type="button" class="opcionDificultad" data-fragmentos="8" aria-pressed="false">Dificil — 8 piezas</button>
-                </div>
+
                 <div class="menuAcciones">
-                    <button id="btn-menu-comenzar" type="button" class="btn btnPrimary">Comenzar</button>
+                    <button id="btn-menu-comenzar" type="button" class="btn btnSecondary">Comenzar</button>
                     <button id="btn-como-jugar" type="button" class="btn btnPrimary">Como Jugar</button>
                 </div>
             </div>

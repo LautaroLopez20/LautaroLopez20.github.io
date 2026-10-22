@@ -45,12 +45,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* Con 3 bloques (titulo, opciones, acciones) el primero queda arriba,
+     el ultimo abajo y el del medio en el espacio libre. */
+  justify-content: space-between;
   gap: 16px;
   width: 100%;
   height: 100%;
   padding: 24px;
   box-sizing: border-box;
+}
+
+/* Grupo central del menu: los dos selectores. Se agrupa para que el
+   titulo quede arriba y los botones abajo, con las opciones al centro. */
+.menuOpciones {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
 .selectorNiveles,
@@ -63,6 +74,43 @@
   gap: 12px;
 }
 
+/* Titulo del juego: efecto sticker, con la sombra dura de la marca
+   (naranja) bajo las letras. */
+.faseLogoJuego {
+  margin: 0;
+  font-size: clamp(40px, 7vw, 64px);
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-luz);
+  text-shadow:
+    0 4px 0 var(--color-secundario),   /* canto naranja solido */
+    0 6px 0 #8A3516,                   /* canto naranja oscuro */
+    0 10px 18px rgba(0, 0, 0, 0.45);   /* sombra difusa de apoyo */
+  animation: entraTitulo 0.5s ease-out;
+}
+
+@keyframes entraTitulo {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Rotulos de cada grupo del menu (Nivel, Dificultad). */
+.menuEtiqueta {
+  margin: 0;
+  color: var(--color-luz);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Mas aire entre el grupo de niveles y el de dificultad, para que se
+   lean como dos secciones separadas. */
+.selectorNiveles + .menuEtiqueta {
+  margin-top: 18px;
+}
+
 /* Botones de accion del menu: "Comenzar" y "Como Jugar" uno al lado del otro. */
 .menuAcciones {
   display: flex;
@@ -70,20 +118,27 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
 }
 
+/* Botones-tarjeta del menu: ilustracion arriba + leyenda abajo. La
+   ilustracion es decorativa (aria-hidden en el HTML); el texto de la
+   leyenda es el que sostiene la accesibilidad. */
 .opcionNivel,
 .opcionDificultad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   background-color: var(--color-primario);
   color: var(--color-blanco-puro);
   border: 2px solid transparent;
   border-radius: 8px;
-  padding: 10px 16px;
+  padding: 6px;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 12px;
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.15s ease, background-color 0.15s ease;
+  transition: transform 0.2s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .opcionNivel:hover,
@@ -91,10 +146,91 @@
   transform: translateY(-2px);
 }
 
+/* Thumb uniforme para las 6 tarjetas */
+.opcionThumb {
+  width: 104px;
+  height: 64px;
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.opcionLabel {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Niveles: la imagen generica con el mismo filtro que aplica el juego
+   en canvas al armar el nivel (ver aplicarFiltro en blocka.js). */
+.nivelFiltro1,
+.nivelFiltro2,
+.nivelFiltro3 {
+  background-image: url("img/menu-generic.png");
+}
+
+.nivelFiltro1 {
+  filter: grayscale(1);
+}
+
+.nivelFiltro2 {
+  filter: brightness(1.3);
+}
+
+.nivelFiltro3 {
+  filter: invert(1);
+}
+
+/* Dificultad: la imagen cortada en grilla por costuras del color del
+   fondo del boton, como si fueran los separadores de las piezas.
+   El orden de las capas importa: los gradientes van arriba de la foto. */
+.puzzle4 {
+  background-image:
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    url("img/menu-generic.png");
+  background-size: 3px 100%, 100% 3px, cover;
+  background-position: 50% 0, 0 50%, center;
+  background-repeat: no-repeat;
+}
+
+.puzzle6 {
+  background-image:
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    url("img/menu-generic.png");
+  background-size: 3px 100%, 3px 100%, 100% 3px, cover;
+  background-position: 33.33% 0, 66.66% 0, 0 50%, center;
+  background-repeat: no-repeat;
+}
+
+.puzzle8 {
+  background-image:
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    url("img/menu-generic.png");
+  background-size: 3px 100%, 3px 100%, 3px 100%, 100% 3px, cover;
+  background-position: 25% 0, 50% 0, 75% 0, 0 50%, center;
+  background-repeat: no-repeat;
+}
+
+/* Seleccion activa: ring naranja + borde crema + escala, mucho mas
+   visible que el solo cambio de color de fondo anterior. */
 .opcionNivel.activo,
 .opcionDificultad.activo {
-  background-color: var(--color-secundario);
   border-color: var(--color-luz);
+  box-shadow: 0 0 0 2px var(--color-secundario);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.opcionNivel:focus-visible,
+.opcionDificultad:focus-visible {
+  outline: 2px solid var(--color-luz);
+  outline-offset: 2px;
 }
 
 /* FASE 2: SELECCION DE IMAGEN */
