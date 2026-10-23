@@ -104,14 +104,23 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Rotulos de cada grupo del menu (Nivel, Dificultad). */
-.menuEtiqueta {
-  margin: 0;
+/* Estilo tipografico comun de rotulos y titulos. */
+.menuEtiqueta,
+.faseTitulo,
+.instruccionesSubtitulo,
+#tiempo,
+.resultadoTitulo,
+.resultadoTiempo {
   color: var(--color-luz);
-  font-size: 18px;
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
+}
+
+/* Rotulos de cada grupo del menu (Nivel, Dificultad). */
+.menuEtiqueta {
+  margin: 0;
+  font-size: 18px;
 }
 
 /* Mas aire entre el grupo de niveles y el de dificultad, para que se
@@ -177,6 +186,25 @@
 .nivelFiltro2,
 .nivelFiltro3 {
   background-image: url("img/menu-generic.png");
+}
+
+/* Nivel 4: no muestra una imagen filtrada sino un recuadro con "?" para
+   indicar que el filtro se sortea al comenzar la partida. */
+.nivelFiltro4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: var(--color-luz);
+  border: 2px solid var(--color-secundario);
+}
+
+.nivelFiltro4::after {
+  content: "?";
+  color: var(--color-primario);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 /* Dificultad: la imagen cortada en grilla por costuras del color del
@@ -248,10 +276,9 @@
 }
 
 .faseTitulo {
-  color: var(--color-blanco-puro);
-  font-size: 20px;
-  font-weight: 700;
   margin: 0;
+  font-size: 18px;
+  text-align: center;
 }
 
 .image-gallery {
@@ -323,9 +350,7 @@
 
 #tiempo {
   background-color: var(--color-primario);
-  color: var(--color-blanco-puro);
   font-size: 28px;
-  font-weight: 700;
   padding: 6px 16px;
   border-radius: 8px;
   font-variant-numeric: tabular-nums; /* evita que el ancho salte mientras corre el reloj */
@@ -359,18 +384,16 @@
 }
 
 .resultadoTitulo {
-  color: var(--color-blanco-puro);
   font-size: 26px;
-  font-weight: 700;
   margin: 0;
+  text-align: center;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
 .resultadoTiempo {
-  color: var(--color-luz);
   font-size: 20px;
-  font-weight: 700;
   margin: 0;
+  text-align: center;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
@@ -426,10 +449,8 @@
 }
 
 .instruccionesSubtitulo {
-  color: var(--color-luz);
-  font-size: 17px;
-  font-weight: 700;
   margin: 10px 0 0;
+  font-size: 18px;
 }
 
 .instruccionesTexto {

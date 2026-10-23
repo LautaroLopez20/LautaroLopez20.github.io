@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
      tamano final de cada foto depende de la dificultad (ver urlImagen). */
   const imageBank = [1015, 1018, 1025, 1069, 1073, 1084, 1074, 1080, 1043, 1035, 237, 433];
 
+  /* Filtros que puede sortear el nivel 4 (uno por partida). */
+  const FILTROS = [filtroByN, filtroBrillo, filtroInvertido];
+
   /* Devuelve la URL de picsum para una foto con la proporcion de la grilla.
      Ej: grilla 3x2 -> 750x500, asi cada celda mide 250x250 (cuadrada) y la
      imagen entra entera, sin recortes ni estiramientos. */
@@ -85,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   let terminado = true; //arranca en true: no se juega hasta que empiece un nivel
   let fuentePrecargada = null;
   let urlFuentePrecargada = "";
+  let filtroNivel4 = null; //filtro sorteado para la partida actual del nivel 4
 
   let imagen = new Image();
   imagen.crossOrigin = "anonymous"; //esto evita el error de CORS al usar la imagen en el canvas
@@ -218,8 +222,8 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
       id: id,
       url: url,
       imagen: imagenPrecargada,
-      fuentesFiltradas: [],
-      cargasFiltros: []
+      fuentesFiltradas: {},
+      cargasFiltros: {}
     });
 
     const img = document.createElement("img");
@@ -242,8 +246,8 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
       id: idNueva,
       url: urlImagen(idNueva, grilla.cols, grilla.rows),
       imagen: new Image(),
-      fuentesFiltradas: [],
-      cargasFiltros: []
+      fuentesFiltradas: {},
+      cargasFiltros: {}
     };
 
     imagenesPrecargadas[indice] = nuevaImagen;
@@ -308,25 +312,34 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     });
   }
 
+  /* Clave de cache del filtro: el nivel 4 puede usar cualquiera de los tres. */
+  function claveFiltro(nivel, filtro){
+    if (nivel !== 4) return String(nivel);
+    return "4-" + FILTROS.indexOf(filtro);
+  }
+
   /* PREPARA Y DEVUELVE LA VERSION FILTRADA DE LA IMAGEN GANADORA */
   function precargarFiltro(imagenPrecargada, nivel){
-    if (imagenPrecargada.fuentesFiltradas[nivel]) {
-      return Promise.resolve(imagenPrecargada.fuentesFiltradas[nivel]);
+    const filtro = seleccionarFiltro(nivel);
+    const clave = claveFiltro(nivel, filtro);
+
+    if (imagenPrecargada.fuentesFiltradas[clave]) {
+      return Promise.resolve(imagenPrecargada.fuentesFiltradas[clave]);
     }
 
-    if (!imagenPrecargada.cargasFiltros[nivel]) {
-      imagenPrecargada.cargasFiltros[nivel] = esperarImagenCargada(imagenPrecargada)
+    if (!imagenPrecargada.cargasFiltros[clave]) {
+      imagenPrecargada.cargasFiltros[clave] = esperarImagenCargada(imagenPrecargada)
         .then(() => {
           const fuenteFiltrada = aplicarFiltro(
             imagenPrecargada.imagen,
-            seleccionarFiltro(nivel)
+            filtro
           );
-          imagenPrecargada.fuentesFiltradas[nivel] = fuenteFiltrada;
+          imagenPrecargada.fuentesFiltradas[clave] = fuenteFiltrada;
           return fuenteFiltrada;
         });
     }
 
-    return imagenPrecargada.cargasFiltros[nivel];
+    return imagenPrecargada.cargasFiltros[clave];
   }
 
   /* RULETA: elige la imagen y arranca la partida */
@@ -338,6 +351,10 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     const elementoGanador = imagenes[azarFinal];
     idsUsados.push(imagenGanadora.id);
     const nivelDeLaPartida = nivelSeleccionado;
+
+    //El nivel 4 sortea su filtro al empezar cada partida.
+    if (nivelDeLaPartida === 4) filtroNivel4 = null;
+
     const cargaImagenJugable = Promise.all([
       esperarImagenCargada(imagenGanadora),
       precargarFiltro(imagenGanadora, nivelDeLaPartida)
@@ -419,7 +436,9 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     nivelActual = nivelSeleccionado;
     fragmentosActuales = dificultadSeleccionada;
     tieneLimite = nivelActual === 3;
-    fuentePrecargada = imagenGanadora.fuentesFiltradas[nivelActual] || null;
+    fuentePrecargada = imagenGanadora.fuentesFiltradas[
+      claveFiltro(nivelActual, seleccionarFiltro(nivelActual))
+    ] || null;
     urlFuentePrecargada = imagenGanadora.url;
 
     if (hud) hud.hidden = false;
@@ -512,7 +531,12 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   function seleccionarFiltro(nivel){
     if (nivel === 1) return filtroByN;
     if (nivel === 2) return filtroBrillo;
-    return filtroInvertido;
+    if (nivel === 3) return filtroInvertido;
+
+    if (!filtroNivel4) {
+      filtroNivel4 = FILTROS[Math.floor(Math.random() * FILTROS.length)];
+    }
+    return filtroNivel4;
   }
 
   function filtroByN(r, g, b){
@@ -683,7 +707,7 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     resultadoTituloEl.textContent = "¡Nivel completado!";
     resultadoTiempoEl.textContent = "Tiempo: " + tiempoFinal;
     resultadoTop.hidden = false;
-    if (btnSiguiente) btnSiguiente.hidden = nivelActual >= 3;
+    if (btnSiguiente) btnSiguiente.hidden = nivelActual >= 4;
     resultadoBottom.hidden = false;
 
     mostrarFase("juego");
@@ -726,7 +750,7 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
 
   //Siguiente nivel: avanza manteniendo la dificultad
   btnSiguiente.addEventListener("click", () => {
-    nivelSeleccionado = Math.min(3, nivelActual + 1);
+    nivelSeleccionado = Math.min(4, nivelActual + 1);
     sincronizarMenu();
     irASeleccionDeImagen();
   });
