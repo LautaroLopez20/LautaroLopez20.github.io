@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   const btnMenuComenzar = document.getElementById("btn-menu-comenzar");
   const btnComoJugar = document.getElementById("btn-como-jugar");
   const btnCerrarInstrucciones = document.getElementById("btn-cerrar-instrucciones");
-  const menuCarga = document.getElementById("menuCarga");
+  const pantallaCarga = document.getElementById("pantallaCarga");
 
   /* ELEMENTOS DE LA SELECCION DE IMAGEN */
   const btnStart = document.getElementById("btn-start");
@@ -46,11 +46,9 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   let idsUsados = []; //imagenes que ya fueron seleccionadas durante esta partida
   let dificultadGaleria = null;
 
-  /* ESTADO DE LA PANTALLA DE CARGA DEL MENU */
-  const RETRASO_CARGA_MENU = 250; //ms antes de tapar el menu (evita parpadeos)
-  let pedidoDeCarga = 0; //identifica la ultima galeria pedida
-  let temporizadorCargaMenu = null;
-  let primeraCargaMenu = true; //al abrir la pagina el HTML ya muestra la pantalla
+  /* ESTADO DE LA PANTALLA DE CARGA */
+  const CARGA_MINIMA_MS = 2000; //si aparece, se queda al menos este tiempo
+  let cargandoSeleccion = false; //evita entrar dos veces mientras carga
 
   /* ELEMENTOS DEL JUEGO */
   const canvas = document.getElementById("imagen-juego");
@@ -132,6 +130,8 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
 
   /* Pasa a la seleccion de imagen, rearmando la galeria */
   function irASeleccionDeImagen(){
+    if (cargandoSeleccion) return; //evita entrar dos veces mientras carga
+
     detenerReloj();
     terminado = true; //el tablero queda bloqueado hasta que empiece el nivel
     btnStart.disabled = false;
@@ -142,7 +142,14 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     if (dificultadGaleria !== dificultadSeleccionada) {
       construirGaleria();
     }
-    mostrarFase("seleccion");
+
+    //Si las imagenes ya estan descargadas se pasa directo, sin pantalla de carga.
+    if (galeriaLista()) {
+      mostrarFase("seleccion");
+      return;
+    }
+
+    mostrarCargaSeleccion();
   }
 
   /* GALERIA: elige imagenes al azar sin repetir y las muestra */
@@ -178,7 +185,6 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     }
 
     imagenes = galeria.querySelectorAll("img");
-    controlarCargaMenu(); //tapa el menu hasta que terminen de bajar las imagenes
   }
 
   /* AGREGA UNA IMAGEN A LA GALERIA Y LA DESCARGA EN SEGUNDO PLANO */
@@ -242,37 +248,43 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     });
   }
 
-  /* PANTALLA DE CARGA DEL MENU */
-  /* Se muestra mientras la galeria se esta descargando y se retira cuando
-     todas las imagenes terminaron (cargadas o con error). */
-  function controlarCargaMenu(){
-    if (!menuCarga) return;
+  /* PANTALLA DE CARGA DE LA GALERIA */
+  /* Indica si todas las imagenes de la galeria ya terminaron de bajar. */
+  function galeriaLista(){
+    return imagenesPrecargadas.every((imagenPrecargada) =>
+      imagenPrecargada.imagen.complete && imagenPrecargada.imagen.naturalWidth > 0
+    );
+  }
 
-    const pedido = ++pedidoDeCarga;
-    clearTimeout(temporizadorCargaMenu);
-
-    //En la primera carga el HTML ya trae la pantalla visible. Despues se
-    //espera un instante antes de tapar: si las imagenes estan en cache la
-    //descarga termina enseguida y el menu no parpadea.
-    if (!primeraCargaMenu){
-      menuCarga.classList.add("oculto");
-      temporizadorCargaMenu = setTimeout(() => {
-        if (pedido === pedidoDeCarga) menuCarga.classList.remove("oculto");
-      }, RETRASO_CARGA_MENU);
+  /* Muestra la pantalla de carga hasta que la galeria este lista. Se usa solo
+     cuando hace falta esperar: tiene un minimo de 2s para que la animacion no
+     aparezca y desaparezca de golpe. */
+  function mostrarCargaSeleccion(){
+    if (!pantallaCarga){ //sin overlay se entra igual, aunque falte cargar
+      mostrarFase("seleccion");
+      return;
     }
-    primeraCargaMenu = false;
+
+    cargandoSeleccion = true;
+    const inicio = Date.now();
+    pantallaCarga.classList.remove("oculto");
 
     const imagenesListas = imagenesPrecargadas.map((imagenPrecargada) =>
       esperarImagenCargada(imagenPrecargada).catch(() => null) //un error no deja la pantalla trabada
     );
 
-    //Red de seguridad: si una imagen nunca responde, el menu igual aparece.
+    //Red de seguridad: si una imagen nunca responde, la galeria se muestra igual.
     const tiempoMaximo = new Promise((resolve) => setTimeout(resolve, 8000));
 
     Promise.race([Promise.all(imagenesListas), tiempoMaximo]).then(() => {
-      if (pedido !== pedidoDeCarga) return; //ya hay una galeria mas nueva cargando
-      clearTimeout(temporizadorCargaMenu);
-      menuCarga.classList.add("oculto");
+      const transcurrido = Date.now() - inicio;
+      const restante = Math.max(0, CARGA_MINIMA_MS - transcurrido);
+
+      setTimeout(() => {
+        pantallaCarga.classList.add("oculto");
+        cargandoSeleccion = false;
+        mostrarFase("seleccion");
+      }, restante);
     });
   }
 

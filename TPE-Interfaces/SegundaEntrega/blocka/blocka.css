@@ -12,6 +12,10 @@
   --color-luz: #F4E3DD;
   --color-blanco-puro: #ffffff;
 
+  /* Hace de referencia para la pantalla de carga, que se superpone
+     a la fase que este visible. */
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -500,11 +504,11 @@
   100% { transform: translateY(110vh); }
 }
 
-/* PANTALLA DE CARGA DEL MENU PRINCIPAL */
-/* Cubre el menu mientras se descargan las imagenes de la galeria. Va por
-   encima de las particulas (z-index 0) y del contenido del menu (z-index 1),
-   y mientras esta visible tambien bloquea los clicks sobre los botones. */
-.menuCarga {
+/* PANTALLA DE CARGA DEL JUEGO */
+/* Se superpone a la fase visible (menu, seleccion o resultado) mientras se
+   descargan las imagenes de la galeria. Va por encima del contenido y, al
+   estar visible, tambien bloquea los clicks. */
+.pantallaCarga {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -518,7 +522,7 @@
 }
 
 /* Se retira cuando la galeria termino de cargar (lo maneja blocka.js). */
-.menuCarga.oculto {
+.pantallaCarga.oculto {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;

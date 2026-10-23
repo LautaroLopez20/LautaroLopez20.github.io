@@ -114,25 +114,6 @@
                     <button id="btn-menu-comenzar" type="button" class="btn btnSecondary">Comenzar</button>
                     <button id="btn-como-jugar" type="button" class="btn btnPrimary">Como Jugar</button>
                 </div>
-
-                <!-- Pantalla de carga: tapa el menu mientras baja la galeria.
-                     Los cubos cruzan de un lado al otro y se desvanecen en los bordes. -->
-                <div class="menuCarga" id="menuCarga">
-                    <div class="cargaPista" aria-hidden="true">
-                        <div class="cargaCubos">
-                            <!-- Seis grupos: la animación corre la mitad de la pista
-                                 (tres grupos) y la otra mitad ocupa su lugar, así el
-                                 desplazamiento lateral nunca se corta. -->
-                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
-                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
-                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
-                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
-                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
-                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
-                        </div>
-                    </div>
-                    <p class="cargaTexto" id="cargaTexto" role="status">Preparando una experiencia sin igual...</p>
-                </div>
             </div>
 
             <!-- Fase 2: seleccion de imagen (galeria + ruleta) -->
@@ -177,6 +158,26 @@
                     <p class="instruccionesTexto">En el nivel 1 la imagen se ve en blanco y negro, en el nivel 2 se ve con mas brillo y en el nivel 3 se ve en negativo. Ademas, en el nivel 3 tenes tiempo limitado, si se acaba antes de armar la imagen, pierdes.</p>
                 </div>
                 <button id="btn-cerrar-instrucciones" type="button" class="btn btnSecondary">Volver</button>
+            </div>
+
+            <!-- Pantalla de carga: se muestra al entrar a la galeria solo si
+                 faltan descargar imagenes. Tapa toda la caja del juego.
+                 Los cubos cruzan de un lado al otro y se desvanecen en los bordes. -->
+            <div class="pantallaCarga oculto" id="pantallaCarga">
+                <div class="cargaPista" aria-hidden="true">
+                    <div class="cargaCubos">
+                        <!-- Seis grupos: la animacion corre la mitad de la pista
+                             (tres grupos) y la otra mitad ocupa su lugar, asi el
+                             desplazamiento lateral nunca se corta. -->
+                        <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                        <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                        <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                        <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                        <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                        <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                    </div>
+                </div>
+                <p class="cargaTexto" role="status">Preparando una experiencia sin igual...</p>
             </div>
 
         </div>
