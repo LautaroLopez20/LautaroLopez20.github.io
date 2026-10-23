@@ -114,6 +114,25 @@
                     <button id="btn-menu-comenzar" type="button" class="btn btnSecondary">Comenzar</button>
                     <button id="btn-como-jugar" type="button" class="btn btnPrimary">Como Jugar</button>
                 </div>
+
+                <!-- Pantalla de carga: tapa el menu mientras baja la galeria.
+                     Los cubos cruzan de un lado al otro y se desvanecen en los bordes. -->
+                <div class="menuCarga" id="menuCarga">
+                    <div class="cargaPista" aria-hidden="true">
+                        <div class="cargaCubos">
+                            <!-- Seis grupos: la animación corre la mitad de la pista
+                                 (tres grupos) y la otra mitad ocupa su lugar, así el
+                                 desplazamiento lateral nunca se corta. -->
+                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                            <div class="cargaGrupo"><i class="cargaCubo cuboBlanco"></i><i class="cargaCubo cuboPrimario"></i><i class="cargaCubo cuboSecundario"></i></div>
+                        </div>
+                    </div>
+                    <p class="cargaTexto" id="cargaTexto" role="status">Preparando una experiencia sin igual...</p>
+                </div>
             </div>
 
             <!-- Fase 2: seleccion de imagen (galeria + ruleta) -->
