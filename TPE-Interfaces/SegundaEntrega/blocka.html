@@ -65,16 +65,19 @@
     <section class="gamePlay">
         <div class="gameBoard" id="gameBoard">
 
+            <!-- Fondo animado: vive en el tablero, no en una fase, para seguir
+                 cayendo en el menu, la ruleta, el juego y las instrucciones. -->
+            <div class="fondoParticulas" aria-hidden="true">
+                <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
+                <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
+                <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
+                <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
+                <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
+                <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
+            </div>
+
             <!-- Fase 1: menu principal (selector de nivel y dificultad) -->
             <div class="faseMenu" id="faseMenu">
-                <div class="fondoParticulas" aria-hidden="true">
-                    <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
-                    <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
-                    <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
-                    <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
-                    <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
-                    <i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i><i class="cuadrado"></i>
-                </div>
                 <h1 class="faseLogoJuego">Blocka</h1>
 
                 <div class="menuOpciones">
@@ -97,15 +100,15 @@
                     <div class="selectorDificultad" id="selectorDificultad">
                         <button type="button" class="opcionDificultad" data-fragmentos="4" aria-pressed="false">
                             <span class="opcionThumb puzzle4" aria-hidden="true"></span>
-                            <span class="opcionLabel">Facil</span>
+                            <span class="opcionLabel">Facil - 2x2</span>
                         </button>
-                        <button type="button" class="opcionDificultad" data-fragmentos="6" aria-pressed="false">
+                        <button type="button" class="opcionDificultad" data-fragmentos="9" aria-pressed="false">
                             <span class="opcionThumb puzzle6" aria-hidden="true"></span>
-                            <span class="opcionLabel">Medio</span>
+                            <span class="opcionLabel">Medio - 3x3</span>
                         </button>
-                        <button type="button" class="opcionDificultad" data-fragmentos="8" aria-pressed="false">
+                        <button type="button" class="opcionDificultad" data-fragmentos="16" aria-pressed="false">
                             <span class="opcionThumb puzzle8" aria-hidden="true"></span>
-                            <span class="opcionLabel">Dificil</span>
+                            <span class="opcionLabel">Dificil - 4x4</span>
                         </button>
                     </div>
                 </div>

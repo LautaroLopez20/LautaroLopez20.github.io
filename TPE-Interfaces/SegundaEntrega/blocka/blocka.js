@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   const btnComoJugar = document.getElementById("btn-como-jugar");
   const btnCerrarInstrucciones = document.getElementById("btn-cerrar-instrucciones");
   const pantallaCarga = document.getElementById("pantallaCarga");
-
   /* ELEMENTOS DE LA SELECCION DE IMAGEN */
   const btnStart = document.getElementById("btn-start");
   let imagenes = []; //elementos img visibles de la galeria
@@ -91,6 +90,8 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   imagen.crossOrigin = "anonymous"; //esto evita el error de CORS al usar la imagen en el canvas
   imagen.onload = prepararNivel; //primero carga la imagen y recien ahi se arma el nivel
 
+  aplicarFiltrosMiniaturas();
+
   /* FASES: muestra una sola fase y oculta el resto */
   function mostrarFase(nombre){
     Object.keys(fases).forEach((clave) => {
@@ -111,6 +112,25 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
       boton.classList.toggle("activo", activo);
       boton.setAttribute("aria-pressed", String(activo));
     });
+  }
+
+  function aplicarFiltroMiniatura(selector, filtro){
+    const miniatura = document.querySelector(selector);
+    if (!miniatura) return;
+
+    const imagenMenu = new Image();
+    imagenMenu.onload = () => {
+      const imagenFiltrada = aplicarFiltro(imagenMenu, filtro);
+      miniatura.style.backgroundImage =
+        "url('" + imagenFiltrada.toDataURL("image/png") + "')";
+    };
+    imagenMenu.src = "blocka/img/menu-generic.png";
+  }
+
+  function aplicarFiltrosMiniaturas(){
+    aplicarFiltroMiniatura(".nivelFiltro1", filtroByN);
+    aplicarFiltroMiniatura(".nivelFiltro2", filtroBrillo);
+    aplicarFiltroMiniatura(".nivelFiltro3", filtroInvertido);
   }
 
   /* Vuelve al menu principal y limpia la partida anterior */
@@ -297,7 +317,10 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     if (!imagenPrecargada.cargasFiltros[nivel]) {
       imagenPrecargada.cargasFiltros[nivel] = esperarImagenCargada(imagenPrecargada)
         .then(() => {
-          const fuenteFiltrada = aplicarFiltro(imagenPrecargada.imagen, nivel);
+          const fuenteFiltrada = aplicarFiltro(
+            imagenPrecargada.imagen,
+            seleccionarFiltro(nivel)
+          );
           imagenPrecargada.fuentesFiltradas[nivel] = fuenteFiltrada;
           return fuenteFiltrada;
         });
@@ -419,8 +442,8 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   /* CONFIGURACION DE LA GRILLA */
   //Devuelve cuantas columnas y filas tiene la grilla segun la cantidad de fragmentos.
   function calcularGrilla(n){
-    if (n === 6) return { cols: 3, rows: 2 };
-    if (n === 8) return { cols: 4, rows: 2 };
+    if (n === 9)  return { cols: 3, rows: 3 };
+    if (n === 16) return { cols: 4, rows: 4 };
     return { cols: 2, rows: 2 }; //4 por defecto
   }
 
@@ -442,7 +465,10 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     if (urlFuentePrecargada === imagen.src && fuentePrecargada) {
       fuente = fuentePrecargada;
     } else {
-      fuente = aplicarFiltro(imagen, nivelActual); //genera la imagen filtrada una sola vez
+      fuente = aplicarFiltro(
+        imagen,
+        seleccionarFiltro(nivelActual)
+      ); //genera la imagen filtrada una sola vez
     }
 
     iniciarNivel(); //reparte los angulos al azar y dibuja el tablero
@@ -450,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   }
 
   /* FILTROS: la imagen se procesa una sola vez y queda lista para recortar */
-  function aplicarFiltro(img, nivel){
+  function aplicarFiltro(img, filtro){
     const off = document.createElement("canvas"); //canvas auxiliar que no se muestra en pantalla
     off.width = img.naturalWidth;
     off.height = img.naturalHeight;
@@ -462,7 +488,6 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
     const height = off.height;
     const imageData = offContexto.getImageData(0, 0, width, height);
     const data = imageData.data;
-
     //Recorre la imagen con el doble ciclo
     for (let y = 0; y < height; y++){
       for (let x = 0; x < width; x++){
@@ -472,23 +497,10 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
         const g = data[i + 1];
         const b = data[i + 2];
 
-        if (nivel === 1){
-          //Nivel 1: blanco y negro (luminancia BT.601)
-          const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-          data[i] = gray;
-          data[i + 1] = gray;
-          data[i + 2] = gray;
-        } else if (nivel === 2){
-          //Nivel 2: brillo +30%
-          data[i] = Math.min(255, r * 1.3);
-          data[i + 1] = Math.min(255, g * 1.3);
-          data[i + 2] = Math.min(255, b * 1.3);
-        } else {
-          //Nivel 3: negativo
-          data[i] = 255 - r;
-          data[i + 1] = 255 - g;
-          data[i + 2] = 255 - b;
-        }
+        const coloresFiltrados = filtro(r, g, b);
+        data[i] = coloresFiltrados[0];
+        data[i + 1] = coloresFiltrados[1];
+        data[i + 2] = coloresFiltrados[2];
         //El alfa no se modifica.
       }
     }
@@ -496,6 +508,30 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
 
     return off; //devuelve el canvas ya filtrado
   }
+
+  function seleccionarFiltro(nivel){
+    if (nivel === 1) return filtroByN;
+    if (nivel === 2) return filtroBrillo;
+    return filtroInvertido;
+  }
+
+  function filtroByN(r, g, b){
+    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+    return [gray, gray, gray];
+  }
+
+  function filtroBrillo(r, g, b){
+    return [
+      Math.min(255, r * 1.3),
+      Math.min(255, g * 1.3),
+      Math.min(255, b * 1.3)
+    ];
+  }
+
+  function filtroInvertido(r, g, b){
+    return [255 - r, 255 - g, 255 - b];
+  }
+
 
   /* INTERACCION: GIRO DE FRAGMENTOS CON EL MOUSE */
   canvas.addEventListener("click", (evento) => girarPorClick(evento, -90)); //el boton izquierdo gira a la izquierda

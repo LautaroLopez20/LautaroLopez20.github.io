@@ -20,6 +20,11 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  /* El tablero es su propio contexto de apilamiento, para que la capa de
+     cuadrados quede por encima del color de fondo pero por debajo de todas
+     las fases. */
+  isolation: isolate;
 }
 
 /* Al usar display flex en las fases, el atributo hidden quedaria pisado por
@@ -174,18 +179,6 @@
   background-image: url("img/menu-generic.png");
 }
 
-.nivelFiltro1 {
-  filter: grayscale(1);
-}
-
-.nivelFiltro2 {
-  filter: brightness(1.3);
-}
-
-.nivelFiltro3 {
-  filter: invert(1);
-}
-
 /* Dificultad: la imagen cortada en grilla por costuras del color del
    fondo del boton, como si fueran los separadores de las piezas.
    El orden de las capas importa: los gradientes van arriba de la foto. */
@@ -204,9 +197,10 @@
     linear-gradient(var(--color-primario), var(--color-primario)),
     linear-gradient(var(--color-primario), var(--color-primario)),
     linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
     url("img/menu-generic.png");
-  background-size: 3px 100%, 3px 100%, 100% 3px, cover;
-  background-position: 33.33% 0, 66.66% 0, 0 50%, center;
+  background-size: 3px 100%, 3px 100%, 100% 3px, 100% 3px, cover;
+  background-position: 33.33% 0, 66.66% 0, 0 33.33%, 0 66.66%, center;
   background-repeat: no-repeat;
 }
 
@@ -216,9 +210,11 @@
     linear-gradient(var(--color-primario), var(--color-primario)),
     linear-gradient(var(--color-primario), var(--color-primario)),
     linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
+    linear-gradient(var(--color-primario), var(--color-primario)),
     url("img/menu-generic.png");
-  background-size: 3px 100%, 3px 100%, 3px 100%, 100% 3px, cover;
-  background-position: 25% 0, 50% 0, 75% 0, 0 50%, center;
+  background-size: 3px 100%, 3px 100%, 3px 100%, 100% 3px, 100% 3px, 100% 3px, cover;
+  background-position: 25% 0, 50% 0, 75% 0, 0 25%, 0 50%, 0 75%, center;
   background-repeat: no-repeat;
 }
 
@@ -260,21 +256,29 @@
 
 .image-gallery {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* Columnas de 180px como maximo, centradas y reducibles en pantallas
+     angostas: los tres cuadrados quedan juntos en el medio. */
+  grid-template-columns: repeat(3, minmax(0, 180px));
+  justify-content: center;
   gap: 12px;
-  width: 100%;
+  /* El panel se achica al ancho de las miniaturas y se centra en la fase,
+     en vez de extenderse todo el ancho del tablero. */
+  width: max-content;
+  margin-inline: auto;
   box-sizing: border-box;
   padding: 10px;
   background-color: var(--color-primario);
-  opacity: 0.9;
 }
 
-/* Miniaturas uniformes: mismo recuadro para todas, sin importar la
-   proporcion real de la foto (cover recorta lo que sobra). */
+/* Miniaturas cuadradas: el ancho manda y el alto lo sigue con aspect-ratio.
+   "fill" estira la foto entera dentro del cuadrado en vez de recortarla. La
+   opacidad queda en 1 para que las miniaturas tapen al fondo animado. */
 .image-gallery img {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  object-fit: fill;
+  opacity: 1;
 }
 
 /* Imagen que la ruleta va iluminando */
@@ -434,28 +438,16 @@
   margin: 0;
 }
 
-/* FONDO ANIMADO DEL MENU PRINCIPAL */
+/* FONDO ANIMADO DEL TABLERO */
 /* Capa de cuadrados que caen verticalmente, con los colores primario y
-   secundario del juego. Va detrás del contenido y no recibe pointer events
-   para no bloquear los botones del menu. */
-.faseMenu {
-  position: relative;
-  overflow: hidden;
-}
-
+   secundario del juego. Cuelga del tablero (no de una fase) para seguir
+   cayendo en el menu, la ruleta, el juego y las instrucciones. No recibe
+   pointer events, asi que nunca bloquea la interaccion. */
 .fondoParticulas {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
-}
-
-/* Los elementos del menu quedan sobre la capa de cuadrados. */
-.faseMenu > .faseLogoJuego,
-.faseMenu > .menuOpciones,
-.faseMenu > .menuAcciones {
-  position: relative;
-  z-index: 1;
 }
 
 .cuadrado {
