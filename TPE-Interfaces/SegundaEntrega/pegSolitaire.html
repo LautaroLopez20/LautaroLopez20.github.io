@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/atoms.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/pegSolitaire.css">
+    <link rel="stylesheet" href="css/pegSolitaire-game.css">
     <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
@@ -62,8 +63,28 @@
 </nav>
 
     <section class="gamePlay">
-        <div class="gameBoard">
-            <img class="gameBoardImage" src="resources/images/ExampleImage.png" alt="Tablero de Dragon Ball Z: Peg Solitaire en partida">
+        <div class="gameBoard gameBoardPeg">
+            <canvas id="canvas-game-peg" width="1340" height="507" aria-label="Tablero de Peg Solitaire"></canvas>
+            <div class="gameHud">
+                <div class="gameHudStat">
+                    <span class="gameHudLabel">Tiempo</span>
+                    <span class="gameHudValue" id="pegTimer">10:00</span>
+                </div>
+                <div class="gameHudStat">
+                    <span class="gameHudLabel">Fichas</span>
+                    <span class="gameHudValue" id="pegChips">32</span>
+                </div>
+                <button type="button" class="gameHudButton" id="pegRestart">Reiniciar</button>
+            </div>
+            <div class="startMenu" id="startMenu">
+                <h1 class="startTitle">DRAGON BALL Z - PEG SOLITAIRE</h1>
+                <button class="startBtn" id="startBtn">INICIAR</button>
+            </div>
+            <div class="endMenu hidden" id="endMenu" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+                <h2 class="endTitle" id="endTitle"></h2>
+                <p class="endMessage" id="endMessage"></p>
+                <button type="button" class="startBtn" id="endBtn">Jugar de nuevo</button>
+            </div>
         </div>
         <div class="gameActions">
             <div class="gameActionsLeft">
@@ -116,12 +137,14 @@
             <p class="aboutText">Para realizar un movimiento, debes saltar una Bola de Dragón sobre otra que se encuentre junto a ella (horizontal o verticalmente) y aterrizar en un espacio vacío.</p>
             <p class="aboutText">La Bola de Dragón sobre la que se realiza el salto será eliminada del tablero.</p>
             <p class="aboutText">La partida se gana cuando solo queda una Bola de Dragón en el tablero, idealmente en el espacio central. Si el juego termina con más de una Bola de Dragón, habrás perdido.</p>
+            <p class="aboutText">Tenés 10 minutos para resolver el tablero. Si el tiempo llega a cero, la partida termina.</p>
         </section>
 
         <section class="aboutSection">
             <h2 class="aboutTitle">Controles</h2>
             <p class="aboutText">Usa el mouse para seleccionar las Bolas de Dragón y realizar los movimientos.</p>
-            <p class="aboutText">Haz clic sobre una Bola de Dragón para seleccionarla y luego haz clic sobre un espacio vacío válido para realizar el salto.</p>
+            <p class="aboutText">Haz clic sobre una Bola de Dragón y arrastrala hasta un espacio vacío válido para realizar el salto. También podés hacer clic en la ficha y después clic en el destino.</p>
+            <p class="aboutText">Mientras una ficha está seleccionada, los destinos posibles se marcan con un anillo animado.</p>
         </section>
 
         <section class="aboutSection">
@@ -288,6 +311,11 @@
             </div>
         </div>
     </footer>
+
     <script src="js/main.js"></script>
+    <script src="pegSolitaire/js/model/PegSolitaireModel.js"></script>
+    <script src="pegSolitaire/js/view/PegSolitaireView.js"></script>
+    <script src="pegSolitaire/js/controller/PegSolitaireController.js"></script>
+    <script src="pegSolitaire/js/main.js"></script>
 </body>
 </html>

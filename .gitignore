@@ -8,3 +8,5 @@ node_modules/
 *requisitos*.txt
 # Notas personales de revision (no se versionan)
 /TPE-Interfaces/SegundaEntrega/para revisar.txt
+# Codigo base de referencia para Peg Solitaire (prestado, no se versiona)
+/TPE-Interfaces/SegundaEntrega/codigo-base/

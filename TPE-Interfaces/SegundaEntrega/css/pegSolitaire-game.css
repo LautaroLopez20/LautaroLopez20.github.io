@@ -1,0 +1,167 @@
+/* pegSolitaire-game.css
+   Estilos exclusivos de la zona jugable: canvas, HUD, menu de inicio y
+   cartel de fin de partida. Los estilos generales de la pagina siguen en
+   pegSolitaire.css.
+*/
+
+/* Solo la caja del juego jugable (blocka.html sigue usando .gameBoard con su
+   imagen de referencia y su alto fijo). Las dos clases juntas ganan por
+   especificidad sin depender del orden en que se cargan las hojas. */
+.gameBoard.gameBoardPeg {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1340 / 507;
+    height: auto;
+    border: 1px solid #F4E3DD;
+    background-color: #121B3F;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+    overflow: hidden;
+    user-select: none;
+}
+
+#canvas-game-peg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: pointer;
+}
+
+/* HUD: reloj, contador de fichas y boton de reinicio.
+   El contenedor no captura el mouse para no cortar el arrastre; el boton si. */
+.gameHud {
+    position: absolute;
+    top: 10px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.gameHudStat {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.gameHudLabel {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #A3A3AD;
+}
+
+.gameHudValue {
+    font-size: 20px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #F4E3DD;
+}
+
+.gameHudValue.isLow {
+    color: #F25022;
+}
+
+.gameHudButton {
+    margin-left: auto;
+    pointer-events: auto;
+    background-color: transparent;
+    border: 1px solid #B8461D;
+    color: #F4E3DD;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 7px 18px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.gameHudButton:hover {
+    background-color: #B8461D;
+}
+
+/* Menu INICIAR y cartel de fin de partida */
+
+.startMenu,
+.endMenu {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 24px;
+    text-align: center;
+    background: radial-gradient(rgba(12, 18, 42, 0.95), rgba(12, 18, 42, 0.75));
+}
+
+.startMenu {
+    z-index: 10;
+}
+
+.endMenu {
+    z-index: 20;
+    background: radial-gradient(rgba(12, 18, 42, 0.97), rgba(12, 18, 42, 0.88));
+}
+
+.startMenu.hidden,
+.endMenu.hidden {
+    display: none;
+}
+
+.startTitle {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #DCDEE5;
+    text-shadow: 0 0 24px rgba(245, 183, 0, 0.25);
+}
+
+.endTitle {
+    margin: 0;
+    font-size: 46px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #F4E3DD;
+    text-shadow: 0 0 24px rgba(184, 70, 29, 0.35);
+}
+
+.endMessage {
+    margin: 0;
+    max-width: 520px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #DCDEE5;
+}
+
+.startBtn {
+    background-color: #B8461D;
+    border: 2px solid transparent;
+    color: #DCDEE5;
+    font-size: 18px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 14px 64px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.startBtn:hover {
+    transform: scale(110%);
+    box-shadow: 0 0 0 4px rgba(184, 70, 29, 0.25);
+}
+
+.startBtn:focus-visible,
+.gameHudButton:focus-visible {
+    outline: 3px solid #C9A227;
+    outline-offset: 3px;
+}
