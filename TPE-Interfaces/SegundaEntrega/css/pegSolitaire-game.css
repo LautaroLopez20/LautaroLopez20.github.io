@@ -30,7 +30,9 @@
 }
 
 /* HUD: reloj, contador de fichas y boton de reinicio.
-   El contenedor no captura el mouse para no cortar el arrastre; el boton si. */
+   El contenedor no captura el mouse para no cortar el arrastre; el boton si.
+   Cada lectura lleva su propia caja: sobre el tablero ilustrado el texto suelto
+   no se leia. Azul del juego semitransparente con borde naranja. */
 .gameHud {
     position: absolute;
     top: 10px;
@@ -47,6 +49,11 @@
     display: flex;
     align-items: baseline;
     gap: 8px;
+    padding: 6px 16px;
+    border: 1px solid #B8461D;
+    border-radius: 999px;
+    background-color: rgba(12, 18, 42, 0.82);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
 }
 
 .gameHudLabel {
@@ -70,7 +77,7 @@
 .gameHudButton {
     margin-left: auto;
     pointer-events: auto;
-    background-color: transparent;
+    background-color: rgba(12, 18, 42, 0.82);
     border: 1px solid #B8461D;
     color: #F4E3DD;
     font-size: 13px;
@@ -78,6 +85,7 @@
     text-transform: uppercase;
     border-radius: 999px;
     padding: 7px 18px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
 }

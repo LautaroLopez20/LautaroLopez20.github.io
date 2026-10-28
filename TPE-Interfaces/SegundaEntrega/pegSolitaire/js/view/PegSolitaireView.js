@@ -7,8 +7,16 @@
 const PEG_CELL_SIZE = 55;          // Lado de cada celda del tablero
 const PEG_BOARD_SIZE = 7 * PEG_CELL_SIZE;
 const PEG_CHIP_SIZE = 58;          // Tamano con el que se dibuja la ficha
-const PEG_HINT_RGB = '245, 183, 0';     // Amarillo de las pistas
-const PEG_SELECTED_RGB = '184, 70, 29'; // Naranja del anillo de seleccion
+
+/* Arte del juego. El PNG del tablero ya trae dibujados el fondo, el marco y
+   los 33 huecos, asi que la vista no pinta ranuras por codigo: solo apoya el
+   tablero y despues las fichas encima. */
+const PEG_IMAGES = {
+    board: 'pegSolitaire/assets/tablero.png',
+    peg: 'pegSolitaire/assets/ficha.svg',
+    selected: 'pegSolitaire/assets/ficha-seleccionada.svg',
+    target: 'pegSolitaire/assets/destino.svg'
+};
 
 class PegSolitaireView {
     /**
@@ -22,9 +30,12 @@ class PegSolitaireView {
         this.offsetX = (canvas.width - PEG_BOARD_SIZE) / 2;
         this.offsetY = (canvas.height - PEG_BOARD_SIZE) / 2;
 
-        /* Imagenes del juego: fondo del tablero y ficha. */
-        this.boardImage = this.loadImage('pegSolitaire/img/tablero.svg');
-        this.chipImage = this.loadImage('pegSolitaire/img/ficha.svg');
+        /* Imagenes del juego: tablero, ficha normal, ficha seleccionada y
+           marca de destino valido. */
+        this.boardImage = this.loadImage(PEG_IMAGES.board);
+        this.pegImage = this.loadImage(PEG_IMAGES.peg);
+        this.selectedImage = this.loadImage(PEG_IMAGES.selected);
+        this.targetImage = this.loadImage(PEG_IMAGES.target);
 
         /* Callback opcional: el controlador lo usa para redibujar cuando
            terminan de cargar las imagenes. */
@@ -63,6 +74,15 @@ class PegSolitaireView {
         return image;
     }
 
+    /**
+     * Indica si una imagen ya se puede dibujar.
+     * @param {HTMLImageElement} image - Imagen a revisar.
+     * @returns {boolean} True si termino de cargar con exito.
+     */
+    isReady(image) {
+        return image.complete && image.naturalWidth > 0;
+    }
+
     /* --------------------------- DIBUJADO ------------------------------- */
 
     /**
@@ -82,20 +102,23 @@ class PegSolitaireView {
             for (let col = 0; col < state.cells[row].length; col++) {
                 if (state.cells[row][col] !== PEG_CHIP) continue;
                 if (drag && drag.from.row === row && drag.from.col === col) continue;
-                this.drawChip(this.cellCenter(row, col));
+
+                /* La ficha seleccionada usa el SVG que ya trae el halo. */
+                const isSelected = state.selected &&
+                    state.selected.row === row && state.selected.col === col;
+                this.drawChip(this.cellCenter(row, col), 1,
+                    isSelected ? this.selectedImage : this.pegImage);
             }
         }
 
         if (drag) {
-            this.drawChip(drag.position, 0.9);
-        } else if (state.selected) {
-            this.drawSelection(this.cellCenter(state.selected.row, state.selected.col), time);
+            this.drawChip(drag.position, 0.9, this.pegImage);
         }
     }
 
     /** Pinta la imagen de fondo (tablero vacio) o un fondo liso si aun carga. */
     drawBoardBackground() {
-        if (this.boardImage.complete && this.boardImage.naturalWidth > 0) {
+        if (this.isReady(this.boardImage)) {
             this.ctx.drawImage(this.boardImage, 0, 0);
         } else {
             this.ctx.fillStyle = '#121B3F';
@@ -118,23 +141,19 @@ class PegSolitaireView {
      * Dibuja una ficha en una posicion del canvas.
      * @param {{x: number, y: number}} position - Centro de la ficha.
      * @param {number} alpha - Opacidad (se baja mientras se arrastra).
+     * @param {HTMLImageElement} image - SVG de la ficha a dibujar.
      */
-    drawChip(position, alpha = 1) {
+    drawChip(position, alpha = 1, image = this.pegImage) {
         const ctx = this.ctx;
         const half = PEG_CHIP_SIZE / 2;
 
         ctx.save();
         ctx.globalAlpha = alpha;
 
-        /* Sombra barata: una elipse debajo de la ficha. */
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-        ctx.beginPath();
-        ctx.ellipse(position.x, position.y + half * 0.4, half * 0.8, half * 0.3, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        if (this.chipImage.complete && this.chipImage.naturalWidth > 0) {
+        if (this.isReady(image)) {
+            /* La sombra viene dentro del SVG: no hace falta pintarla aparte. */
             ctx.drawImage(
-                this.chipImage,
+                image,
                 position.x - half,
                 position.y - half,
                 PEG_CHIP_SIZE,
@@ -152,59 +171,33 @@ class PegSolitaireView {
     }
 
     /**
-     * Dibuja las pistas animadas sobre cada destino valido.
+     * Dibuja la marca animada sobre cada destino valido.
      * @param {{row: number, col: number}[]} targets - Destinos posibles.
      * @param {number} time - Marca de tiempo actual (ms).
      */
     drawHints(targets, time) {
+        if (!this.isReady(this.targetImage)) return;
+
         const ctx = this.ctx;
 
         targets.forEach((target, index) => {
             const center = this.cellCenter(target.row, target.col);
-            const phase = ((time + index * 180) % 900) / 900;
+
+            /* Latido suave: cada marca respira desfasada de la anterior. */
+            const pulse = 0.5 + 0.5 * Math.sin((time + index * 160) / 320);
+            const size = PEG_CHIP_SIZE * (0.92 + 0.12 * pulse);
 
             ctx.save();
-
-            /* Onda que crece y se desvanece. */
-            ctx.strokeStyle = `rgba(${PEG_HINT_RGB}, ${0.85 * (1 - phase)})`;
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.arc(center.x, center.y, 10 + phase * 13, 0, Math.PI * 2);
-            ctx.stroke();
-
-            /* Anillo fijo que marca la ranura de destino. */
-            ctx.strokeStyle = `rgba(${PEG_HINT_RGB}, 0.9)`;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(center.x, center.y, 19, 0, Math.PI * 2);
-            ctx.stroke();
-
-            /* Punto central. */
-            ctx.fillStyle = `rgba(${PEG_HINT_RGB}, 0.85)`;
-            ctx.beginPath();
-            ctx.arc(center.x, center.y, 4, 0, Math.PI * 2);
-            ctx.fill();
-
+            ctx.globalAlpha = 0.6 + 0.4 * pulse;
+            ctx.drawImage(
+                this.targetImage,
+                center.x - size / 2,
+                center.y - size / 2,
+                size,
+                size
+            );
             ctx.restore();
         });
-    }
-
-    /**
-     * Dibuja el anillo que marca la ficha seleccionada.
-     * @param {{x: number, y: number}} center - Centro de la ficha.
-     * @param {number} time - Marca de tiempo actual (ms).
-     */
-    drawSelection(center, time) {
-        const pulse = 0.55 + 0.35 * Math.sin(time / 180);
-        const ctx = this.ctx;
-
-        ctx.save();
-        ctx.strokeStyle = `rgba(${PEG_SELECTED_RGB}, ${pulse})`;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, 25, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
     }
 
     /* --------------------------- COORDENADAS ---------------------------- */
