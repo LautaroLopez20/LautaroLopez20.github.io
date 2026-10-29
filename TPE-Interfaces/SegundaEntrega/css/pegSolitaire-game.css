@@ -4,9 +4,9 @@
    pegSolitaire.css.
 */
 
-/* Solo la caja del juego jugable (blocka.html sigue usando .gameBoard con su
-   imagen de referencia y su alto fijo). Las dos clases juntas ganan por
-   especificidad sin depender del orden en que se cargan las hojas. */
+/* Solo la caja del juego jugable (blocka.html sigue usando .gameBoard y su
+   alto fijo). Las dos clases juntas ganan por especificidad sin depender del
+   orden en que se cargan las hojas. */
 .gameBoard.gameBoardPeg {
     position: relative;
     width: 100%;

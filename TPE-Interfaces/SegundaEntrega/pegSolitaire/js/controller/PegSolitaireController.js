@@ -4,7 +4,7 @@
    reglas a traves del modelo y pide a la vista que se redibuje.
    ============================================================================ */
 
-const PEG_DRAG_THRESHOLD = 5; // Pixeles que hay que mover para considerar arrastre
+const PEG_DRAG_THRESHOLD = 5; // Pixeles de distancia Manhattan para iniciar el arrastre
 
 class PegSolitaireController {
     /**
@@ -18,8 +18,8 @@ class PegSolitaireController {
         /* 'idle' | 'playing' | 'won' | 'lost' | 'timeup' */
         this.status = 'idle';
         this.drag = null;          // { from: {row, col}, position: {x, y} }
-        this.pressPoint = null;    // Punto donde empezo el click
-        this.isDragging = false;   // Diferencia click simple de arrastre
+        this.pressPoint = null;    // Punto donde empezo el arrastre
+        this.isDragging = false;   // Indica si el mouse ya supero el umbral
         this.frameId = null;       // requestAnimationFrame en curso
 
         /* Los metodos se pasan como referencia: hay que fijar el contexto. */
@@ -111,8 +111,7 @@ class PegSolitaireController {
     /* ----------------------------- MOUSE -------------------------------- */
 
     /**
-     * mousedown: selecciona una ficha o intenta soltar la seleccion actual
-     * en una ranura vacia (modo click, click).
+     * mousedown: selecciona una ficha y comienza el arrastre.
      * @param {MouseEvent} event - Evento del mouse.
      */
     handleMouseDown(event) {
@@ -122,26 +121,15 @@ class PegSolitaireController {
         const cell = this.view.pointToCell(point);
         if (!cell) return;
 
-        /* Hay una ficha en la celda: empieza la seleccion / el arrastre. */
-        if (this.model.hasChip(cell.row, cell.col)) {
-            this.model.select(cell.row, cell.col);
-            this.drag = { from: cell, position: point };
-            this.pressPoint = point;
-            this.isDragging = false;
-            this.view.canvas.style.cursor = 'grabbing';
-            this.render(performance.now());
-            return;
-        }
+        /* Solo se puede empezar un movimiento desde una ficha. */
+        if (!this.model.hasChip(cell.row, cell.col)) return;
 
-        /* Ranura vacia: si hay una ficha seleccionada, se intenta el salto. */
-        if (!this.model.selected) return;
-
-        if (this.model.move(this.model.selected, cell)) {
-            this.afterMove();
-        } else {
-            this.model.clearSelection();
-            this.render(performance.now());
-        }
+        this.model.select(cell.row, cell.col);
+        this.drag = { from: cell, position: point };
+        this.pressPoint = point;
+        this.isDragging = false;
+        this.view.canvas.style.cursor = 'grabbing';
+        this.render(performance.now());
     }
 
     /**
@@ -160,8 +148,8 @@ class PegSolitaireController {
     }
 
     /**
-     * mouseup: suelta la ficha. Si cae en un destino valido se mueve; si fue
-     * un click simple, queda seleccionada para el modo click, click.
+     * mouseup: suelta la ficha. Solo se mueve si el arrastre termino sobre un
+     * destino valido; en cualquier otro caso se cancela la seleccion.
      * @param {MouseEvent} event - Evento del mouse.
      */
     handleMouseUp(event) {
@@ -174,20 +162,13 @@ class PegSolitaireController {
         this.drag = null;
         this.view.canvas.style.cursor = 'pointer';
 
-        if (this.isDragging) {
-            if (target && this.model.move(drag.from, target)) {
-                this.afterMove();
-                return;
-            }
-
-            /* Si solto fuera de un destino (o fuera del canvas), se cancela;
-               si volvio a la celda de origen, la ficha queda seleccionada. */
-            const sameCell = target &&
-                target.row === drag.from.row &&
-                target.col === drag.from.col;
-            if (!sameCell) this.model.clearSelection();
+        if (this.isDragging && target && this.model.move(drag.from, target)) {
+            this.afterMove();
+            return;
         }
 
+        /* Solto fuera de un destino valido, o sin arrastrar: se cancela. */
+        this.model.clearSelection();
         this.render(performance.now());
     }
 
@@ -214,6 +195,7 @@ class PegSolitaireController {
         this.status = result;
         this.drag = null;
         this.isDragging = false;
+        this.model.clearSelection();
         this.model.stopTimer();
 
         if (this.frameId !== null) {
@@ -228,7 +210,7 @@ class PegSolitaireController {
         if (result === 'won') {
             this.view.showEndMenu(
                 '¡Ganaste!',
-                'Quedo una sola Bola de Dragon en el tablero.',
+                'Quedó una sola Bola de Dragón en el tablero.',
                 'Jugar de nuevo'
             );
             return;
@@ -236,8 +218,8 @@ class PegSolitaireController {
 
         if (result === 'timeup') {
             this.view.showEndMenu(
-                '¡Se termino el tiempo!',
-                `Quedaron ${remaining} fichas en el tablero.`,
+                '¡Se terminó el tiempo!',
+                `Quedaron ${remaining} Bolas de Dragón en el tablero.`,
                 'Reintentar'
             );
             return;
@@ -245,7 +227,7 @@ class PegSolitaireController {
 
         this.view.showEndMenu(
             'Sin movimientos',
-            `No quedan jugadas posibles. Quedaron ${remaining} fichas.`,
+            `No quedan jugadas posibles. Quedaron ${remaining} Bolas de Dragón.`,
             'Reintentar'
         );
     }

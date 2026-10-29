@@ -89,7 +89,7 @@ class PegSolitaireView {
      * Dibuja un cuadro completo del juego.
      * @param {object} state - Estado devuelto por el modelo (getState).
      * @param {number} time - Marca de tiempo para animar los hints.
-     * @param {object|null} drag - Ficha que se esta arrastrando.
+     * @param {{from: {row: number, col: number}, position: {x: number, y: number}}|null} drag - Datos del arrastre activo.
      */
     render(state, time, drag) {
         const ctx = this.ctx;
@@ -98,21 +98,14 @@ class PegSolitaireView {
         this.drawBoardBackground();
         this.drawHints(state.validTargets, time);
 
-        for (let row = 0; row < state.cells.length; row++) {
-            for (let col = 0; col < state.cells[row].length; col++) {
-                if (state.cells[row][col] !== PEG_CHIP) continue;
-                if (drag && drag.from.row === row && drag.from.col === col) continue;
-
-                /* La ficha seleccionada usa el SVG que ya trae el halo. */
-                const isSelected = state.selected &&
-                    state.selected.row === row && state.selected.col === col;
-                this.drawChip(this.cellCenter(row, col), 1,
-                    isSelected ? this.selectedImage : this.pegImage);
-            }
-        }
+        state.pegs.forEach(({ row, col }) => {
+            if (drag && drag.from.row === row && drag.from.col === col) return;
+            this.drawChip(this.cellCenter(row, col), 1, this.pegImage);
+        });
 
         if (drag) {
-            this.drawChip(drag.position, 0.9, this.pegImage);
+            /* La ficha que se arrastra usa el SVG seleccionado. */
+            this.drawChip(drag.position, 0.9, this.selectedImage);
         }
     }
 

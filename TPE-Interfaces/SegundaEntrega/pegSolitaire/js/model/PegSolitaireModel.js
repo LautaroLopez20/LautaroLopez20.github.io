@@ -1,111 +1,64 @@
 /* ============================================================================
    MODELO - PegSolitaireModel
-   Contiene solo las reglas y el estado del juego. No conoce el canvas, el DOM
-   ni los eventos: si se pudiera jugar por consola, este archivo alcanzaria.
+   Fachada del modelo de Peg Solitaire. Coordina el tablero, el reloj y la
+   seleccion actual. No conoce el canvas, el DOM ni los eventos. Depende de
+   Board, CountdownTimer, Position y Move para aplicar las reglas.
    ============================================================================ */
-
-/* Valores posibles de cada celda del tablero. */
-const PEG_INVALID = -1; // Fuera de la cruz: no se puede jugar
-const PEG_EMPTY = 0;    // Ranura valida sin ficha
-const PEG_CHIP = 1;     // Ranura valida con ficha
-
-/* Forma del tablero clasico (7x7):
-   '.' = celda invalida, '#' = ficha, 'o' = espacio vacio inicial. */
-const PEG_BOARD_MASK = [
-    '..###..',
-    '..###..',
-    '#######',
-    '###o###',
-    '#######',
-    '..###..',
-    '..###..'
-];
-
-/* Un movimiento siempre salta dos celdas en linea recta (arriba, abajo,
-   izquierda o derecha), dejando la celda del medio para eliminar. */
-const PEG_DIRECTIONS = [
-    { row: -2, col: 0 },
-    { row: 2, col: 0 },
-    { row: 0, col: -2 },
-    { row: 0, col: 2 }
-];
 
 class PegSolitaireModel {
     /**
-     * Crea el modelo con el limite de tiempo indicado.
      * @param {number} minutes - Duracion maxima de la partida en minutos.
+     * @param {() => number} now - Funcion de tiempo, inyectable para tests.
      */
-    constructor(minutes = 10) {
-        this.rows = PEG_BOARD_MASK.length;
-        this.cols = PEG_BOARD_MASK[0].length;
-        this.timeLimitMs = minutes * 60 * 1000;
+    constructor(minutes = 10, now = () => Date.now()) {
+        this.board = new Board();
+        this.timer = new CountdownTimer(minutes * 60 * 1000, now);
+        this.selected = null;
         this.reset();
     }
 
-    /* ------------------------------ TABLERO ------------------------------ */
-
-    /**
-     * Reinicia el tablero al estado inicial y deja el reloj listo para
-     * arrancar (sin contar todavia).
-     */
+    /** Reinicia el tablero y deja el reloj listo para arrancar. */
     reset() {
-        this.cells = PEG_BOARD_MASK.map((line) => this.createRow(line));
+        this.board.reset();
         this.selected = null;
-        this.deadline = null;
-        this.remainingMs = this.timeLimitMs;
+        this.timer.reset();
     }
+
+    /* ---------------------------- CONSULTAS ----------------------------- */
 
     /**
-     * Convierte una fila del mapa de texto en valores numericos.
-     * @param {string} line - Fila del mapa ('#', 'o' o '.').
-     * @returns {number[]} Fila con valores PEG_INVALID, PEG_EMPTY o PEG_CHIP.
+     * Indica si una celda tiene una ficha.
+     * @param {number} row - Fila de la celda.
+     * @param {number} col - Columna de la celda.
+     * @returns {boolean} True si la celda esta ocupada.
      */
-    createRow(line) {
-        return line.split('').map((char) => {
-            if (char === '#') return PEG_CHIP;
-            if (char === 'o') return PEG_EMPTY;
-            return PEG_INVALID;
-        });
-    }
-
-    /**
-     * Devuelve el valor de una celda.
-     * @returns {number} Valor de la celda, o PEG_INVALID si esta fuera del tablero.
-     */
-    getCell(row, col) {
-        if (!this.isInside(row, col)) return PEG_INVALID;
-        return this.cells[row][col];
-    }
-
-    /** Indica si la coordenada cae dentro de la matriz 7x7. */
-    isInside(row, col) {
-        return row >= 0 && row < this.rows && col >= 0 && col < this.cols;
-    }
-
-    /** Indica si la celda pertenece a la cruz jugable. */
-    isPlayable(row, col) {
-        return this.getCell(row, col) !== PEG_INVALID;
-    }
-
-    /** Indica si la celda tiene una ficha. */
     hasChip(row, col) {
-        return this.getCell(row, col) === PEG_CHIP;
+        return this.board.hasPeg(new Position(row, col));
     }
 
-    /** Indica si la celda es una ranura valida y esta vacia. */
+    /**
+     * Indica si una celda es una ranura jugable vacia.
+     * @param {number} row - Fila de la celda.
+     * @param {number} col - Columna de la celda.
+     * @returns {boolean} True si la celda esta vacia.
+     */
     isEmpty(row, col) {
-        return this.getCell(row, col) === PEG_EMPTY;
+        return this.board.isEmpty(new Position(row, col));
     }
 
     /* ---------------------------- SELECCION ----------------------------- */
 
     /**
      * Selecciona una ficha. Solo puede haber una ficha seleccionada a la vez.
+     * @param {number} row - Fila de la celda.
+     * @param {number} col - Columna de la celda.
      * @returns {boolean} True si la celda tenia ficha y quedo seleccionada.
      */
     select(row, col) {
-        if (!this.hasChip(row, col)) return false;
-        this.selected = { row, col };
+        const position = new Position(row, col);
+        if (!this.board.hasPeg(position)) return false;
+
+        this.selected = position;
         return true;
     }
 
@@ -118,57 +71,37 @@ class PegSolitaireModel {
 
     /**
      * Calcula los destinos legales desde la ficha seleccionada.
-     * @returns {{row: number, col: number}[]} Lista de destinos validos.
+     * @returns {Position[]} Lista de destinos validos.
      */
     getValidTargets() {
         if (!this.selected) return [];
 
-        return PEG_DIRECTIONS
-            .map((dir) => ({
-                row: this.selected.row + dir.row,
-                col: this.selected.col + dir.col
-            }))
-            .filter((target) => this.isValidMove(this.selected, target));
+        return this.board
+            .getValidMovesFrom(this.selected)
+            .map((move) => move.to);
     }
 
     /**
-     * Verifica las reglas de un salto: origen con ficha, destino vacio y una
-     * ficha en la celda del medio.
-     * @param {{row: number, col: number}} from - Celda de origen.
-     * @param {{row: number, col: number}} to - Celda de destino.
+     * Verifica las reglas de un salto sobre el estado actual.
+     * @param {Position|{row: number, col: number}} from - Celda de origen.
+     * @param {Position|{row: number, col: number}} to - Celda de destino.
      * @returns {boolean} True si el movimiento respeta las reglas.
      */
     isValidMove(from, to) {
-        if (!from || !to) return false;
-        if (!this.hasChip(from.row, from.col)) return false;
-        if (!this.isEmpty(to.row, to.col)) return false;
-
-        const rowDiff = to.row - from.row;
-        const colDiff = to.col - from.col;
-        const movesInLine =
-            (Math.abs(rowDiff) === 2 && colDiff === 0) ||
-            (Math.abs(colDiff) === 2 && rowDiff === 0);
-
-        if (!movesInLine) return false;
-
-        const middleRow = from.row + rowDiff / 2;
-        const middleCol = from.col + colDiff / 2;
-        return this.hasChip(middleRow, middleCol);
+        const move = Move.between(Position.from(from), Position.from(to));
+        return move !== null && this.board.canApply(move);
     }
 
     /**
      * Ejecuta un movimiento: mueve la ficha y elimina la que fue saltada.
+     * @param {Position|{row: number, col: number}} from - Celda de origen.
+     * @param {Position|{row: number, col: number}} to - Celda de destino.
      * @returns {boolean} True si el movimiento era valido y se aplico.
      */
     move(from, to) {
-        if (!this.isValidMove(from, to)) return false;
+        const move = Move.between(Position.from(from), Position.from(to));
+        if (!move || !this.board.applyMove(move)) return false;
 
-        const middleRow = from.row + (to.row - from.row) / 2;
-        const middleCol = from.col + (to.col - from.col) / 2;
-
-        this.cells[to.row][to.col] = PEG_CHIP;
-        this.cells[from.row][from.col] = PEG_EMPTY;
-        this.cells[middleRow][middleCol] = PEG_EMPTY;
         this.clearSelection();
         return true;
     }
@@ -177,28 +110,12 @@ class PegSolitaireModel {
 
     /** Cuenta las fichas que siguen en el tablero. */
     countChips() {
-        let total = 0;
-        for (let row = 0; row < this.rows; row++) {
-            for (let col = 0; col < this.cols; col++) {
-                if (this.hasChip(row, col)) total++;
-            }
-        }
-        return total;
+        return this.board.countPegs();
     }
 
     /** Recorre el tablero y avisa si queda al menos un salto posible. */
     hasValidMoves() {
-        for (let row = 0; row < this.rows; row++) {
-            for (let col = 0; col < this.cols; col++) {
-                if (!this.hasChip(row, col)) continue;
-                const from = { row, col };
-                const canMove = PEG_DIRECTIONS.some((dir) =>
-                    this.isValidMove(from, { row: row + dir.row, col: col + dir.col })
-                );
-                if (canMove) return true;
-            }
-        }
-        return false;
+        return this.board.hasAnyMove();
     }
 
     /** Se gana cuando queda una sola ficha en el tablero. */
@@ -210,38 +127,36 @@ class PegSolitaireModel {
 
     /** Arranca (o reinicia) la cuenta regresiva del limite de tiempo. */
     startTimer() {
-        this.remainingMs = this.timeLimitMs;
-        this.deadline = Date.now() + this.timeLimitMs;
+        this.timer.start();
     }
 
     /** Detiene el reloj conservando el tiempo restante actual. */
     stopTimer() {
-        if (this.deadline === null) return;
-        this.remainingMs = this.getRemainingMs();
-        this.deadline = null;
+        this.timer.stop();
     }
 
     /** Tiempo que falta para que termine la partida, en milisegundos. */
     getRemainingMs() {
-        if (this.deadline === null) return this.remainingMs;
-        return Math.max(0, this.deadline - Date.now());
+        return this.timer.getRemainingMs();
     }
 
     /** Indica si el tiempo se agoto. */
     isTimeUp() {
-        return this.getRemainingMs() === 0;
+        return this.timer.isTimeUp();
     }
 
     /**
      * Empaqueta todo lo que la vista necesita para dibujar un cuadro.
-     * @returns {{cells: number[][], selected: object|null, validTargets: object[], remaining: number}}
+     * @returns {{pegs: {row: number, col: number}[], validTargets: {row: number, col: number}[], remaining: number}}
      */
     getState() {
+        const snapshot = this.board.snapshot();
+
         return {
-            cells: this.cells,
-            selected: this.selected,
-            validTargets: this.getValidTargets(),
-            remaining: this.countChips()
+            pegs: snapshot.pegs,
+            validTargets: this.getValidTargets()
+                .map((position) => position.toPlain()),
+            remaining: snapshot.remaining
         };
     }
 }
