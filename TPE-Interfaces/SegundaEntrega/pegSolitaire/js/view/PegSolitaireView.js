@@ -14,7 +14,6 @@ const PEG_CHIP_SIZE = 58;          // Tamano con el que se dibuja la ficha
 const PEG_IMAGES = {
     board: 'pegSolitaire/assets/tablero.png',
     peg: 'pegSolitaire/assets/ficha.svg',
-    selected: 'pegSolitaire/assets/ficha-seleccionada.svg',
     target: 'pegSolitaire/assets/destino.svg'
 };
 
@@ -30,12 +29,21 @@ class PegSolitaireView {
         this.offsetX = (canvas.width - PEG_BOARD_SIZE) / 2;
         this.offsetY = (canvas.height - PEG_BOARD_SIZE) / 2;
 
-        /* Imagenes del juego: tablero, ficha normal, ficha seleccionada y
-           marca de destino valido. */
+        /* Imagenes del juego: tablero, ficha clasica y marca de destino. */
         this.boardImage = this.loadImage(PEG_IMAGES.board);
         this.pegImage = this.loadImage(PEG_IMAGES.peg);
-        this.selectedImage = this.loadImage(PEG_IMAGES.selected);
         this.targetImage = this.loadImage(PEG_IMAGES.target);
+
+        /* Arte de cada skin. La Bola de Dragon reutiliza la ficha clasica. */
+        this.skinImages = new Map();
+        PEG_SKINS.forEach((skin) => {
+            const image = skin.kind === 'ball' ? this.pegImage : this.loadImage(skin.src);
+            this.skinImages.set(skin.id, image);
+        });
+
+        this.activeSkin = PEG_SKINS[0];
+        this.activeSkinId = PEG_SKINS[0].id;
+        this.activeSkinImage = this.pegImage;
 
         /* Callback opcional: el controlador lo usa para redibujar cuando
            terminan de cargar las imagenes. */
@@ -47,17 +55,30 @@ class PegSolitaireView {
             timer: $('pegTimer'),
             chips: $('pegChips'),
             restart: $('pegRestart'),
+            menu: $('pegMenu'),
+            hud: $('gameHud'),
             startMenu: $('startMenu'),
-            startBtn: $('startBtn'),
+            btnJugar: $('btnJugar'),
+            btnSkins: $('btnSkins'),
+            btnComoJugar: $('btnComoJugar'),
+            skinsMenu: $('skinsMenu'),
+            skinsGrid: $('skinsGrid'),
+            btnVolverSkins: $('btnVolverSkins'),
+            instructionsMenu: $('instructionsMenu'),
+            btnVolverInstrucciones: $('btnVolverInstrucciones'),
             endMenu: $('endMenu'),
             endTitle: $('endTitle'),
             endMessage: $('endMessage'),
-            endBtn: $('endBtn')
+            endBtn: $('endBtn'),
+            endMenuBtn: $('endMenuBtn')
         };
 
         /* Cache para no reescribir el DOM en cada cuadro. */
         this.lastTimerText = '';
         this.lastChipCount = -1;
+
+        this.buildSkinGrid();
+        this.setSkin(PEG_SKINS[0].id);
     }
 
     /**
@@ -100,12 +121,12 @@ class PegSolitaireView {
 
         state.pegs.forEach(({ row, col }) => {
             if (drag && drag.from.row === row && drag.from.col === col) return;
-            this.drawChip(this.cellCenter(row, col), 1, this.pegImage);
+            this.drawChip(this.cellCenter(row, col), 1, this.activeSkinImage);
         });
 
         if (drag) {
-            /* La ficha que se arrastra usa el SVG seleccionado. */
-            this.drawChip(drag.position, 0.9, this.selectedImage);
+            /* La ficha que se arrastra usa el arte de la skin activa. */
+            this.drawChip(drag.position, 0.9, this.activeSkinImage, true);
         }
     }
 
@@ -134,16 +155,49 @@ class PegSolitaireView {
      * Dibuja una ficha en una posicion del canvas.
      * @param {{x: number, y: number}} position - Centro de la ficha.
      * @param {number} alpha - Opacidad (se baja mientras se arrastra).
-     * @param {HTMLImageElement} image - SVG de la ficha a dibujar.
+     * @param {HTMLImageElement} image - Arte de la skin activa.
+     * @param {boolean} selected - Si la ficha se esta arrastrando.
      */
-    drawChip(position, alpha = 1, image = this.pegImage) {
+    drawChip(position, alpha = 1, image = this.activeSkinImage, selected = false) {
         const ctx = this.ctx;
         const half = PEG_CHIP_SIZE / 2;
+        const radius = half * 0.92;
 
         ctx.save();
         ctx.globalAlpha = alpha;
 
-        if (this.isReady(image)) {
+        if (this.activeSkin.kind === 'avatar') {
+            /* Las skins de avatar van dentro de un disco crema con borde
+               naranja para integrarse con el tablero. */
+            ctx.fillStyle = '#F4E3DD';
+            ctx.beginPath();
+            ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
+            ctx.clip();
+
+            if (this.isReady(image)) {
+                ctx.drawImage(
+                    image,
+                    position.x - half,
+                    position.y - half,
+                    PEG_CHIP_SIZE,
+                    PEG_CHIP_SIZE
+                );
+            } else {
+                this.drawFallbackChip(position, radius);
+            }
+            ctx.restore();
+
+            ctx.strokeStyle = '#B8461D';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+        } else if (this.isReady(image)) {
             /* La sombra viene dentro del SVG: no hace falta pintarla aparte. */
             ctx.drawImage(
                 image,
@@ -153,14 +207,33 @@ class PegSolitaireView {
                 PEG_CHIP_SIZE
             );
         } else {
-            /* Respaldo por si la imagen todavia no cargo. */
-            ctx.fillStyle = '#F5B700';
+            this.drawFallbackChip(position, half * 0.75);
+        }
+
+        if (selected) {
+            ctx.strokeStyle = '#F5B700';
+            ctx.lineWidth = 3;
+            ctx.shadowColor = '#F5B700';
+            ctx.shadowBlur = 12;
             ctx.beginPath();
-            ctx.arc(position.x, position.y, half * 0.75, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
         }
 
         ctx.restore();
+    }
+
+    /**
+     * Dibuja el respaldo circular de una ficha cuando su imagen no cargo.
+     * @param {{x: number, y: number}} position - Centro de la ficha.
+     * @param {number} radius - Radio del respaldo.
+     */
+    drawFallbackChip(position, radius) {
+        const ctx = this.ctx;
+        ctx.fillStyle = '#F5B700';
+        ctx.beginPath();
+        ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
+        ctx.fill();
     }
 
     /**
@@ -256,11 +329,81 @@ class PegSolitaireView {
         return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
 
+    /* ------------------------------ SKINS ------------------------------- */
+
+    /** Genera la grilla de skins a partir del catalogo. */
+    buildSkinGrid() {
+        const grid = this.ui.skinsGrid;
+        if (!grid) return;
+
+        grid.innerHTML = '';
+
+        PEG_SKINS.forEach((skin) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'skinOption';
+            button.dataset.skinId = skin.id;
+            button.setAttribute('aria-pressed', 'false');
+            button.setAttribute('aria-label', `Elegir skin ${skin.name}`);
+
+            const image = document.createElement('img');
+            image.className = 'skinThumb';
+            image.src = skin.src;
+            image.alt = '';
+
+            const name = document.createElement('span');
+            name.className = 'skinName';
+            name.textContent = skin.name;
+
+            button.append(image, name);
+            grid.appendChild(button);
+        });
+    }
+
+    /**
+     * Activa una skin y actualiza la seleccion visual de la grilla.
+     * @param {string} skinId - Identificador de la skin.
+     */
+    setSkin(skinId) {
+        const skin = PEG_SKINS.find((item) => item.id === skinId);
+        if (!skin) return;
+
+        this.activeSkin = skin;
+        this.activeSkinId = skin.id;
+        this.activeSkinImage = this.skinImages.get(skin.id) || this.pegImage;
+        this.updateSkinButtons();
+    }
+
+    /** Marca en la grilla la skin que esta activa. */
+    updateSkinButtons() {
+        if (!this.ui.skinsGrid) return;
+
+        this.ui.skinsGrid.querySelectorAll('.skinOption').forEach((button) => {
+            const isSelected = button.dataset.skinId === this.activeSkinId;
+            button.classList.toggle('isSelected', isSelected);
+            button.setAttribute('aria-pressed', String(isSelected));
+        });
+    }
+
     /* ---------------------------- CARTELES ------------------------------ */
 
-    /** Oculta el menu de inicio para dejar ver el tablero. */
-    hideStartMenu() {
-        this.ui.startMenu.classList.add('hidden');
+    /**
+     * Muestra una fase del juego y oculta el resto.
+     * @param {'menu'|'skins'|'instructions'|'game'} phase - Fase visible.
+     */
+    showPhase(phase) {
+        const phases = {
+            menu: this.ui.startMenu,
+            skins: this.ui.skinsMenu,
+            instructions: this.ui.instructionsMenu
+        };
+
+        Object.entries(phases).forEach(([name, element]) => {
+            element.classList.toggle('hidden', name !== phase);
+        });
+
+        const inGame = phase === 'game';
+        this.ui.hud.classList.toggle('hidden', !inGame);
     }
 
     /**

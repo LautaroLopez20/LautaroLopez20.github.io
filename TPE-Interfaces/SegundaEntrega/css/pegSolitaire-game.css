@@ -18,6 +18,9 @@
     box-sizing: border-box;
     overflow: hidden;
     user-select: none;
+    /* Contexto de apilamiento propio: las fases y el HUD quedan sobre el
+       canvas. */
+    isolation: isolate;
 }
 
 #canvas-game-peg {
@@ -29,10 +32,10 @@
     cursor: pointer;
 }
 
-/* HUD: reloj, contador de fichas y boton de reinicio.
-   El contenedor no captura el mouse para no cortar el arrastre; el boton si.
-   Cada lectura lleva su propia caja: sobre el tablero ilustrado el texto suelto
-   no se leia. Azul del juego semitransparente con borde naranja. */
+/* HUD: reloj, contador de fichas y botones de reinicio/menu.
+   El contenedor no captura el mouse para no cortar el arrastre; los botones si.
+   Las lecturas usan tarjetas crema con el naranja de la marca, en linea con
+   los paneles del menu y de skins. */
 .gameHud {
     position: absolute;
     top: 10px;
@@ -40,66 +43,361 @@
     right: 16px;
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 12px;
     z-index: 5;
     pointer-events: none;
 }
 
 .gameHudStat {
     display: flex;
-    align-items: baseline;
-    gap: 8px;
-    padding: 6px 16px;
-    border: 1px solid #B8461D;
-    border-radius: 999px;
-    background-color: rgba(12, 18, 42, 0.82);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 2px solid #B8461D;
+    border-radius: 12px;
+    background-color: #FFF8F3;
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.gameHudIcon {
+    width: 18px;
+    height: 18px;
+    display: block;
+    flex: 0 0 auto;
 }
 
 .gameHudLabel {
-    font-size: 11px;
-    letter-spacing: 2px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: #A3A3AD;
+    color: #8A3516;
 }
 
 .gameHudValue {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
+    line-height: 1.1;
     font-variant-numeric: tabular-nums;
-    color: #F4E3DD;
+    color: #121B3F;
 }
 
 .gameHudValue.isLow {
-    color: #F25022;
+    color: #8A3516;
+    animation: pulsoTiempo 1s ease-in-out infinite;
+}
+
+@keyframes pulsoTiempo {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+}
+
+.gameHudButtons {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    pointer-events: auto;
+}
+
+.gameHud.hidden {
+    display: none;
 }
 
 .gameHudButton {
-    margin-left: auto;
     pointer-events: auto;
-    background-color: rgba(12, 18, 42, 0.82);
-    border: 1px solid #B8461D;
+    padding: 6px 12px;
+    border: 2px solid #8A3516;
+    border-radius: 10px;
+    background-color: #B8461D;
     color: #F4E3DD;
-    font-size: 13px;
-    letter-spacing: 2px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    border-radius: 999px;
-    padding: 7px 18px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 3px 0 #8A3516;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .gameHudButton:hover {
-    background-color: #B8461D;
+    background-color: #8A3516;
+    box-shadow: 0 4px 0 #5F2410;
+    transform: translateY(-1px);
 }
 
-/* Menu INICIAR y cartel de fin de partida */
+.gameHudButton:active {
+    box-shadow: 0 1px 0 #8A3516;
+    transform: translateY(1px);
+}
 
-.startMenu,
+.gameHudButton--ghost {
+    background-color: #FFF8F3;
+    border-color: #B8461D;
+    color: #B8461D;
+    box-shadow: 0 3px 0 rgba(184, 70, 29, 0.35);
+}
+
+.gameHudButton--ghost:hover {
+    background-color: #F4E3DD;
+    color: #8A3516;
+    box-shadow: 0 4px 0 rgba(138, 53, 22, 0.35);
+}
+
+.gameHudButton--ghost:active {
+    box-shadow: 0 1px 0 rgba(184, 70, 29, 0.35);
+}
+
+/* Fases del juego: menu principal, skins e instrucciones */
+
+.gamePhase {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 24px;
+    box-sizing: border-box;
+    text-align: center;
+    /* Fondo solido: el canvas del tablero no debe verse detras del menu. */
+    background-color: #121B3F;
+}
+
+.gamePhase.hidden {
+    display: none;
+}
+
+/* Fondos de los menus principal y de skins. */
+.faseMenu {
+    background-image: url("../pegSolitaire/assets/menu-background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.faseSkins {
+    background-image: url("../pegSolitaire/assets/skins-background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 12px;
+    justify-content: safe center;
+}
+
+.faseInstrucciones {
+    /* Si el texto no entra, se alinea arriba en vez de recortar el comienzo. */
+    justify-content: safe center;
+    overflow-y: auto;
+}
+
+/* Panel central de seleccion de skins: crema con el naranja de la pagina. */
+.skinsPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+    width: min(92%, 520px);
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 18px 20px;
+    border: 2px solid #B8461D;
+    border-radius: 20px;
+    background-color: #F4E3DD;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.skinsPanel .faseTitulo {
+    color: #B8461D;
+    text-shadow: none;
+    font-size: clamp(22px, 4vw, 34px);
+}
+
+.skinsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+.skinOption {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    padding: 6px 4px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.35);
+    color: #121B3F;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.skinOption:hover {
+    border-color: #B8461D;
+    transform: translateY(-1px);
+}
+
+.skinOption.isSelected {
+    border-color: #B8461D;
+    background-color: #FFF8F3;
+    box-shadow: 0 0 0 3px rgba(184, 70, 29, 0.16);
+}
+
+.skinOption.isSelected::after {
+    content: '✓';
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    display: grid;
+    place-items: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #B8461D;
+    color: #F4E3DD;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.skinThumb {
+    width: 44px;
+    height: 44px;
+    box-sizing: border-box;
+    border: 2px solid #121B3F;
+    border-radius: 50%;
+    background-color: #FFF8F3;
+    object-fit: contain;
+}
+
+.skinOption.isSelected .skinThumb {
+    border-color: #B8461D;
+}
+
+.skinName {
+    width: 100%;
+    overflow-wrap: anywhere;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: center;
+}
+
+/* Tarjeta central del menu: agrupa titulo, subtitulo y acciones. */
+.menuPanel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-sizing: border-box;
+    padding: 32px 48px;
+    border: 1px solid #B8461D;
+    border-radius: 20px;
+    background-color: rgba(12, 18, 42, 0.72);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+}
+
+/* Titulo del juego: efecto sticker con el canto naranja de la marca. */
+.faseLogoJuego {
+    margin: 0;
+    font-size: clamp(38px, 6vw, 60px);
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #F4E3DD;
+    text-shadow:
+        0 4px 0 #B8461D,
+        0 6px 0 #8A3516,
+        0 10px 18px rgba(0, 0, 0, 0.45);
+    animation: entraTitulo 0.5s ease-out;
+}
+
+@keyframes entraTitulo {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.menuSubtitulo {
+    margin: 0 0 12px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #F5B700;
+}
+
+/* Rotulos y titulos de las fases. */
+.faseTitulo,
+.instruccionesSubtitulo {
+    margin: 0;
+    color: #F4E3DD;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.faseTitulo {
+    font-size: clamp(30px, 5vw, 46px);
+}
+
+.instruccionesSubtitulo {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.instruccionesContenido {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 640px;
+    text-align: left;
+}
+
+.instruccionesTexto {
+    margin: 0;
+    color: #F4E3DD;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.menuAcciones {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+/* .btnPrimary/.btnSecondary traen ancho fijo; en las fases se ajustan al texto. */
+.faseMenu .btn,
+.faseSkins .btn,
+.faseInstrucciones .btn,
+.endMenu .btn {
+    width: auto;
+}
+
+/* Cartel de fin de partida */
+
 .endMenu {
     position: absolute;
     inset: 0;
+    z-index: 20;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -107,30 +405,11 @@
     gap: 24px;
     padding: 24px;
     text-align: center;
-    background: radial-gradient(rgba(12, 18, 42, 0.95), rgba(12, 18, 42, 0.75));
-}
-
-.startMenu {
-    z-index: 10;
-}
-
-.endMenu {
-    z-index: 20;
     background: radial-gradient(rgba(12, 18, 42, 0.97), rgba(12, 18, 42, 0.88));
 }
 
-.startMenu.hidden,
 .endMenu.hidden {
     display: none;
-}
-
-.startTitle {
-    margin: 0;
-    font-size: 42px;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    color: #DCDEE5;
-    text-shadow: 0 0 24px rgba(245, 183, 0, 0.25);
 }
 
 .endTitle {
@@ -150,26 +429,125 @@
     color: #DCDEE5;
 }
 
-.startBtn {
-    background-color: #B8461D;
-    border: 2px solid transparent;
-    color: #DCDEE5;
-    font-size: 18px;
-    letter-spacing: 8px;
-    text-transform: uppercase;
-    border-radius: 999px;
-    padding: 14px 64px;
-    cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.startBtn:hover {
-    transform: scale(110%);
-    box-shadow: 0 0 0 4px rgba(184, 70, 29, 0.25);
-}
-
-.startBtn:focus-visible,
+/* Foco visible comun a botones del juego. */
+.faseMenu .btn:focus-visible,
+.faseSkins .btn:focus-visible,
+.faseInstrucciones .btn:focus-visible,
+.endMenu .btn:focus-visible,
+.skinOption:focus-visible,
 .gameHudButton:focus-visible {
     outline: 3px solid #C9A227;
     outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gameHudValue.isLow {
+        animation: none;
+    }
+}
+
+/* En pantallas angostas la tarjeta ocupa el ancho y los botones se apilan. */
+@media (max-width: 640px) {
+    .gameHud {
+        top: 6px;
+        left: 8px;
+        right: 8px;
+        gap: 6px;
+    }
+
+    .gameHudStat {
+        gap: 4px;
+        padding: 3px 7px;
+        border-radius: 9px;
+    }
+
+    .gameHudIcon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .gameHudLabel {
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+
+    .gameHudValue {
+        font-size: 14px;
+    }
+
+    .gameHudButton {
+        padding: 4px 8px;
+        border-radius: 8px;
+        font-size: 9px;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 0 #8A3516;
+    }
+
+    .gameHudButton:hover {
+        box-shadow: 0 3px 0 #5F2410;
+    }
+
+    .gameHudButton--ghost {
+        box-shadow: 0 2px 0 rgba(184, 70, 29, 0.35);
+    }
+
+    .menuPanel {
+        width: 100%;
+        padding: 24px 20px;
+    }
+
+    .menuAcciones {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .menuAcciones .btn {
+        width: 100%;
+    }
+
+    .faseSkins {
+        padding: 8px;
+    }
+
+    .skinsPanel {
+        width: 100%;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .skinsGrid {
+        gap: 6px;
+    }
+
+    .skinOption {
+        padding: 4px 2px;
+    }
+
+    .skinThumb {
+        width: 34px;
+        height: 34px;
+    }
+
+    .skinName {
+        font-size: 8px;
+    }
+
+    .skinsPanel .faseTitulo {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gameHudLabel {
+        display: none;
+    }
+
+    .gameHudStat {
+        padding: 3px 6px;
+    }
+
+    .gameHudButton {
+        padding: 3px 6px;
+        font-size: 8px;
+    }
 }

@@ -65,25 +65,64 @@
     <section class="gamePlay">
         <div class="gameBoard gameBoardPeg">
             <canvas id="canvas-game-peg" width="1340" height="507" aria-label="Tablero de Dragon Ball Z: Peg Solitaire"></canvas>
-            <div class="gameHud">
+
+            <div class="gameHud hidden" id="gameHud">
                 <div class="gameHudStat">
                     <span class="gameHudLabel">Tiempo</span>
                     <span class="gameHudValue" id="pegTimer">10:00</span>
                 </div>
                 <div class="gameHudStat">
+                    <img class="gameHudIcon" src="pegSolitaire/assets/ficha.svg" alt="">
                     <span class="gameHudLabel">Bolas</span>
                     <span class="gameHudValue" id="pegChips">32</span>
                 </div>
-                <button type="button" class="gameHudButton" id="pegRestart">Reiniciar</button>
+                <div class="gameHudButtons">
+                    <button type="button" class="gameHudButton" id="pegRestart">Reiniciar</button>
+                    <button type="button" class="gameHudButton gameHudButton--ghost" id="pegMenu">Menú</button>
+                </div>
             </div>
-            <div class="startMenu" id="startMenu">
-                <h1 class="startTitle">DRAGON BALL Z: PEG SOLITAIRE</h1>
-                <button class="startBtn" id="startBtn">INICIAR</button>
+
+            <div class="gamePhase faseMenu" id="startMenu">
+                <div class="menuPanel">
+                    <h1 class="faseLogoJuego">Peg Solitaire</h1>
+                    <p class="menuSubtitulo">Dragon Ball Z</p>
+                    <div class="menuAcciones">
+                        <button type="button" class="btn btnSecondary" id="btnJugar">Jugar</button>
+                        <button type="button" class="btn btnPrimary" id="btnSkins">Skins</button>
+                        <button type="button" class="btn btnPrimary" id="btnComoJugar">Reglas</button>
+                    </div>
+                </div>
             </div>
+
+            <div class="gamePhase faseSkins hidden" id="skinsMenu">
+                <div class="skinsPanel">
+                    <p class="faseTitulo skinsTitulo">Skins</p>
+                    <div class="skinsGrid" id="skinsGrid" role="group" aria-label="Selección de skin"></div>
+                    <button type="button" class="btn btnSecondary" id="btnVolverSkins">Volver</button>
+                </div>
+            </div>
+
+            <div class="gamePhase faseInstrucciones hidden" id="instructionsMenu">
+                <p class="faseTitulo">Reglas</p>
+                <div class="instruccionesContenido">
+                    <p class="instruccionesTexto">El objetivo es eliminar todas las Bolas de Dragón excepto una, realizando movimientos estratégicos sobre el tablero.</p>
+                    <p class="instruccionesSubtitulo">Movimientos</p>
+                    <p class="instruccionesTexto">Arrastrá una Bola de Dragón sobre otra que esté junto a ella, en horizontal o vertical, y soltala en el espacio vacío del otro lado. La Bola saltada se elimina del tablero.</p>
+                    <p class="instruccionesSubtitulo">Victoria y derrota</p>
+                    <p class="instruccionesTexto">Ganás cuando queda una sola Bola de Dragón en el tablero. Tenés 10 minutos; si el tiempo llega a cero o no quedan movimientos posibles, la partida termina.</p>
+                    <p class="instruccionesSubtitulo">Controles</p>
+                    <p class="instruccionesTexto">Usá el mouse: hacé clic sobre una Bola de Dragón, mantené presionado y arrastrala hasta un destino válido. Los destinos posibles se marcan con un anillo animado.</p>
+                </div>
+                <button type="button" class="btn btnSecondary" id="btnVolverInstrucciones">Volver</button>
+            </div>
+
             <div class="endMenu hidden" id="endMenu" role="dialog" aria-modal="true" aria-labelledby="endTitle">
                 <h2 class="endTitle" id="endTitle"></h2>
                 <p class="endMessage" id="endMessage"></p>
-                <button type="button" class="startBtn" id="endBtn">Jugar de nuevo</button>
+                <div class="menuAcciones">
+                    <button type="button" class="btn btnPrimary" id="endBtn">Jugar de nuevo</button>
+                    <button type="button" class="btn btnSecondary" id="endMenuBtn">Menú</button>
+                </div>
             </div>
         </div>
         <div class="gameActions">
@@ -320,6 +359,7 @@
     <script src="pegSolitaire/js/model/domain/Board.js"></script>
     <script src="pegSolitaire/js/model/domain/CountdownTimer.js"></script>
     <script src="pegSolitaire/js/model/PegSolitaireModel.js"></script>
+    <script src="pegSolitaire/js/view/PegSkins.js"></script>
     <script src="pegSolitaire/js/view/PegSolitaireView.js"></script>
     <script src="pegSolitaire/js/controller/PegSolitaireController.js"></script>
     <script src="pegSolitaire/js/main.js"></script>

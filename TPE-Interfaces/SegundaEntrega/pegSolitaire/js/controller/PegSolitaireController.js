@@ -33,9 +33,22 @@ class PegSolitaireController {
 
     /** Conecta los eventos y pinta el tablero inicial detras del menu. */
     init() {
-        this.view.ui.startBtn.addEventListener('click', () => this.start());
+        this.view.ui.btnJugar.addEventListener('click', () => this.start());
+        this.view.ui.btnSkins.addEventListener('click', () => this.view.showPhase('skins'));
+        this.view.ui.btnComoJugar.addEventListener('click', () => this.view.showPhase('instructions'));
+        this.view.ui.btnVolverSkins.addEventListener('click', () => this.view.showPhase('menu'));
+
+        this.view.ui.skinsGrid.addEventListener('click', (event) => {
+            const option = event.target.closest('.skinOption');
+            if (!option) return;
+            this.view.setSkin(option.dataset.skinId);
+        });
+        this.view.ui.btnVolverInstrucciones.addEventListener('click', () => this.view.showPhase('menu'));
+
         this.view.ui.endBtn.addEventListener('click', () => this.start());
+        this.view.ui.endMenuBtn.addEventListener('click', () => this.toMenu());
         this.view.ui.restart.addEventListener('click', () => this.start());
+        this.view.ui.menu.addEventListener('click', () => this.toMenu());
 
         this.view.canvas.addEventListener('mousedown', this.handleMouseDown);
         this.view.canvas.addEventListener('mousemove', this.handleMouseMove);
@@ -46,6 +59,7 @@ class PegSolitaireController {
         /* Si las imagenes terminan de cargar, se vuelve a pintar. */
         this.view.onAssetsLoaded = () => this.render(performance.now());
 
+        this.view.showPhase('menu');
         this.render(performance.now());
         this.view.updateHud(this.model.getRemainingMs(), this.model.countChips());
     }
@@ -60,12 +74,31 @@ class PegSolitaireController {
         this.pressPoint = null;
         this.isDragging = false;
 
-        this.view.hideStartMenu();
+        this.view.showPhase('game');
         this.view.hideEndMenu();
         this.view.canvas.style.cursor = 'pointer';
 
         this.render(performance.now());
         this.startLoop();
+    }
+
+    /** Vuelve al menu principal y deja el tablero listo para una nueva partida. */
+    toMenu() {
+        if (this.frameId !== null) {
+            cancelAnimationFrame(this.frameId);
+            this.frameId = null;
+        }
+
+        this.model.reset();
+        this.status = 'idle';
+        this.drag = null;
+        this.pressPoint = null;
+        this.isDragging = false;
+
+        this.view.canvas.style.cursor = 'default';
+        this.view.hideEndMenu();
+        this.view.showPhase('menu');
+        this.render(performance.now());
     }
 
     /* ------------------------------- LOOP ------------------------------- */
