@@ -34,16 +34,16 @@ class PegSolitaireView {
         this.pegImage = this.loadImage(PEG_IMAGES.peg);
         this.targetImage = this.loadImage(PEG_IMAGES.target);
 
-        /* Arte de cada skin. La Bola de Dragon reutiliza la ficha clasica. */
+        /* Arte de cada skin. Cada skin carga su propia imagen desde su src. */
         this.skinImages = new Map();
         PEG_SKINS.forEach((skin) => {
-            const image = skin.kind === 'ball' ? this.pegImage : this.loadImage(skin.src);
+            const image = this.loadImage(skin.src); // se carga cada skin en segundo plano
             this.skinImages.set(skin.id, image);
         });
 
         this.activeSkin = PEG_SKINS[0];
-        this.activeSkinId = PEG_SKINS[0].id;
-        this.activeSkinImage = this.pegImage;
+        this.activeSkinId = PEG_SKINS[0].id; //default la primera skin del catalogo
+        this.activeSkinImage = this.skinImages.get(PEG_SKINS[0].id);
 
         /* Callback opcional: el controlador lo usa para redibujar cuando
            terminan de cargar las imagenes. */
@@ -342,7 +342,7 @@ class PegSolitaireView {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'skinOption';
-            button.dataset.skinId = skin.id;
+            button.dataset.skinId = skin.id; // se usa para identificar la skin al hacer click
             button.setAttribute('aria-pressed', 'false');
             button.setAttribute('aria-label', `Elegir skin ${skin.name}`);
 
@@ -364,13 +364,13 @@ class PegSolitaireView {
      * Activa una skin y actualiza la seleccion visual de la grilla.
      * @param {string} skinId - Identificador de la skin.
      */
-    setSkin(skinId) {
+    setSkin(skinId) { // se llama desde el controlador cuando el usuario hace click en una skin
         const skin = PEG_SKINS.find((item) => item.id === skinId);
         if (!skin) return;
 
         this.activeSkin = skin;
         this.activeSkinId = skin.id;
-        this.activeSkinImage = this.skinImages.get(skin.id) || this.pegImage;
+        this.activeSkinImage = this.skinImages.get(skin.id) || this.pegImage; // swap a la skin activa, o la ficha clasica si no cargo aun
         this.updateSkinButtons();
     }
 

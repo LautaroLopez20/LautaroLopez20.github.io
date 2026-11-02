@@ -12,51 +12,15 @@ const PEG_SKINS = [
         kind: 'ball'
     },
     {
-        id: 'goku',
-        name: 'GokuFan99',
-        src: 'img/avatar/GokuFan99.svg',
-        kind: 'avatar'
+        id: 'dragon-negativa',
+        name: 'Bola de Dragón negativa',
+        src: 'pegSolitaire/assets/ficha-negativa.svg',
+        kind: 'ball'
     },
     {
-        id: 'vegeta',
-        name: 'VegetaPro',
-        src: 'img/avatar/VegetaPro.svg',
-        kind: 'avatar'
-    },
-    {
-        id: 'bulma',
-        name: 'BulmaTech',
-        src: 'img/avatar/BulmaTech.svg',
-        kind: 'avatar'
-    },
-    {
-        id: 'krillin',
-        name: 'Krillin_DEV',
-        src: 'img/avatar/Krillin_DEV.svg',
-        kind: 'avatar'
-    },
-    {
-        id: 'piccolo',
-        name: 'PiccoloMaster',
-        src: 'img/avatar/PiccoloMaster.svg',
-        kind: 'avatar'
-    },
-    {
-        id: 'kpop',
-        name: 'AmanteDelKpop',
-        src: 'img/avatar/AmanteDelKpop.svg',
-        kind: 'avatar'
-    },
-    {
-        id: 'puzzle',
-        name: 'MaestroDelPuzzle',
-        src: 'img/avatar/MaestroDelPuzzle.svg',
-        kind: 'avatar'
-    },
-    {
-        id: 'simple',
-        name: 'UnTipoSimple',
-        src: 'img/avatar/UnTipoSimple.svg',
-        kind: 'avatar'
+        id: 'dragon-petrificada',
+        name: 'Bola de Dragón petrificada',
+        src: 'pegSolitaire/assets/ficha-petrificada.svg',
+        kind: 'ball'
     }
 ];
