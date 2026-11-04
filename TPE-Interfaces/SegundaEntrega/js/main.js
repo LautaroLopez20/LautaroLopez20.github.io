@@ -13,6 +13,13 @@ const BLOCKA_HERO = {
     image: 'blocka/img/portada.png'
 };
 
+/* Segundo destacado fijo: Peg Solitaire tambien es un juego local del sitio. */
+const PEG_HERO = {
+    name: 'Dragon Ball Z: Peg Solitaire',
+    href: 'pegSolitaire.html',
+    image: 'img/peg-Solitaire/Portada.jpg'
+};
+
 const LOADING_DURATION_MS = 5000;
 const LOADING_INTERVAL_MS = 50;
 
@@ -362,10 +369,10 @@ function buildHero(games) {
     const navigation = document.querySelector('.heroNavigation');
     if (!heroCategory || !track || !navigation) return;
 
-    const featured = [BLOCKA_HERO].concat(
+    const featured = [BLOCKA_HERO, PEG_HERO].concat(
         [...games]
             .sort((a, b) => b.rating - a.rating)
-            .slice(0, HERO_SLIDES - 1)
+            .slice(0, HERO_SLIDES - 2)
     );
 
     track.innerHTML = '';

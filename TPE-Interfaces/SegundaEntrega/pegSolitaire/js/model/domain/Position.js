@@ -16,15 +16,6 @@ class Position {
     }
 
     /**
-     * Compara dos posiciones por valor.
-     * @param {Position|null} other - Posicion a comparar.
-     * @returns {boolean} True si representan la misma celda.
-     */
-    equals(other) {
-        return Boolean(other) && this.row === other.row && this.col === other.col;
-    }
-
-    /**
      * Devuelve una posicion desplazada por un delta.
      * @param {{row: number, col: number}} delta - Desplazamiento a aplicar.
      * @returns {Position} Nueva posicion.

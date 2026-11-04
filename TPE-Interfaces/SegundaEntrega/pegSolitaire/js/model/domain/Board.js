@@ -87,15 +87,6 @@ class Board {
     }
 
     /**
-     * Indica si una posicion corresponde a una ranura jugable.
-     * @param {Position|{row: number, col: number}} position - Coordenada.
-     * @returns {boolean} True si hay una celda en esa posicion.
-     */
-    isPlayable(position) {
-        return this.getCell(position) !== null;
-    }
-
-    /**
      * Indica si una posicion tiene una ficha.
      * @param {Position|{row: number, col: number}} position - Coordenada.
      * @returns {boolean} True si la celda existe y esta ocupada.

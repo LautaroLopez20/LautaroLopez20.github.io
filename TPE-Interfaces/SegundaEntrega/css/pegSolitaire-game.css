@@ -443,8 +443,7 @@
 .faseSkins .btn:focus-visible,
 .faseInstrucciones .btn:focus-visible,
 .endMenu .btn:focus-visible,
-.skinOption:focus-visible,
-.gameHudButton:focus-visible {
+.skinOption:focus-visible {
     outline: 3px solid #C9A227;
     outline-offset: 3px;
 }
@@ -475,29 +474,8 @@
         height: 14px;
     }
 
-    .gameHudLabel {
-        font-size: 8px;
-        letter-spacing: 1px;
-    }
-
     .gameHudValue {
         font-size: 14px;
-    }
-
-    .gameHudButton {
-        padding: 4px 8px;
-        border-radius: 8px;
-        font-size: 9px;
-        letter-spacing: 1px;
-        box-shadow: 0 2px 0 #8A3516;
-    }
-
-    .gameHudButton:hover {
-        box-shadow: 0 3px 0 #5F2410;
-    }
-
-    .gameHudButton--ghost {
-        box-shadow: 0 2px 0 rgba(184, 70, 29, 0.35);
     }
 
     .menuPanel {
@@ -547,16 +525,7 @@
 }
 
 @media (max-width: 480px) {
-    .gameHudLabel {
-        display: none;
-    }
-
     .gameHudStat {
         padding: 3px 6px;
-    }
-
-    .gameHudButton {
-        padding: 3px 6px;
-        font-size: 8px;
     }
 }

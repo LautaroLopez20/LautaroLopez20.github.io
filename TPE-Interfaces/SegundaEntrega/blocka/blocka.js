@@ -84,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   let angulos = []; //angulo actual de cada fragmento (indice = fila * cols + col)
   let tiempoInicio = 0; //timestamp de inicio del nivel (Date.now())
   let intervalo = null; //manejador del setInterval que actualiza el reloj
-  let enCurso = false;
   let terminado = true; //arranca en true: no se juega hasta que empiece un nivel
   let fuentePrecargada = null;
   let urlFuentePrecargada = "";
@@ -651,13 +650,11 @@ document.addEventListener("DOMContentLoaded", () => { //se espera a que el DOM e
   function detenerReloj(){
     clearInterval(intervalo);
     intervalo = null;
-    enCurso = false;
   }
 
   //INICIA EL CRONOMETRO DEL NIVEL
   function iniciarTemporizador(){
     detenerReloj(); //por si quedo un intervalo de una partida anterior
-    enCurso = true;
     terminado = false;
     tiempoInicio = Date.now();
 

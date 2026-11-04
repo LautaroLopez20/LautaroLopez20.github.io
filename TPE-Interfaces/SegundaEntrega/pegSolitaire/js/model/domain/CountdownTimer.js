@@ -41,11 +41,6 @@ class CountdownTimer {
         return Math.max(0, this.deadline - this.now());
     }
 
-    /** Indica si la cuenta regresiva esta activa. */
-    isRunning() {
-        return this.deadline !== null;
-    }
-
     /** Indica si el tiempo se agoto. */
     isTimeUp() {
         return this.getRemainingMs() === 0;

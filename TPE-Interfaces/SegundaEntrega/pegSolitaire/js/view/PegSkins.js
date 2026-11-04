@@ -8,19 +8,16 @@ const PEG_SKINS = [
     {
         id: 'dragon',
         name: 'Bola de Dragón',
-        src: 'pegSolitaire/assets/ficha.svg',
-        kind: 'ball'
+        src: 'pegSolitaire/assets/ficha.svg'
     },
     {
         id: 'dragon-negativa',
         name: 'Bola de Dragón negativa',
-        src: 'pegSolitaire/assets/ficha-negativa.svg',
-        kind: 'ball'
+        src: 'pegSolitaire/assets/ficha-negativa.svg'
     },
     {
         id: 'dragon-petrificada',
         name: 'Bola de Dragón petrificada',
-        src: 'pegSolitaire/assets/ficha-petrificada.svg',
-        kind: 'ball'
+        src: 'pegSolitaire/assets/ficha-petrificada.svg'
     }
 ];

@@ -13,7 +13,6 @@ const PEG_CHIP_SIZE = 58;          // Tamano con el que se dibuja la ficha
    tablero y despues las fichas encima. */
 const PEG_IMAGES = {
     board: 'pegSolitaire/assets/tablero.png',
-    peg: 'pegSolitaire/assets/ficha.svg',
     target: 'pegSolitaire/assets/destino.svg'
 };
 
@@ -29,9 +28,8 @@ class PegSolitaireView {
         this.offsetX = (canvas.width - PEG_BOARD_SIZE) / 2;
         this.offsetY = (canvas.height - PEG_BOARD_SIZE) / 2;
 
-        /* Imagenes del juego: tablero, ficha clasica y marca de destino. */
+        /* Imagenes del juego: tablero y marca de destino. */
         this.boardImage = this.loadImage(PEG_IMAGES.board);
-        this.pegImage = this.loadImage(PEG_IMAGES.peg);
         this.targetImage = this.loadImage(PEG_IMAGES.target);
 
         /* Arte de cada skin. Cada skin carga su propia imagen desde su src. */
@@ -41,7 +39,6 @@ class PegSolitaireView {
             this.skinImages.set(skin.id, image);
         });
 
-        this.activeSkin = PEG_SKINS[0];
         this.activeSkinId = PEG_SKINS[0].id; //default la primera skin del catalogo
         this.activeSkinImage = this.skinImages.get(PEG_SKINS[0].id);
 
@@ -167,38 +164,7 @@ class PegSolitaireView {
         ctx.save();
         ctx.globalAlpha = alpha;
 
-        if (this.activeSkin.kind === 'avatar') {
-            /* Las skins de avatar van dentro de un disco crema con borde
-               naranja para integrarse con el tablero. */
-            ctx.fillStyle = '#F4E3DD';
-            ctx.beginPath();
-            ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
-            ctx.clip();
-
-            if (this.isReady(image)) {
-                ctx.drawImage(
-                    image,
-                    position.x - half,
-                    position.y - half,
-                    PEG_CHIP_SIZE,
-                    PEG_CHIP_SIZE
-                );
-            } else {
-                this.drawFallbackChip(position, radius);
-            }
-            ctx.restore();
-
-            ctx.strokeStyle = '#B8461D';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(position.x, position.y, radius, 0, Math.PI * 2);
-            ctx.stroke();
-        } else if (this.isReady(image)) {
+        if (this.isReady(image)) {
             /* La sombra viene dentro del SVG: no hace falta pintarla aparte. */
             ctx.drawImage(
                 image,
@@ -369,9 +335,8 @@ class PegSolitaireView {
         const skin = PEG_SKINS.find((item) => item.id === skinId);
         if (!skin) return;
 
-        this.activeSkin = skin;
         this.activeSkinId = skin.id;
-        this.activeSkinImage = this.skinImages.get(skin.id) || this.pegImage; // swap a la skin activa, o la ficha clasica si no cargo aun
+        this.activeSkinImage = this.skinImages.get(skin.id); // swap a la imagen de la skin activa
         this.updateSkinButtons();
     }
 

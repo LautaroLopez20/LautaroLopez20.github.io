@@ -36,16 +36,6 @@ class PegSolitaireModel {
         return this.board.hasPeg(new Position(row, col));
     }
 
-    /**
-     * Indica si una celda es una ranura jugable vacia.
-     * @param {number} row - Fila de la celda.
-     * @param {number} col - Columna de la celda.
-     * @returns {boolean} True si la celda esta vacia.
-     */
-    isEmpty(row, col) {
-        return this.board.isEmpty(new Position(row, col));
-    }
-
     /* ---------------------------- SELECCION ----------------------------- */
 
     /**
@@ -79,17 +69,6 @@ class PegSolitaireModel {
         return this.board
             .getValidMovesFrom(this.selected)
             .map((move) => move.to);
-    }
-
-    /**
-     * Verifica las reglas de un salto sobre el estado actual.
-     * @param {Position|{row: number, col: number}} from - Celda de origen.
-     * @param {Position|{row: number, col: number}} to - Celda de destino.
-     * @returns {boolean} True si el movimiento respeta las reglas.
-     */
-    isValidMove(from, to) {
-        const move = Move.between(Position.from(from), Position.from(to));
-        return move !== null && this.board.canApply(move);
     }
 
     /**
