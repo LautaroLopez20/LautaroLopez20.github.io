@@ -64,23 +64,29 @@
 
     <section class="gamePlay">
         <div class="gameBoard gameBoardPeg">
-            <canvas id="canvas-game-peg" width="1340" height="507" aria-label="Tablero de Dragon Ball Z: Peg Solitaire"></canvas>
-
-            <div class="gameHud hidden" id="gameHud">
-                <div class="gameHudStat">
-                    <span class="gameHudLabel">Tiempo</span>
-                    <span class="gameHudValue" id="pegTimer">10:00</span>
-                </div>
-                <div class="gameHudStat">
-                    <img class="gameHudIcon" src="pegSolitaire/assets/ficha.svg" alt="">
-                    <span class="gameHudLabel">Bolas</span>
-                    <span class="gameHudValue" id="pegChips">32</span>
-                </div>
-                <div class="gameHudButtons">
-                    <button type="button" class="gameHudButton" id="pegRestart">Reiniciar</button>
-                    <button type="button" class="gameHudButton gameHudButton--ghost" id="pegMenu">Menú</button>
+            <div class="gameHudBar hidden" id="gameHudBar">
+                <div class="gameHud" id="gameHud">
+                    <div class="gameHudSide gameHudSide--left">
+                        <div class="gameHudStat gameHudStat--time">
+                            <span class="gameHudValue gameHudValue--time" id="pegTimer">10:00</span>
+                        </div>
+                    </div>
+                    <div class="gameHudSide gameHudSide--center">
+                        <div class="gameHudStat gameHudStat--chips">
+                            <img class="gameHudIcon" src="pegSolitaire/assets/ficha.svg" alt="">
+                            <span class="gameHudValue gameHudValue--chips" id="pegChips">32</span>
+                        </div>
+                    </div>
+                    <div class="gameHudSide gameHudSide--right">
+                        <div class="gameHudButtons">
+                            <button type="button" class="btn btnSecondary gameHudBtn" id="pegRestart">Reiniciar</button>
+                            <button type="button" class="btn btnSecondary gameHudBtn" id="pegMenu">Menú</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <canvas id="canvas-game-peg" width="1340" height="507" aria-label="Tablero de Dragon Ball Z: Peg Solitaire"></canvas>
 
             <div class="gamePhase faseMenu" id="startMenu">
                 <div class="menuPanel">

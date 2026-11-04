@@ -57,6 +57,7 @@ class PegSolitaireView {
             restart: $('pegRestart'),
             menu: $('pegMenu'),
             hud: $('gameHud'),
+            hudBar: $('gameHudBar'),
             startMenu: $('startMenu'),
             btnJugar: $('btnJugar'),
             btnSkins: $('btnSkins'),
@@ -404,6 +405,9 @@ class PegSolitaireView {
 
         const inGame = phase === 'game';
         this.ui.hud.classList.toggle('hidden', !inGame);
+        if (this.ui.hudBar) {
+            this.ui.hudBar.classList.toggle('hidden', !inGame);
+        }
     }
 
     /**
