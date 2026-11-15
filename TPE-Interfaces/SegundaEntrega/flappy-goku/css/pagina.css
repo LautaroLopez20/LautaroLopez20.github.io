@@ -1,0 +1,61 @@
+/* ============================================================================
+   PAGINA - Flappy Goku
+   Esqueleto de la pagina del juego: mismo layout que la pagina de Peg Solitaire
+   (body, breadcrumb y zona de juego), repetido aca para no acoplar esta pagina
+   a la hoja del otro juego.
+   ============================================================================ */
+
+body {
+    margin: 0;
+    background-color: #0C122A;
+    color: #DCDEE5;
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 70%;
+    margin: 12px 0 0;
+    box-sizing: border-box;
+    font-size: 13px;
+    color: #DCDEE5;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.breadcrumbSeparator {
+    color: #66666E;
+}
+
+.gamePlay {
+    width: 70%;
+    margin: 24px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* El alto sale del aspect-ratio: el tablero entra completo en Full HD sin
+   scroll, como pide la consigna del TPE.
+   Marco estilo pixel: dos bordes duros de 3px, sin radio. El box-shadow interior
+   hace de segundo marco en el tono de fondo de la pagina, para que el borde
+   claro no quede pegado a la escena. */
+.gameBoard {
+    width: 100%;
+    aspect-ratio: 1340 / 507;
+    border: 3px solid #F4E3DD;
+    box-shadow: inset 0 0 0 3px #0C122A;
+    background-color: #121B3F;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+    overflow: hidden;
+}

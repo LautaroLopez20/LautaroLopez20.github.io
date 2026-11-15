@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 12" width="120" height="12" shape-rendering="crispEdges">
+  <!-- Capa mas cercana: sin pilares, para no tapar el area de juego. Es una
+       franja baja de vegetacion sobre grilla de 10px. Los bultos de los
+       extremos son simetricos sobre el borde (cx 0 y cx 120 con el mismo
+       rx/ry), asi que el tile empalma sin costura. -->
+  <g fill="#2B5847">
+    <ellipse cx="0" cy="12" rx="12" ry="5"/>
+    <ellipse cx="15" cy="12" rx="11" ry="3"/>
+    <ellipse cx="40" cy="12" rx="14" ry="5"/>
+    <ellipse cx="70" cy="12" rx="12" ry="3"/>
+    <ellipse cx="95" cy="12" rx="13" ry="4"/>
+    <ellipse cx="120" cy="12" rx="12" ry="5"/>
+  </g>
+</svg>

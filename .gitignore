@@ -6,6 +6,9 @@ node_modules/
 # Requisitos / consignas de los TPE (no se versionan)
 *Requisitos*.txt
 *requisitos*.txt
+# Consigna y apuntes de clase del TPE5 (no se versionan)
+/TPE-Interfaces/SegundaEntrega/flappy-goku/condiciones-entrega
+/TPE-Interfaces/SegundaEntrega/flappy-goku/Ejemplo de clase.txt
 # Notas personales de revision (no se versionan)
 /TPE-Interfaces/SegundaEntrega/para revisar.txt
 # Codigo base de referencia para Peg Solitaire (prestado, no se versiona)

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+  <!-- Placeholder generico de captura de gameplay. El viewBox es 16:10, el
+       mismo aspect-ratio que .gameplaySlot, asi que entra sin recortes.
+       Se reemplaza por las capturas reales cuando esten. -->
+  <rect width="1600" height="1000" fill="#121B3F"/>
+  <circle cx="800" cy="470" r="110" fill="none" stroke="#3A4A7A" stroke-width="8"/>
+  <polygon points="770,415 770,525 860,470" fill="#3A4A7A"/>
+  <text x="800" y="680" fill="#4A5A8A" font-family="Roboto, Segoe UI, Arial, sans-serif" font-size="52" text-anchor="middle">Gameplay</text>
+</svg>

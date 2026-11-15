@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastGames - Flappy Goku</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/atoms.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/game-page.css">
+    <link rel="stylesheet" href="flappy-goku/css/pagina.css">
+    <link rel="stylesheet" href="flappy-goku/css/juego.css">
+    <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+<header>
+    <nav>
+        <button type="button" class="hamburguesa" aria-expanded="false" aria-controls="categoryPanel" aria-label="Ver categorias">
+            <span></span><span></span><span></span>
+        </button>
+
+        <a href="Index.html" class="logo">
+            <img src="img/LOGO.svg" alt="FastGames">
+        </a>
+        <div class="headerSearch">
+                <input type="text" class="searchPlaceholderMobile" placeholder="Introduce tu busqueda...">
+            <input type="text" class="searchPlaceholderDesktop" placeholder="Introduce tu busqueda...">
+            <button type="button">
+                <img src="img/lupa.svg" alt="Buscar">
+            </button>
+        </div>
+        <div class="navIcons">
+            <button type="button">
+                <img src="img/Cart-Button.svg" class="carrito" alt="Carrito">
+            </button>
+                <div class="userMenu">
+                    <button type="button" class="userButton">
+                        <img src="img/User-Button.svg" alt="Usuario">
+                        <span class="userStatus" aria-hidden="true"></span>
+                    </button>
+                    <div class="userPanel hidden">
+                        <ul class="userPanelList">
+                            <li><a href="#">Mis juegos</a></li>
+                            <li><a href="#">Configuracion</a></li>
+                            <li class="userPanelLogout"><a href="login.html">Cerrar sesion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </nav>
+    <div class="categoryPanel hidden" id="categoryPanel">
+        <ul class="categoryPanelList" id="categoryPanelList"></ul>
+    </div>
+</header>
+    <nav class="breadcrumb" aria-label="Ruta de navegacion">
+        <a href="Index.html">Inicio</a>
+        <span class="breadcrumbSeparator">&gt;</span>
+        <span>Accion</span>
+        <span class="breadcrumbSeparator">&gt;</span>
+        <span>Flappy Goku</span>
+    </nav>
+
+    <section class="gamePlay">
+        <div class="gameBoard gameBoardFlappy">
+            <div class="flappyEscena">
+                <div class="parallaxCapa parallaxCapa--1"></div>
+                <div class="parallaxCapa parallaxCapa--2"></div>
+                <div class="parallaxCapa parallaxCapa--3"></div>
+                <div class="parallaxCapa parallaxCapa--4"></div>
+
+                <div class="flappySuelo"></div>
+
+                <div class="flappyPelota flappyPelota--normal" aria-label="Esfera del Dragon del jugador">
+                    <svg viewBox="0 0 17 17" shape-rendering="crispEdges" aria-hidden="true">
+                        <defs>
+                            <!-- Estrella de 5 bloques: es la forma minima que se lee
+                                 como estrella sobre una grilla de pixel. -->
+                            <g id="flappyEstrella" class="flappyPelotaEstrella">
+                                <rect x="-1" y="0" width="1" height="1"/>
+                                <rect x="0" y="-1" width="1" height="1"/>
+                                <rect x="0" y="0" width="1" height="1"/>
+                                <rect x="1" y="0" width="1" height="1"/>
+                                <rect x="0" y="1" width="1" height="1"/>
+                            </g>
+                        </defs>
+                        <circle class="flappyPelotaCuerpo" cx="8.5" cy="8.5" r="8"/>
+                        <use href="#flappyEstrella" transform="translate(8,4)"/>
+                        <use href="#flappyEstrella" transform="translate(12,8)"/>
+                        <use href="#flappyEstrella" transform="translate(8,12)"/>
+                        <use href="#flappyEstrella" transform="translate(4,8)"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="gameActions">
+            <div class="gameActionsLeft">
+                <button type="button" class="btn btnLike" aria-pressed="false">
+                    <img src="img/thumbUp.svg" alt="">
+                    <span class="actionCount">241</span>
+                </button>
+                <button type="button" class="btn btnDislike" aria-pressed="false">
+                    <img src="img/thumbDown.svg" alt="">
+                    <span class="actionCount">9</span>
+                </button>
+            </div>
+            <div class="gameActionsRight">
+                <button type="button" class="btn btnShare" aria-pressed="false">
+                    <img src="img/share.svg" alt="">
+                    Compartir
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div class="gameAbout">
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Gameplay</h2>
+            <div class="gameplayRow">
+                <div class="gameplaySlot">
+                    <img src="flappy-goku/assets/gameplay-placeholder.svg" alt="Captura de gameplay de Flappy Goku 1 de 4">
+                </div>
+                <div class="gameplaySlot">
+                    <img src="flappy-goku/assets/gameplay-placeholder.svg" alt="Captura de gameplay de Flappy Goku 2 de 4">
+                </div>
+                <div class="gameplaySlot">
+                    <img src="flappy-goku/assets/gameplay-placeholder.svg" alt="Captura de gameplay de Flappy Goku 3 de 4">
+                </div>
+                <div class="gameplaySlot">
+                    <img src="flappy-goku/assets/gameplay-placeholder.svg" alt="Captura de gameplay de Flappy Goku 4 de 4">
+                </div>
+            </div>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Ayuda — Flappy Goku</h2>
+            <p class="aboutText">Flappy Goku es un juego de reflejos: la Esfera del Dragón cae constantemente y tu única herramienta es un impulso hacia arriba. Un toque, un salto.</p>
+            <p class="aboutText">El escenario es un homenaje a Zhangjiajie, con sus pilares de arenisca flotando entre la neblina. Las capas del fondo se mueven a distinta velocidad y eso genera la sensación de profundidad.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Reglas</h2>
+            <p class="aboutText">Cada toque le da un impulso hacia arriba a la Esfera del Dragón. Sin tocar nada, la gravedad la hace caer.</p>
+            <p class="aboutText">Cada pilar que pase sin tocarlo suma un punto. El puntaje se muestra arriba del tablero.</p>
+            <p class="aboutText">Si la Esfera toca un pilar o el suelo, la partida termina. La Esfera se pone roja y aparece el menú de fin de partida.</p>
+            <p class="aboutText">No hay niveles ni aumentos de dificultad: la velocidad de los pilares es siempre la misma, así que la única variable es tu pulso.</p>
+            <p class="aboutText">El récord de la sesión se guarda y se compara contra tu mejor marca anterior.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Controles</h2>
+            <p class="aboutText">Hacé clic en cualquier parte del tablero para impulsar la Esfera hacia arriba.</p>
+            <p class="aboutText">En teclado, la barra espaciadora y la flecha arriba hacen lo mismo.</p>
+            <p class="aboutText">Con el juego detenido, la barra espaciadora arranca la partida y también la reinicia cuando termina.</p>
+        </section>
+
+        <section class="aboutSection">
+            <h2 class="aboutTitle">Enlaces e información del juego</h2>
+            <h3 class="aboutSubtitle">Creado por Dragon Games Team</h3>
+            <h3 class="aboutSubtitle">Sobre nosotros</h3>
+            <p class="aboutText">Dragon Games Team es un equipo independiente enfocado en la recreación y adaptación de juegos de mesa mecánicos a entornos digitales.</p>
+            <p class="aboutText">Este equipo nació como un colectivo independiente de tres desarrolladores enfocado en la revitalización de mecánicas de juego clásicas y de mesa en formatos digitales modernos.</p>
+            <p class="aboutText">Lo que comenzó como un proyecto de prueba para digitalizar juegos de estrategia tradicionales se convirtió en un estudio a tiempo completo tras el lanzamiento de su primer título en 2020.</p>
+            <h3 class="aboutSubtitle">Contacto</h3>
+            <p class="aboutText">dbteam-contacto@mail.com</p>
+        </section>
+    </div>
+
+    <section class="commentsSection">
+        <h2 class="aboutTitle">Comentarios</h2>
+        <div class="commentsContainer">
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/avatar/MaestroDelPuzzle.svg" alt="" class="commentAvatar">
+                    <span class="commentUser">MaestroDelPuzzle</span>
+                    <span class="commentDate">03/09/26</span>
+                </div>
+                <p class="commentText">Lo que más me gustó es el fondo: las cuatro capas se mueven a distinta velocidad y el ojo lee la profundidad enseguida. Se nota el trabajo en los pilares, están muy bien.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/avatar/AmanteDelKpop.svg" alt="" class="commentAvatar">
+                    <span class="commentUser">AmanteDelKpop</span>
+                    <span class="commentDate">11/09/26</span>
+                </div>
+                <p class="commentText">Perdí veinte veces seguidas y lo volví a abrir. Es adictivo de una forma que no te das cuenta hasta que ya estás adentro.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/avatar/UnTipoSimple.svg" alt="" class="commentAvatar">
+                    <span class="commentUser">UnTipoSimple</span>
+                    <span class="commentDate">17/09/26</span>
+                </div>
+                <p class="commentText">Truco: apretá en el momento en que la Esfera empieza a bajar, no cuando ya bajó. Si esperás a verla caer, llegás tarde al hueco.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/avatar/GokuFan99.svg" alt="" class="commentAvatar">
+                    <span class="commentUser">GokuFan99</span>
+                    <span class="commentDate">24/09/26</span>
+                </div>
+                <p class="commentText">La Esfera del Dragón como personaje es un detalle que me encantó, y que se ponga roja al chocar se entiende sin leer nada. Muy bien resuelto. Lo único que le pediría es un modo sin fin, pero entiendo que la dificultad constante es parte de la idea.</p>
+            </article>
+            <article class="comment">
+                <div class="commentHeader">
+                    <img src="img/avatar/VegetaPro.svg" alt="" class="commentAvatar">
+                    <span class="commentUser">VegetaPro</span>
+                    <span class="commentDate">02/10/26</span>
+                </div>
+                <p class="commentText">43 puntos. El que lo supere que lo suba a los comentarios.</p>
+            </article>
+        </div>
+
+        <div class="commentForm">
+            <h2 class="aboutTitle commentFormTitle">Dejá tu Comentario</h2>
+            <div class="commentFormRow">
+                <textarea class="commentInput" placeholder="Escribe aqui tu comentario..."></textarea>
+                <button type="button" class="btn btnSubmitComment">
+                    <span class="btnSubmitLabel">Enviar</span>
+                    <img class="btnSubmitIcon" src="img/mail.svg" alt="">
+                </button>
+            </div>
+        </div>
+    </section>
+
+<footer>
+        <div class="footerTop">
+            <div class="footerColumns">
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Sobre Nosotros</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#">Inicios</a></li>
+                        <li><a href="#">Alcance</a></li>
+                        <li><a href="#">Direccion</a></li>
+                        <li><a href="#">Ideas</a></li>
+                        <li><a href="#">Desarrolladores</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Informacion</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Terminos de Uso</a></li>
+                        <li><a href="#">Politicas de Privacidad</a></li>
+                        <li><a href="#">Codigo de Conducta</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Opciones de Pago</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Agradecimientos</h4>
+                    <ul class="footerList">
+                        <li><a href="#">Catedra de Interfaces</a></li>
+                        <li><a href="#">ChatGPT</a></li>
+                        <li><a href="#">TUDAI</a></li>
+                        <li><a href="#">UNICEN</a></li>
+                        <li><a href="#">Figma</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn">
+                    <h4 class="footerHeading">Cuenta</h4>
+                    <ul class="footerList">
+                        <li><a href="register.html">Crear Cuenta</a></li>
+                        <li><a href="login.html">Iniciar Sesion</a></li>
+                        <li><a href="#">Mi Cuenta</a></li>
+                        <li><a href="#">Mis Juegos</a></li>
+                    </ul>
+                </div>
+                <div class="footerColumn footerColumnWide">
+                    <h4 class="footerHeading">Nuestros Titulos Destacados</h4>
+                    <div class="footerSubColumns">
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="blocka.html">Blocka</a></li>
+                            <li><a href="#">Roblox</a></li>
+                            <li><a href="#">Super Mario 64</a></li>
+                            <li><a href="#">Plants vs. Zombies</a></li>
+                            <li><a href="#">Bomb Pong</a></li>
+                            <li><a href="pegSolitaire.html">Dragon Ball Z: Peg Solitaire</a></li>
+                        </ul>
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Rumble Club</a></li>
+                            <li><a href="#">Machinarium</a></li>
+                            <li><a href="#">Navy Moves</a></li>
+                            <li><a href="#">El Caudillo</a></li>
+                            <li><a href="#">Minecraft</a></li>
+                            <li><a href="#">Mario Party</a></li>
+                        </ul>
+                        <ul class="footerList footerSubColumn">
+                            <li><a href="#">Pictonico</a></li>
+                            <li><a href="#">LEGO Marvel Super Heroes</a></li>
+                            <li><a href="#">Stick Fight</a></li>
+                            <li><a href="#">Zombie Rumble</a></li>
+                            <li><a href="#">Agar.io</a></li>
+                            <li><a href="#">Minesweeper</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footerLanguages">
+                <img class="footerFlag" src="img/flag-mx.svg" alt="Mexico">
+                <img class="footerFlag" src="img/flag-jp.svg" alt="Japon">
+                <img class="footerFlag" src="img/flag-us.svg" alt="USA">
+                <img class="footerFlag" src="img/flag-uk.svg" alt="UK">
+                <img class="footerFlag" src="img/flag-fr.svg" alt="Francia">
+                <img class="footerFlag" src="img/flag-it.svg" alt="Italia">
+                <img class="footerFlag" src="img/flag-br.svg" alt="Brasil">
+                <img class="footerFlag" src="img/flag-es.svg" alt="Espana">
+            </div>
+        </div>
+        <div class="footerBottom">
+            <span class="footerCopyright">© Copyright 2026 FastGames.com</span>
+            <img class="footerLogo" src="img/LOGO_White.svg" alt="FastGames">
+            <div class="footerSocials">
+                <img src="img/icon-instagram.svg" alt="Instagram">
+                <img src="img/facebook.svg" alt="Facebook">
+                <img src="img/icon-twitter.svg" alt="Twitter">
+                <img src="img/icon-youtube.svg" alt="YouTube">
+            </div>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html>

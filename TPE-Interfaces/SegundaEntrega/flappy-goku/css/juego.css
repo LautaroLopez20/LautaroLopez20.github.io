@@ -1,0 +1,168 @@
+/* ============================================================================
+   JUEGO - Flappy Goku
+   Escena con parallax de 4 capas de fondo + el suelo como capa aparte.
+   Estetica Zhangjiajie de dia: pilares de arenisca en perspectiva aerea
+   (azulados al fondo, verdes adelante) con neblina entre capas.
+
+   Idea: cada capa es un div de "100% + un tile" de ancho con la imagen repetida
+   en x. Se la traslada exactamente un tile en loop, asi que al volver al inicio
+   no se nota el salto. La profundidad sale del z-index y de la duracion:
+   todas las capas recorren el mismo tile, y la que tarda menos se mueve mas
+   rapido (esta mas cerca).
+
+   Velocidad base del juego: 120 px/s. El factor de cada capa se traduce en una
+   duracion con duracion = ancho del tile / (120 px/s * factor).
+
+   Pixelart: los SVG de las capas miden 120 unidades de ancho, sobre una grilla
+   de 10. El CSS los estira al ancho del tile y image-rendering: pixelated evita
+   que el navegador los suavice, asi que cada unidad se ve como un bloque de 10px.
+   ============================================================================ */
+
+.gameBoardFlappy {
+    --tile-ancho: 1200px;
+    --suelo-alto: 64px;
+    position: relative;
+    /* Cielo de dia en franjas duras: un degradé suave delataria vector, y esto
+       es pixelart. Mismo recorrido de color que antes, pero escalonado. */
+    background: linear-gradient(
+        #3E9BD1 0 16%,
+        #4EA6D8 16% 32%,
+        #62B4DF 32% 48%,
+        #7BC2E7 48% 64%,
+        #98D1EE 64% 80%,
+        #CBE8F5 80% 100%
+    );
+    isolation: isolate;
+}
+
+/* Anclada a los cuatro bordes del tablero: asi las capas tienen un alto
+   definido aunque el tablero lo saque de su aspect-ratio. */
+.flappyEscena {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+/* Una capa de fondo. Cada capa define su alto con el alto real de su SVG,
+   para que la imagen no se deforme.
+   image-rendering: pixelated es la mitad del efecto: el SVG mide 120px de ancho
+   de origen y aca se estira a 1200, asi que el navegador repite cada bloque de
+   10px en vez de interpolarlo. Sin esta linea el dibujo se ve suave, como vector. */
+.parallaxCapa {
+    position: absolute;
+    left: 0;
+    bottom: var(--suelo-alto); /* justo arriba del suelo */
+    width: calc(100% + var(--tile-ancho));
+    background-repeat: repeat-x;
+    background-position: left bottom;
+    background-size: var(--tile-ancho) 100%;
+    image-rendering: pixelated;
+    animation: parallaxScroll linear infinite;
+    will-change: transform;
+}
+
+/* Las cuatro capas, de la mas lejana a la mas cercana. La duracion es lo unico
+   que cambia la velocidad: mismo tile, menos tiempo, mas rapido.
+   Solo las tres primeras tienen pilares: la cuarta es una franja de vegetacion
+   baja para no tapar el area de juego. */
+
+.parallaxCapa--1 {
+    z-index: 1;
+    height: 300px;
+    background-image: url('../assets/parallax/capa-1.svg');
+    animation-duration: 100s; /* factor 0.1 */
+}
+
+.parallaxCapa--2 {
+    z-index: 2;
+    height: 240px;
+    background-image: url('../assets/parallax/capa-2.svg');
+    animation-duration: 40s; /* factor 0.25 */
+}
+
+.parallaxCapa--3 {
+    z-index: 3;
+    height: 180px;
+    background-image: url('../assets/parallax/capa-3.svg');
+    animation-duration: 20s; /* factor 0.5 */
+}
+
+.parallaxCapa--4 {
+    z-index: 4;
+    height: 120px;
+    background-image: url('../assets/parallax/capa-4.svg');
+    animation-duration: 10s; /* factor 1: igual que el suelo y los tubos */
+}
+
+/* Suelo: capa propia, fuera del parallax. Un solo color, sin textura, asi que
+   no lleva animacion: un color plano desplazandose se ve igual. Cuando tenga
+   un patron, vuelven el background-image y el scroll. */
+
+.flappySuelo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 10;
+    width: 100%;
+    height: var(--suelo-alto);
+    background-color: #22463A;
+}
+
+/* Avatar provisorio, dibujado como una Esfera del Dragon: el cuerpo toma el
+   color del estado y las estrellas van siempre en rojo.
+   Pixelart: el SVG de adentro mide 17 unidades de ancho con
+   shape-rendering="crispEdges", y el elemento mide 51px = 17 x 3, asi que cada
+   unidad cae en un bloque exacto de 3px y el circulo se ve escalonado. Ese
+   bloque es el "pixel" del sprite: si cambia el tamano, conviene moverlo de a
+   multiplos de 17 para que no queden bloques de 3px y 4px mezclados.
+   Cuando exista el spritesheet, este bloque se reemplaza por un elemento de
+   ancho fijo y un transform con steps() que elija el frame. */
+
+.flappyPelota {
+    position: absolute;
+    left: 22%;
+    top: 50%;
+    z-index: 20;
+    width: 51px;
+    height: 51px;
+    transform: translateY(-50%);
+}
+
+.flappyPelota svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.flappyPelotaCuerpo {
+    fill: currentColor;
+}
+
+.flappyPelotaEstrella {
+    fill: #B01B22;
+}
+
+.flappyPelota--normal {
+    color: #F5A623;
+}
+
+.flappyPelota--choque {
+    color: #E23B3B;
+}
+
+.flappyPelota--turbo {
+    color: #3BE27B;
+}
+
+/* Todas las capas y el suelo comparten este desplazamiento: un tile entero a
+   la izquierda. Con background-repeat en x, el tile que entra por la derecha
+   es identico al que sale por la izquierda. */
+
+@keyframes parallaxScroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(calc(-1 * var(--tile-ancho)));
+    }
+}

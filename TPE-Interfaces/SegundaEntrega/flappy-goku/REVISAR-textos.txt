@@ -1,0 +1,72 @@
+REVISAR LOS TEXTOS - Flappy Goku
+===============================
+
+Motivo
+------
+Ahora mismo toda la pagina habla de Dragon Ball: la Esfera del Dragon, Goku,
+el equipo "Dragon Games Team". Es provisorio. Mas adelante el juego va a ser
+otra cosa (otro personaje, otra tematica), y cuando eso pase hay que reescribir
+los textos para que no queden mintiendo.
+
+Que revisar
+------------
+1. flappy-goku.html - seccion "Ayuda - Flappy Goku"
+   Habla de "la Esfera del Dragon" como personaje jugable.
+
+2. flappy-goku.html - seccion "Reglas"
+   Misma cosa: "la Esfera del Dragon" aparece cuatro veces.
+   Tambien conviene confirmar los numeros: dice que cada pilar pasado suma un
+   punto y que la dificultad es constante. Si eso cambia, cambia el texto.
+
+3. flappy-goku.html - seccion "Controles"
+   Menciona clic, barra espaciadora y flecha arriba. Verificar contra el juego
+   real cuando este implementado.
+
+4. flappy-goku.html - seccion "Enlaces e informacion del juego"
+   "Creado por Dragon Games Team" y el texto de "Sobre nosotros" estan copiados
+   de la pagina de Peg Solitaire. Reemplazar por el equipo real.
+
+5. flappy-goku.html - los 5 comentarios
+   Los usuarios son de Dragon Ball (GokuFan99, VegetaPro, etc.) y varios
+   mensajes nombran la Esfera del Dragon. Hay que cambiarlos junto con el tema.
+
+6. flappy-goku.html - textos alternativos de las imagenes
+   Los cuatro slots de Gameplay dicen "Captura de gameplay de Flappy Goku".
+   Revisar tambien cuando entren las capturas reales.
+
+7. Titulo de la pagina (<title>) y el breadcrumb
+   Dicen "Flappy Goku". Si cambia el nombre del juego, cambian los dos.
+
+8. Pagina principal (Index.html) y el footer
+   Si el juego aparece listado o enlazado con el nombre viejo, hay que
+   actualizarlo. El footer de flappy-goku.html tambien tiene el link
+   "Dragon Ball Z: Peg Solitaire", que es otro juego y no se toca.
+
+Pendiente aparte de los textos: subirlo a la pagina principal
+--------------------------------------------------------------
+El juego todavia no aparece en Index.html. Cuando este listo hay que agregarlo
+al carrusel de portada, que es donde esta Peg Solitaire:
+
+- Archivo: Index.html
+- Lugar: <div class="heroCarousel"> > .heroTrack (linea 71-78 hoy)
+- Cada juego es un <a class="heroGame" href="pagina.html"
+  style="background-image: url('ruta/a/la/portada.jpg');"><p>Nombre</p></a>
+- Falta la imagen de portada. Peg Solitaire usa img/peg-Solitaire/Portada.jpg,
+  asi que para este convendria img/flappy-goku/Portada.jpg. Todavia no existe.
+- Si no hay portada, el heroGame queda sin fondo y se ve vacio: la imagen es
+  parte del pendiente, no un extra.
+
+Tambien conviene revisar:
+- Las .categoryCarousel del mismo Index.html, que hoy tienen placeholders
+  ("Nombre del Juego"). Si el juego va en "Accion", ese es el lugar.
+- El footer de todas las paginas: <h4>Nuestros Titulos Destacados</h4> lista los
+  juegos a mano. Peg Solitaire figura ahi; Flappy Goku no.
+
+Lo que NO hay que tocar
+------------------------
+- flappy-goku/css/*.css: no tiene texto visible, solo comentarios internos
+  (que si se pueden actualizar si el cambio de tema es grande).
+- flappy-goku/assets/*: los SVG del parallax son genericos (pilares, bruma,
+  vegetacion). Zhanjiajie puede quedar aunque el personaje cambie.
+- Las clases CSS y los ids: se llaman "flappyPelota", "gameBoardFlappy", etc.
+  Renombrarlos implica tocar el CSS tambien. Es opcional.
