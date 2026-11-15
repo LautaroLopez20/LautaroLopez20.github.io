@@ -1,0 +1,339 @@
+/* ============================================================================
+   GAME PAGE - Estilos compartidos por las paginas de juego.
+   Chrome comun que ya estaba en pegSolitaire.css: barra de acciones, seccion
+   "Acerca de", comentarios y el formulario de comentario. Lo comparten
+   pegSolitaire.html y flappy-goku.html; cada juego suma los suyos encima.
+   ============================================================================ */
+
+/* botones de abajo de la zona del juego*/
+
+.gameActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.gameActionsLeft,
+.gameActionsRight {
+    display: flex;
+    gap: 12px;
+}
+
+.btnLike,
+.btnDislike,
+.btnShare {
+    background-color: #B8461D;
+    /* El borde nace transparente para que el estado activo no desarme el
+       tamano del boton. */
+    border: 2px solid transparent;
+    font-size: 15px;
+    border-radius: 15px;
+    padding: 7px;
+    /* Se repite la transicion de .btn (atoms.css) mas el borde: como esta
+       regla viene despues, el shorthand la pisaria entera y el scale del
+       hover quedaria sin animar. */
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.15s ease;
+}
+
+/* Estado activo: aparece el borde en el tono mas oscuro de la paleta. */
+
+.btnLike.isLiked,
+.btnDislike.isDisliked,
+.btnShare.isShared {
+    border-color: #8A3516;
+}
+
+.btnLike img,
+.btnDislike img,
+.btnShare img {
+    width: 16px;
+    height: 16px;
+}
+
+/* El contador reacciona al cambiar de valor. La animacion se reinicia sacando
+   la clase y forzando un reflow antes de volver a ponerla. */
+
+.actionCount {
+    display: inline-block;
+}
+
+.actionCount.pop {
+    animation: popContador 0.3s ease-out;
+}
+
+@keyframes popContador {
+    0% {
+        transform: scale(1);
+    }
+    45% {
+        transform: scale(1.25);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btnLike:hover,
+.btnDislike:hover,
+.btnShare:hover,
+.btnSubmitComment:hover{
+    transform: scale(110%);
+}
+
+/* about */
+
+.gameAbout {
+    width: 70%;
+    margin: 40px 0 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+
+}
+
+.gameplayRow {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.gameplaySlot {
+    flex: 1 1 0;
+    aspect-ratio: 16 / 10;
+    border-radius: 12px;
+    background-color: #1A2140;
+    /* sin esto el border-radius no recorta la imagen de adentro */
+    overflow: hidden;
+}
+
+/* las capturas llenan el slot. cover y no contain porque las imagenes son 3:2
+   y el slot es 16:10: contain dejaria las bandas del color de fondo. cover
+   recorta un poco del alto pero no deforma. */
+.gameplaySlot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.aboutTitle {
+    color: rgba(220, 222, 229, 0.9);
+    font-size: 20px;
+    margin: 0 0 12px;
+    text-decoration: underline;
+}
+
+.aboutSubtitle {
+    color: rgba(220, 222, 229, 0.9);
+    font-size: 17px;
+    margin: 14px 0 6px;
+}
+
+.aboutText {
+    color: rgba(220, 222, 229, 0.9);
+    font-size: 16px;
+    margin: 6px 0;
+}
+
+/* Comentarios */
+
+.commentsSection {
+    width: 70%;
+    margin: 40px 0 60px;
+    box-sizing: border-box;
+    /* Linea divisoria: separa los comentarios de las secciones de arriba sin
+       necesidad de cambiar el fondo de la pagina. Cubre el mismo 70% de ancho
+       que la seccion; no hay padding lateral. */
+    border-top: 1px solid rgba(220, 222, 229, 0.15);
+    /* Sin esto la linea quedaria pegada contra el titulo. Queda simetrico:
+       40px del texto a la linea, 40px de la linea al titulo. */
+    padding-top: 40px;
+}
+
+.commentsSection .aboutTitle {
+    font-size: 34px;
+    color: #FFFFFF;
+    margin-bottom: 30px;
+}
+
+/* El titulo del formulario vuelve a su tamano base. Sin esta regla,
+   .commentsSection .aboutTitle le aplicaria 34px por ser tambien .aboutTitle
+   y competiria con el titulo de la seccion. */
+.commentsSection .commentFormTitle {
+    font-size: 20px;
+    color: rgba(220, 222, 229, 0.9);
+}
+
+.commentsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.comment {
+    /* Antes era #060915, que es el fondo del login y ademas mas oscuro que la
+       pagina (#0C122A), asi que las cards se leian como agujeros calados. Con
+       #182455 quedan por encima de la pagina, mismo matiz, y ya se usa en el
+       proyecto (register.css, .passwordHint). */
+    background-color: #182455;
+    border: 1px solid #DCDEE5;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.commentHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(220, 222, 229, 0.15);
+}
+
+.commentAvatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    /* Los avatares son cuadrados: cover los recorta en el cuadrado de 34x34
+       en lugar de deformarlos. */
+    object-fit: cover;
+    /* .commentHeader es flex, asi que sin esto el avatar se achica cuando el
+       nombre o la fecha son largos. */
+    flex: 0 0 auto;
+}
+
+.commentUser {
+    font-weight: bold;
+    font-size: 14px;
+    color: #DCDEE5;
+}
+
+/* Fecha: mismo tono base que el nombre, pero mas chica (12px contra 14px) y
+   con la mitad de opacidad, para que el dato acomane y no compita. */
+.commentDate {
+    display: inline-block;
+    font-size: 12px;
+    color: rgba(220, 222, 229, 0.5);
+    margin-left: auto;
+}
+
+.commentText {
+    margin: 10px 0 0;
+    font-size: 15px;
+    color: rgba(220, 222, 229, 0.8);
+}
+
+/* Formulario de comentario */
+
+.commentForm {
+    margin-top: 40px;
+}
+
+.commentFormTitle {
+    margin-bottom: 16px;
+}
+
+.commentFormRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    width: 50%;
+}
+
+.commentInput {
+    flex: 1;
+    min-height: 200px;
+    background-color: rgba(162, 167, 187,0.5);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 15px;
+    color: #060915;
+    resize: none;
+}
+
+.commentInput::placeholder {
+    color: rgba(6, 9, 21, 0.55);
+}
+
+.btnSubmitComment {
+    background-color: #1A2140;
+    /* min-width para que el boton no cambie de tamano al pasar de "Enviar" a
+       el sobre. */
+    min-width: 90px;
+    /* Gradiente de dos tonos con corte duro, estirado al doble del ancho del
+       boton. El tono claro esta en la primera mitad de la imagen, asi al
+       desplazar la posicion del fondo la franja clara entra por la izquierda
+       y avanza hacia la derecha. */
+    background-image: linear-gradient(90deg, #2A3560 0 50%, #1A2140 50% 100%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    color: #FFFFFF;
+}
+
+/* El texto y el sobre conviven en el boton: el CSS decide cual se ve segun el
+   estado, asi el cambio de uno a otro no tiene que crear ni borrar nodos. El
+   texto sigue a la vista mientras corre el barrido. */
+.btnSubmitIcon {
+    display: none;
+    width: 24px;
+    height: 24px;
+}
+
+.btnSubmitComment.enviado .btnSubmitLabel {
+    display: none;
+}
+
+.btnSubmitComment.enviado .btnSubmitIcon {
+    display: block;
+}
+
+/* Enviar: barrido de una tonalidad mas clara, de izquierda a derecha. En vez
+   de quedar en loop con el cursor encima, corre una sola vez al hacer click.
+   El "forwards" deja el fondo en el tono claro para que el sobre no aparezca
+   sobre el color oscuro. */
+.btnSubmitComment.enviando {
+    animation: barridoEnviar 1.2s ease-in-out 1 forwards;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Estado de confirmacion: el texto ya paso al sobre y el fondo queda en el tono
+   claro del barrido. El background-position va explicito porque al sacar la
+   animacion del barrido se pierde su "forwards". La sacudida arranca sola con
+   esta clase y dura menos que COMMENT_RESET_MS, asi que el boton queda quieto
+   antes de reiniciarse. Reusa el keyframe "sacudida" de atoms.css, el mismo
+   que usa .btnSecondary. */
+.btnSubmitComment.enviado {
+    background-position: 0% 0;
+    cursor: default;
+    animation: sacudida 0.5s ease-in-out 1;
+}
+
+/* En hover solo queda el escalado. El barrido ya no depende del cursor. */
+.btnSubmitComment:hover:not(:disabled) {
+    transform: scale(110%);
+}
+
+.btnSubmitComment:disabled {
+    cursor: default;
+}
+
+@keyframes barridoEnviar {
+    from {
+        background-position: 100% 0;
+    }
+    to {
+        background-position: 0% 0;
+    }
+}
+
+footer {
+    margin-top: auto;
+}
