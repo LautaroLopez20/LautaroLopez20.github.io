@@ -15,8 +15,13 @@ Que revisar
 
 2. flappy-goku.html - seccion "Reglas"
    Misma cosa: "la Esfera del Dragon" aparece cuatro veces.
-   Tambien conviene confirmar los numeros: dice que cada pilar pasado suma un
-   punto y que la dificultad es constante. Si eso cambia, cambia el texto.
+   Los numeros ya estan alineados con el juego implementado: un punto por pilar
+   pasado, velocidad constante y el hueco que se estrecha con el puntaje. Si
+   alguna de esas tres cosas cambia, cambia el texto.
+
+   Falta implementar el record de la sesion: una de las reglas promete que se
+   guarda y se compara contra la mejor marca, y hoy el puntaje se pierde al
+   reiniciar. O se implementa, o se borra la linea.
 
 3. flappy-goku.html - seccion "Controles"
    Menciona clic, barra espaciadora y flecha arriba. Verificar contra el juego

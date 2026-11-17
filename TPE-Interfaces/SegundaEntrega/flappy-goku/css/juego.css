@@ -120,12 +120,15 @@
 
 .flappyPelota {
     position: absolute;
-    left: 22%;
-    top: 50%;
+    left: 0;
+    top: 0;
     z-index: 20;
     width: 51px;
     height: 51px;
-    transform: translateY(-50%);
+    /* La posicion la pone el JS con transform. No usar top/left para mover:
+       eso obliga a recalcular el layout del tablero en cada frame. */
+    transform: translate(0, 0);
+    will-change: transform;
 }
 
 .flappyPelota svg {
@@ -152,6 +155,128 @@
 
 .flappyPelota--turbo {
     color: #3BE27B;
+}
+
+/* ============================== TUBERIAS ============================== */
+
+/* Contenedor de los tubos: arranca donde termina el suelo, asi las tuberias
+   apoyan justo encima y no lo pisan.
+   z-index 15 las deja arriba de las 4 capas del parallax (1-4) y del suelo
+   (10), y abajo del jugador (20). */
+.flappyTubos {
+    position: absolute;
+    inset: 0 0 var(--suelo-alto) 0;
+    z-index: 15;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Un tubo son dos divs adentro del mismo elemento: se traslada el contenedor y
+   los dos se mueven juntos.
+   El ancho esta duplicado en `Tubo.ANCHO` (js/model/Tubo.js) porque el CSS no
+   lee constantes de JS. Si cambia uno, cambia el otro. */
+.flappyTubo {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 64px;
+    will-change: transform;
+}
+
+/* El alto lo pone el JS: depende del hueco, que es distinto en cada tubo. */
+.flappyTuboArriba {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2E7D4F;
+}
+
+/* El de abajo se ancla al piso con bottom: 0 y el JS solo le mueve el top, que
+   es donde arranca el hueco. */
+.flappyTuboAbajo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    top: 0; /* valor de arranque, el JS lo pisa en el primer frame */
+    background-color: #2E7D4F;
+}
+
+/* Remate de la boca: sobresale del cuerpo para que la tuberia se lea como
+   tuberia y no como una barra. Sin radio: es pixelart. */
+.flappyTuboArriba::after,
+.flappyTuboAbajo::after {
+    content: '';
+    position: absolute;
+    left: -6px;
+    width: calc(100% + 12px);
+    height: 14px;
+    background-color: #1E5133;
+}
+
+.flappyTuboArriba::after {
+    bottom: 0;
+}
+
+.flappyTuboAbajo::after {
+    top: 0;
+}
+
+/* =============================== PUNTAJE =============================== */
+
+.flappyPuntaje {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    font-size: 32px;
+    font-weight: 700;
+    color: #FFFFFF;
+    /* Sombra dura, sin blur: el texto tambien es pixel. */
+    text-shadow: 0 3px 0 #0C122A;
+    pointer-events: none;
+}
+
+/* ============================= MENU DEL FIN ============================= */
+
+/* pointer-events: none para que el clic que reinicia llegue al tablero: el
+   cartel cae justo en el medio, que es donde el jugador hace clic. */
+.flappyMenu {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 30;
+    padding: 16px 24px;
+    border: 3px solid #F4E3DD;
+    background-color: #0C122A;
+    text-align: center;
+    pointer-events: none;
+}
+
+.flappyMenu--visible {
+    display: block;
+}
+
+.flappyMenuTitulo {
+    margin: 0 0 8px;
+    font-size: 22px;
+    color: #F4E3DD;
+}
+
+.flappyMenuTexto {
+    margin: 4px 0;
+    font-size: 15px;
+    color: #DCDEE5;
+}
+
+.flappyMenuPuntaje {
+    font-weight: 700;
+    color: #F5A623;
 }
 
 /* Todas las capas y el suelo comparten este desplazamiento: un tile entero a

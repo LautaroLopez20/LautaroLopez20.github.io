@@ -72,6 +72,8 @@
 
                 <div class="flappySuelo"></div>
 
+                <div class="flappyTubos"></div>
+
                 <div class="flappyPelota flappyPelota--normal" aria-label="Esfera del Dragon del jugador">
                     <svg viewBox="0 0 17 17" shape-rendering="crispEdges" aria-hidden="true">
                         <defs>
@@ -91,6 +93,14 @@
                         <use href="#flappyEstrella" transform="translate(8,12)"/>
                         <use href="#flappyEstrella" transform="translate(4,8)"/>
                     </svg>
+                </div>
+
+                <div class="flappyPuntaje">0</div>
+
+                <div class="flappyMenu">
+                    <p class="flappyMenuTitulo">Fin de la partida</p>
+                    <p class="flappyMenuTexto">Puntaje: <span class="flappyMenuPuntaje">0</span></p>
+                    <p class="flappyMenuTexto">Clic o Espacio para reiniciar</p>
                 </div>
             </div>
         </div>
@@ -144,7 +154,7 @@
             <p class="aboutText">Cada toque le da un impulso hacia arriba a la Esfera del Dragón. Sin tocar nada, la gravedad la hace caer.</p>
             <p class="aboutText">Cada pilar que pase sin tocarlo suma un punto. El puntaje se muestra arriba del tablero.</p>
             <p class="aboutText">Si la Esfera toca un pilar o el suelo, la partida termina. La Esfera se pone roja y aparece el menú de fin de partida.</p>
-            <p class="aboutText">No hay niveles ni aumentos de dificultad: la velocidad de los pilares es siempre la misma, así que la única variable es tu pulso.</p>
+            <p class="aboutText">No hay niveles: la velocidad de los pilares es siempre la misma. Lo que cambia es el hueco entre ellos, que se estrecha a medida que avanzás.</p>
             <p class="aboutText">El récord de la sesión se guarda y se compara contra tu mejor marca anterior.</p>
         </section>
 
@@ -319,6 +329,15 @@
             </div>
         </div>
     </footer>
+    <script src="flappy-goku/js/model/Jugador.js"></script>
+    <script src="flappy-goku/js/model/Tubo.js"></script>
+    <script src="flappy-goku/js/model/Mundo.js"></script>
+    <script src="flappy-goku/js/view/JugadorView.js"></script>
+    <script src="flappy-goku/js/view/TuboView.js"></script>
+    <script src="flappy-goku/js/view/MarcadorView.js"></script>
+    <script src="flappy-goku/js/view/MenuView.js"></script>
+    <script src="flappy-goku/js/controller/FlappyController.js"></script>
+    <script src="flappy-goku/js/main.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
