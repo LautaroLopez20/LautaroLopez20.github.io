@@ -99,7 +99,8 @@ class PegSolitaireModel {
 
     /** Se gana cuando queda una sola ficha en el tablero. */
     isWon() {
-        return this.countChips() === 1;
+        const center = new Position(3, 3);
+        return this.countChips() === 1 && this.board.hasPeg(center);
     }
 
     /* ------------------------------ RELOJ ------------------------------- */
