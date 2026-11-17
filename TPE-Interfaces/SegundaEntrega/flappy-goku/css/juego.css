@@ -184,13 +184,28 @@
     will-change: transform;
 }
 
+/* Cana de bambu. El cuerpo no es un color plano: es una imagen que se repite en
+   vertical, con la luz, la sombra y los nudos ya dibujados. Asi la tuberia puede
+   tener cualquier alto sin que el dibujo se deforme: el patron se repite.
+   64px de ancho / 8 unidades del SVG = 8px por bloque; 10 unidades de alto =
+   80px por nudo. Al ser cuadrada, no se estira.
+   image-rendering: pixelated es la mitad del efecto, igual que en el parallax:
+   sin esa linea el navegador suaviza el SVG y los bloques pierden el filo.
+   El amarillo verdoso tambien es funcional: despega la tuberia del fondo azul. */
+.flappyTuboArriba,
+.flappyTuboAbajo {
+    background-image: url('../assets/tubo-bambu.svg');
+    background-repeat: repeat-y;
+    background-size: 100% 80px;
+    image-rendering: pixelated;
+}
+
 /* El alto lo pone el JS: depende del hueco, que es distinto en cada tubo. */
 .flappyTuboArriba {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #2E7D4F;
 }
 
 /* El de abajo se ancla al piso con bottom: 0 y el JS solo le mueve el top, que
@@ -201,19 +216,22 @@
     bottom: 0;
     width: 100%;
     top: 0; /* valor de arranque, el JS lo pisa en el primer frame */
-    background-color: #2E7D4F;
 }
 
-/* Remate de la boca: sobresale del cuerpo para que la tuberia se lea como
-   tuberia y no como una barra. Sin radio: es pixelart. */
+/* Boca de la cana: sobresale del cuerpo para que la tuberia se lea como tuberia
+   y no como una barra. Es un nudo mas grueso, con el filo claro arriba y el
+   borde oscuro abajo, igual que los nudos del cuerpo. Sin radio: es pixelart. */
 .flappyTuboArriba::after,
 .flappyTuboAbajo::after {
     content: '';
     position: absolute;
     left: -6px;
     width: calc(100% + 12px);
-    height: 14px;
-    background-color: #1E5133;
+    height: 16px;
+    box-sizing: border-box;
+    background-color: #6C7C2A;
+    border-top: 4px solid #DDEA93;
+    border-bottom: 4px solid #5A6820;
 }
 
 .flappyTuboArriba::after {

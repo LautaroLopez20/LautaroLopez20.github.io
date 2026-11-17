@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 10" width="8" height="10" shape-rendering="crispEdges">
+  <!-- Cana de bambu, textura que se repite en vertical.
+       Grilla de 8px: el SVG mide 8 unidades de ancho y el CSS lo estira a 64px,
+       asi que cada unidad es un bloque de 8px. De alto mide 10 unidades = 80px,
+       que es la cadencia de los nudos.
+       El amarillo verdoso no es capricho: el fondo de la escena es azul y verde
+       azulado, y con este tono las tuberias se despegan aunque haya neblina. -->
+
+  <!-- Cuerpo: base, luz a la izquierda y sombra a la derecha. Las tres son
+       franjas verticales de ancho fijo, no un degradé: el pixelart no tiene
+       medios tonos. -->
+  <rect width="8" height="10" fill="#A8BE4A"/>
+  <rect x="0" width="2" height="10" fill="#C6D96B"/>
+  <rect x="6" width="2" height="10" fill="#7F9034"/>
+
+  <!-- Nudo: una linea clara arriba y una banda oscura abajo, cruzando todo el
+       ancho. Van despues de la luz y la sombra para taparlas, porque el nudo
+       es una anillo entero y no esta sombreado como el cuerpo. -->
+  <rect y="4" width="8" height="1" fill="#DDEA93"/>
+  <rect y="5" width="8" height="1" fill="#6C7C2A"/>
+</svg>
