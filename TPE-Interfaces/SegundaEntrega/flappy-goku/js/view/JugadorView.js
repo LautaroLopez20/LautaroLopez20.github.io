@@ -6,25 +6,62 @@
    La posicion va por transform y no por top/left. Mover top/left en cada frame
    obliga al navegador a recalcular el layout del tablero entero; transform lo
    resuelve el compositor y el frame no se cae.
+
+   Las animaciones del sprite se manejan por clases CSS: flying en loop, jump
+   una vez y vuelve a flying, death una vez y se congela en el ultimo frame.
    ============================================================================ */
 
 class JugadorView {
+    static ANIM_FLYING = 'flappyPelota--flying';
+    static ANIM_JUMP = 'flappyPelota--jump';
+    static ANIM_DEATH = 'flappyPelota--death';
+
     constructor(elemento) {
         this.elemento = elemento;
+        this.animacion = 'flying';
+        this.muerto = false;
+
+        this.elemento.addEventListener('animationend', this.alTerminarAnimacion);
+        this.aplicarAnimacion('flying');
     }
 
-    /* El tamano sale del CSS en vez de ser otra constante duplicada en el JS:
-       si algun dia cambia `.flappyPelota`, el hitbox se entera solo. */
+    /* Tamano logico para la fisica. No depende del sprite visible porque jump y
+       death desbordan el contenedor base; la caja fisica sigue siendo la de flying. */
     get tamano() {
-        return this.elemento.offsetWidth;
+        return 64;
+    }
+
+    reiniciar() {
+        this.muerto = false;
+        this.aplicarAnimacion('flying');
+    }
+
+    saltar() {
+        if (this.muerto) return;
+        this.aplicarAnimacion('jump');
     }
 
     dibujar(jugador) {
         this.elemento.style.transform = `translate(${jugador.x}px, ${jugador.y}px)`;
 
-        /* Cada estado es una clase, como pide el apunte de clase: el color no
-           se escribe desde aca, se elige una clase y el CSS decide. */
-        this.elemento.classList.toggle('flappyPelota--choque', jugador.choque);
-        this.elemento.classList.toggle('flappyPelota--normal', !jugador.choque);
+        if (jugador.choque || !jugador.vivo) {
+            this.muerto = true;
+            if (this.animacion !== 'death') this.aplicarAnimacion('death');
+        }
+    }
+
+    alTerminarAnimacion = (evento) => {
+        if (evento.target !== this.elemento) return;
+
+        if (this.animacion === 'jump' && !this.muerto) {
+            this.aplicarAnimacion('flying');
+        }
+    };
+
+    aplicarAnimacion(nombre) {
+        this.animacion = nombre;
+        this.elemento.classList.toggle(JugadorView.ANIM_FLYING, nombre === 'flying');
+        this.elemento.classList.toggle(JugadorView.ANIM_JUMP, nombre === 'jump');
+        this.elemento.classList.toggle(JugadorView.ANIM_DEATH, nombre === 'death');
     }
 }

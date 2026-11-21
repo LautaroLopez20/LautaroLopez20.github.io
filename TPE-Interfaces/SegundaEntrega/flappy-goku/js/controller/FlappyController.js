@@ -74,6 +74,7 @@ class FlappyController {
 
         this.jugador.reiniciar();
         this.jugador.ubicar(x, y);
+        this.vistas.jugador.reiniciar();
 
         this.estado = FlappyController.LISTO;
         this.vistas.menu.ocultar();
@@ -93,6 +94,7 @@ class FlappyController {
         }
 
         this.jugador.saltar();
+        this.vistas.jugador.saltar();
     }
 
     actualizar(dt) {

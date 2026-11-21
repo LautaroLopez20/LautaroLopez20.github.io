@@ -17,9 +17,9 @@ class Jugador {
     static CAIDA_MAXIMA = 900;   // 15 px/frame * 60
 
     /* El hitbox es mas chico que el dibujo: si fuera del tamano del sprite, el
-       jugador muere cuando la imagen todavia no toco nada. Mismo criterio que
-       el codigo base (40x35 sobre un sprite de 75x80). */
-    static MARGEN_HITBOX = 8;
+       jugador muere cuando la imagen todavia no toco nada. Con Goku a 64x64, el
+       margen se ajusta para seguir siendo permisivo con el arte pixelado. */
+    static MARGEN_HITBOX = 12;
 
     constructor(tamano, altoJugable) {
         this.tamano = tamano;
@@ -78,9 +78,9 @@ class Jugador {
     /* La caja real con la que se prueba la colision, centrada en el sprite. */
     caja() {
         return {
-            x: this.x + Jugador.MARGEN_HITBOX,
+            x: this.x + Jugador.MARGEN_HITBOX + 4,
             y: this.y + Jugador.MARGEN_HITBOX,
-            ancho: this.hitbox,
+            ancho: this.hitbox - 8,
             alto: this.hitbox
         };
     }
