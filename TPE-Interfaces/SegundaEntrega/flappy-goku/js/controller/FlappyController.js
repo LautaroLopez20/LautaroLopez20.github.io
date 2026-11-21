@@ -110,7 +110,15 @@ class FlappyController {
         this.jugador.actualizar(dt);
         this.modelo.actualizar(dt, this.jugador.x + this.jugador.tamano / 2);
 
-        if (this.modelo.colisionaCon(this.jugador.caja()) || this.jugador.tocaElSuelo()) {
+        if (this.modelo.colisionaCon(this.jugador.caja())) {
+            const murio = this.jugador.recibirGolpeObstaculo();
+            if (murio) {
+                this.terminar();
+                return;
+            }
+        }
+
+        if (this.jugador.tocaElSuelo()) {
             this.terminar();
         }
     }
@@ -126,6 +134,7 @@ class FlappyController {
         this.vistas.jugador.dibujar(this.jugador);
         this.vistas.tubos.dibujar(this.modelo.tubos);
         this.vistas.marcador.dibujar(this.modelo.puntaje);
+        this.vistas.vidas.dibujar(this.jugador.vidas);
     }
 
     /* Funcion de flecha como campo de instancia: requestAnimationFrame y los

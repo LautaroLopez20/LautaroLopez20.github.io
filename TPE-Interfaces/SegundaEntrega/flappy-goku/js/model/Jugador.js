@@ -15,6 +15,8 @@ class Jugador {
     static GRAVEDAD = 1080;      // 0.3 px/frame^2 * 60^2
     static IMPULSO = -360;       // -6 px/frame * 60
     static CAIDA_MAXIMA = 900;   // 15 px/frame * 60
+    static VIDAS_INICIALES = 3;
+    static TIEMPO_INVULNERABLE = 1.5;
 
     /* El hitbox es mas chico que el dibujo: si fuera del tamano del sprite, el
        jugador muere cuando la imagen todavia no toco nada. Con Goku a 64x64, el
@@ -30,12 +32,16 @@ class Jugador {
         this.velocidad = 0;
         this.vivo = true;
         this.choque = false;
+        this.vidas = Jugador.VIDAS_INICIALES;
+        this.invulnerable = 0;
     }
 
     reiniciar() {
         this.velocidad = 0;
         this.vivo = true;
         this.choque = false;
+        this.vidas = Jugador.VIDAS_INICIALES;
+        this.invulnerable = 0;
     }
 
     /* Solo se llama al empezar y al reiniciar, no en cada frame. */
@@ -53,6 +59,10 @@ class Jugador {
        piso en vez de quedar congelado en el aire. Lo que se corta al morir es
        el salto, no la fisica. */
     actualizar(dt) {
+        if (this.invulnerable > 0) {
+            this.invulnerable = Math.max(0, this.invulnerable - dt);
+        }
+
         this.velocidad += Jugador.GRAVEDAD * dt;
 
         if (this.velocidad > Jugador.CAIDA_MAXIMA) {
@@ -89,8 +99,26 @@ class Jugador {
         return this.y + this.tamano >= this.altoJugable;
     }
 
+    esInvulnerable() {
+        return this.invulnerable > 0;
+    }
+
+    recibirGolpeObstaculo() {
+        if (!this.vivo || this.esInvulnerable()) return false;
+
+        this.vidas--;
+        if (this.vidas <= 0) {
+            this.morir();
+            return true;
+        }
+
+        this.invulnerable = Jugador.TIEMPO_INVULNERABLE;
+        return false;
+    }
+
     morir() {
         this.vivo = false;
         this.choque = true;
+        this.invulnerable = 0;
     }
 }

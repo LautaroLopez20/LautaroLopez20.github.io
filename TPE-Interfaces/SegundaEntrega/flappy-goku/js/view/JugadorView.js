@@ -33,6 +33,7 @@ class JugadorView {
 
     reiniciar() {
         this.muerto = false;
+        this.elemento.classList.remove('flappyPelota--invulnerable');
         this.aplicarAnimacion('flying');
     }
 
@@ -43,9 +44,11 @@ class JugadorView {
 
     dibujar(jugador) {
         this.elemento.style.transform = `translate(${jugador.x}px, ${jugador.y}px)`;
+        this.elemento.classList.toggle('flappyPelota--invulnerable', jugador.esInvulnerable());
 
         if (jugador.choque || !jugador.vivo) {
             this.muerto = true;
+            this.elemento.classList.remove('flappyPelota--invulnerable');
             if (this.animacion !== 'death') this.aplicarAnimacion('death');
         }
     }

@@ -135,12 +135,24 @@
     image-rendering: pixelated;
 }
 
+.flappyPelota--flying {
+    --sprite-anim: flappyGokuFlying 0.6s steps(4) infinite;
+}
+
+.flappyPelota--jump {
+    --sprite-anim: flappyGokuJump 0.45s steps(7) 1 forwards;
+}
+
+.flappyPelota--death {
+    --sprite-anim: flappyGokuDeath 0.7s steps(4) 1 forwards;
+}
+
 .flappyPelota--flying::before {
     width: 64px;
     height: 64px;
     background-image: url('../assets/Player/flying-goku.png');
     background-size: 256px 64px;
-    animation: flappyGokuFlying 0.6s steps(4) infinite;
+    animation: var(--sprite-anim);
 }
 
 .flappyPelota--jump::before {
@@ -148,7 +160,7 @@
     height: 96px;
     background-image: url('../assets/Player/jump-goku.png');
     background-size: 512px 96px;
-    animation: flappyGokuJump 0.45s steps(7) 1 forwards;
+    animation: var(--sprite-anim);
 }
 
 .flappyPelota--death::before {
@@ -157,7 +169,11 @@
     left: -16px;
     background-image: url('../assets/Player/death-goku.png');
     background-size: 480px 96px;
-    animation: flappyGokuDeath 0.7s steps(4) 1 forwards;
+    animation: var(--sprite-anim);
+}
+
+.flappyPelota--invulnerable::before {
+    animation: var(--sprite-anim), flappyGokuSacudida 0.12s linear infinite, flappyGokuParpadeo 0.25s ease-in-out infinite;
 }
 
 @keyframes flappyGokuFlying {
@@ -173,6 +189,17 @@
 @keyframes flappyGokuDeath {
     from { background-position-x: 0; }
     to { background-position-x: -384px; }
+}
+
+@keyframes flappyGokuSacudida {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
+
+@keyframes flappyGokuParpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
 }
 
 /* ============================== TUBERIAS ============================== */
@@ -274,6 +301,25 @@
     /* Sombra dura, sin blur: el texto tambien es pixel. */
     text-shadow: 0 3px 0 #0C122A;
     pointer-events: none;
+}
+
+.flappyVidas {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 25;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    pointer-events: none;
+}
+
+.flappyVidaIcon {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+    display: block;
+    flex: 0 0 auto;
 }
 
 /* ============================= MENU DEL FIN ============================= */
