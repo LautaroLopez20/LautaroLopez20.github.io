@@ -116,6 +116,15 @@ class Jugador {
         return false;
     }
 
+    /* La senzu cura un corazon y no pasa del maximo. Muerto no se cura: el
+       controlador solo la junta en estado JUGANDO, pero el guardia deja la regla
+       escrita donde vive el estado. */
+    curar() {
+        if (!this.vivo) return;
+
+        this.vidas = Math.min(this.vidas + 1, Jugador.VIDAS_INICIALES);
+    }
+
     morir() {
         this.vivo = false;
         this.choque = true;

@@ -5,8 +5,8 @@ const HERO_SLIDES = 4;
 const HERO_INTERVAL_MS = 4000;
 
 /* Destacado fijo del hero: Blocka es un juego local del sitio y no viene de la
-   API, asi que su card se arma a mano. Ocupa el primer slide y los otros tres
-   salen de los juegos mejor puntuados. */
+   API, asi que su card se arma a mano. Ocupa el primer slide; los otros dos
+   slides son los demas juegos locales y el ultimo, el mejor puntuado de la API. */
 const BLOCKA_HERO = {
     name: 'Blocka',
     href: 'blocka.html',
@@ -18,6 +18,14 @@ const PEG_HERO = {
     name: 'Dragon Ball Z: Peg Solitaire',
     href: 'pegSolitaire.html',
     image: 'img/peg-Solitaire/Portada.jpg'
+};
+
+/* Tercer destacado fijo: Flappy Goku es local, igual que los dos anteriores.
+   Con los tres fijos queda un solo slide para el mejor puntuado de la API. */
+const FLAPPY_HERO = {
+    name: 'Flappy Goku',
+    href: 'flappy-goku.html',
+    image: 'img/flappy-goku/portada.jpg'
 };
 
 const LOADING_DURATION_MS = 5000;
@@ -369,10 +377,10 @@ function buildHero(games) {
     const navigation = document.querySelector('.heroNavigation');
     if (!heroCategory || !track || !navigation) return;
 
-    const featured = [BLOCKA_HERO, PEG_HERO].concat(
+    const featured = [BLOCKA_HERO, PEG_HERO, FLAPPY_HERO].concat(
         [...games]
             .sort((a, b) => b.rating - a.rating)
-            .slice(0, HERO_SLIDES - 2)
+            .slice(0, HERO_SLIDES - 3)
     );
 
     track.innerHTML = '';

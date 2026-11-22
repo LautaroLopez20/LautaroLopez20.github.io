@@ -31,6 +31,13 @@ class TuboView {
                abajo esta anclado al piso con bottom: 0. */
             elemento.querySelector('.flappyTuboArriba').style.height = `${tubo.entrada}px`;
             elemento.querySelector('.flappyTuboAbajo').style.top = `${tubo.entrada + tubo.hueco}px`;
+
+            /* La senzu se saca del DOM al tomarla: es feedback inmediato y evita
+               dejarla oculta para siempre dentro del tubo. */
+            if (tubo.senzuTomada) {
+                const senzu = elemento.querySelector('.flappySenzu');
+                if (senzu) senzu.remove();
+            }
         }
 
         for (const [id, elemento] of this.elementos) {
@@ -45,7 +52,15 @@ class TuboView {
         elemento.className = 'flappyTubo';
         elemento.innerHTML =
             '<div class="flappyTuboArriba"></div>' +
-            '<div class="flappyTuboAbajo"></div>';
+            '<div class="flappyTuboAbajo"></div>' +
+            (tubo.senzu ? '<div class="flappySenzu"><span class="flappySenzuSprite"></span></div>' : '');
+
+        /* El hueco no cambia una vez creado el tubo, asi que la senzu se ubica
+           una sola vez y despues se mueve con el contenedor. */
+        if (tubo.senzu) {
+            elemento.querySelector('.flappySenzu').style.top =
+                `${tubo.entrada + tubo.hueco / 2 - Tubo.SENZU_ALTO / 2}px`;
+        }
 
         this.contenedor.appendChild(elemento);
         this.elementos.set(tubo.id, elemento);

@@ -11,7 +11,9 @@
    rapido (esta mas cerca).
 
    Velocidad base del juego: 120 px/s. El factor de cada capa se traduce en una
-   duracion con duracion = ancho del tile / (120 px/s * factor).
+   duracion con duracion = ancho del tile / (120 px/s * factor). El factor global
+   que sube con el puntaje escala estas duraciones en bloque via playbackRate
+   (js/view/ParallaxView.js), no cambiando el CSS.
 
    Pixelart: los SVG de las capas miden 120 unidades de ancho, sobre una grilla
    de 10. El CSS los estira al ancho del tile y image-rendering: pixelated evita
@@ -61,8 +63,9 @@
     will-change: transform;
 }
 
-/* Las cuatro capas, de la mas lejana a la mas cercana. La duracion es lo unico
-   que cambia la velocidad: mismo tile, menos tiempo, mas rapido.
+/* Las cuatro capas, de la mas lejana a la mas cercana. La duracion define la
+   velocidad relativa entre capas: mismo tile, menos tiempo, mas rapido. El
+   factor global del juego las escala a todas juntas via playbackRate.
    Solo las tres primeras tienen pilares: la cuarta es una franja de vegetacion
    baja para no tapar el area de juego. */
 
@@ -287,6 +290,44 @@
     top: 0;
 }
 
+/* ============================== SENZU ================================= */
+
+/* Semilla curativa: aparece en el centro del hueco de uno de cada cinco tubos.
+   El PNG es un spritesheet de 4 frames de 11x14 con 14px de separacion entre
+   ellos (92x17 en total, con 3px de margen a la izquierda y 2px arriba). Se
+   dibuja a 2x, igual que los corazones, y la animacion de frames avanza de a
+   un paso de 25px de origen (50px al doble). El tamano esta duplicado en
+   `Tubo.SENZU_ANCHO/ALTO` porque el CSS no lee constantes de JS. */
+.flappySenzu {
+    position: absolute;
+    left: calc(50% - 11px);
+    width: 22px;
+    height: 28px;
+    animation: flappySenzuFlota 1.6s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.flappySenzuSprite {
+    display: block;
+    width: 22px;
+    height: 28px;
+    background-image: url('../assets/env/senzu-bean.png');
+    background-repeat: no-repeat;
+    background-size: 184px 34px;
+    image-rendering: pixelated;
+    animation: flappySenzuFrames 0.6s steps(4) infinite;
+}
+
+@keyframes flappySenzuFrames {
+    from { background-position: -6px -4px; }
+    to   { background-position: -206px -4px; }
+}
+
+@keyframes flappySenzuFlota {
+    0%, 100% { transform: translateY(-3px); }
+    50%      { transform: translateY(3px); }
+}
+
 /* =============================== PUNTAJE =============================== */
 
 .flappyPuntaje {
@@ -297,7 +338,7 @@
     z-index: 25;
     font-size: 32px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #B8461D;
     /* Sombra dura, sin blur: el texto tambien es pixel. */
     text-shadow: 0 3px 0 #0C122A;
     pointer-events: none;

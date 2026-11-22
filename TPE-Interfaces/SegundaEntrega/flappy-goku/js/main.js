@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tubos: new TuboView(document.querySelector('.flappyTubos')),
         marcador: new MarcadorView(document.querySelector('.flappyPuntaje')),
         vidas: new VidasView(document.querySelector('.flappyVidas')),
+        parallax: new ParallaxView(document.querySelectorAll('.parallaxCapa')),
         menu: new MenuView(
             document.querySelector('.flappyMenu'),
             document.querySelector('.flappyMenuPuntaje')

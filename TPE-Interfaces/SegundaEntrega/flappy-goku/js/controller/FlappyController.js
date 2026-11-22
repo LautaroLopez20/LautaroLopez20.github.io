@@ -110,12 +110,27 @@ class FlappyController {
         this.jugador.actualizar(dt);
         this.modelo.actualizar(dt, this.jugador.x + this.jugador.tamano / 2);
 
-        if (this.modelo.colisionaCon(this.jugador.caja())) {
+        const caja = this.jugador.caja();
+
+        if (this.modelo.colisionaCon(caja)) {
+            const vidasAntes = this.jugador.vidas;
             const murio = this.jugador.recibirGolpeObstaculo();
+
+            /* Solo frena el golpe que descuenta una vida. Si el jugador esta
+               invulnerable, la caja sigue tocando el tubo cada frame y frenar
+               ahi mandaria la velocidad a cero en un parpadeo. */
+            if (this.jugador.vidas < vidasAntes) {
+                this.modelo.frenar();
+            }
+
             if (murio) {
                 this.terminar();
                 return;
             }
+        }
+
+        if (this.modelo.recogerSenzu(caja)) {
+            this.jugador.curar();
         }
 
         if (this.jugador.tocaElSuelo()) {
@@ -135,6 +150,9 @@ class FlappyController {
         this.vistas.tubos.dibujar(this.modelo.tubos);
         this.vistas.marcador.dibujar(this.modelo.puntaje);
         this.vistas.vidas.dibujar(this.jugador.vidas);
+        this.vistas.parallax.dibujar(this.modelo.factorVelocidad);
+        //Este de abajo para que se frene cuando el parallax cuando moris 
+        this.vistas.parallax.dibujar(this.estado === FlappyController.FIN ? 0 : this.modelo.factorVelocidad);
     }
 
     /* Funcion de flecha como campo de instancia: requestAnimationFrame y los
