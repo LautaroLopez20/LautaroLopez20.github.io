@@ -10,13 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
        no hay nada que iniciar. */
     if (!tablero) return;
 
+    const proyectil = new Proyectil();
+
     /* El mundo arranca sin geometria: las medidas se las pasa el controlador en
        reiniciar(), que es quien mira el tablero. */
-    const modelo = new Mundo();
+    const modelo = new Mundo(0, 0, proyectil);
 
     const vistas = {
         jugador: new JugadorView(document.querySelector('.flappyPelota')),
         tubos: new TuboView(document.querySelector('.flappyTubos')),
+        proyectil: new ProyectilView(document.querySelector('.flappyProyectil')),
         marcador: new MarcadorView(document.querySelector('.flappyPuntaje')),
         vidas: new VidasView(document.querySelector('.flappyVidas')),
         parallax: new ParallaxView(document.querySelectorAll('.parallaxCapa')),
@@ -26,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         )
     };
 
-    const controller = new FlappyController({ tablero, modelo, vistas });
+    const controller = new FlappyController({ tablero, modelo, vistas, proyectil });
 
     controller.init();
 });

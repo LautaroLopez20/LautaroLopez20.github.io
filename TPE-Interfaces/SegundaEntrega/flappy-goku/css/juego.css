@@ -290,6 +290,41 @@
     top: 0;
 }
 
+/* ============================= PROYECTIL ============================== */
+
+.flappyProyectil {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 16;
+    width: 96px;
+    height: 64px;
+    will-change: transform;
+    pointer-events: none;
+}
+
+.flappyProyectil[hidden] {
+    display: none;
+}
+
+.flappyProyectilSprite {
+    display: block;
+    width: 96px;
+    height: 64px;
+    background-image: url('../assets/env/proyectile.png');
+    background-repeat: no-repeat;
+    background-size: 960px 64px;
+    image-rendering: pixelated;
+    transform: scaleX(-1);
+    transform-origin: center;
+    animation: flappyProyectilIdle 0.8s steps(10) infinite;
+}
+
+@keyframes flappyProyectilIdle {
+    from { background-position-x: 0; }
+    to { background-position-x: -960px; }
+}
+
 /* ============================== SENZU ================================= */
 
 /* Semilla curativa: aparece en el centro del hueco de uno de cada cinco tubos.

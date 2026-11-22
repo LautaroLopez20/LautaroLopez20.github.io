@@ -37,10 +37,11 @@ class FlappyController {
        Esta espera lo evita. */
     static ESPERA_REINICIO = 700;
 
-    constructor({ tablero, modelo, vistas }) {
+    constructor({ tablero, modelo, vistas, proyectil }) {
         this.tablero = tablero;
         this.modelo = modelo;
         this.vistas = vistas;
+        this.proyectil = proyectil;
 
         this.jugador = null;
         this.estado = FlappyController.LISTO;
@@ -72,6 +73,7 @@ class FlappyController {
             x + FlappyController.DISTANCIA_PRIMER_TUBO
         );
 
+        this.proyectil.reiniciar(this.ancho, this.altoJugable);
         this.jugador.reiniciar();
         this.jugador.ubicar(x, y);
         this.vistas.jugador.reiniciar();
@@ -109,8 +111,10 @@ class FlappyController {
 
         this.jugador.actualizar(dt);
         this.modelo.actualizar(dt, this.jugador.x + this.jugador.tamano / 2);
+        this.proyectil.actualizar(dt, this.modelo.factorVelocidad);
 
         const caja = this.jugador.caja();
+        const chocoProyectil = this.proyectil.colisionaCon(caja);
 
         if (this.modelo.colisionaCon(caja)) {
             const vidasAntes = this.jugador.vidas;
@@ -121,9 +125,15 @@ class FlappyController {
                ahi mandaria la velocidad a cero en un parpadeo. */
             if (this.jugador.vidas < vidasAntes) {
                 this.modelo.frenar();
+                if (chocoProyectil) {
+                    this.proyectil.desactivar();
+                }
             }
 
             if (murio) {
+                if (chocoProyectil) {
+                    this.proyectil.desactivar();
+                }
                 this.terminar();
                 return;
             }
@@ -148,10 +158,9 @@ class FlappyController {
     dibujar() {
         this.vistas.jugador.dibujar(this.jugador);
         this.vistas.tubos.dibujar(this.modelo.tubos);
+        this.vistas.proyectil.dibujar(this.proyectil);
         this.vistas.marcador.dibujar(this.modelo.puntaje);
         this.vistas.vidas.dibujar(this.jugador.vidas);
-        this.vistas.parallax.dibujar(this.modelo.factorVelocidad);
-        //Este de abajo para que se frene cuando el parallax cuando moris 
         this.vistas.parallax.dibujar(this.estado === FlappyController.FIN ? 0 : this.modelo.factorVelocidad);
     }
 

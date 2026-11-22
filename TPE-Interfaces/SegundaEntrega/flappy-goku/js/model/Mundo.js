@@ -38,13 +38,14 @@ class Mundo {
 
     /* Las dimensiones llegan en reiniciar(), cuando el controlador ya midio el
        tablero. Hasta entonces el mundo no tiene geometria. */
-    constructor(ancho = 0, altoJugable = 0) {
+    constructor(ancho = 0, altoJugable = 0, proyectil = null) {
         this.ancho = ancho;
         this.altoJugable = altoJugable;
         this.tubos = [];
         this.puntaje = 0;
         this.proximoTuboX = ancho;
         this.factorVelocidad = 1;
+        this.proyectil = proyectil;
     }
 
     reiniciar(ancho = this.ancho, altoJugable = this.altoJugable, primerTuboX = ancho) {
@@ -86,7 +87,8 @@ class Mundo {
     }
 
     colisionaCon(caja) {
-        return this.tubos.some((tubo) => tubo.colisionaCon(caja));
+        return this.tubos.some((tubo) => tubo.colisionaCon(caja))
+            || (!!this.proyectil && this.proyectil.colisionaCon(caja));
     }
 
     /* El ejemplo que mando el usuario manda sobre la lectura literal de "bajar
