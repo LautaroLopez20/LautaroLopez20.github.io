@@ -158,6 +158,7 @@
 .flappyPelota--flying::before {
     width: 64px;
     height: 64px;
+    bottom: -12px;
     background-image: url('../assets/Player/flying-goku.png');
     background-size: 256px 64px;
     animation: var(--sprite-anim);
@@ -166,6 +167,7 @@
 .flappyPelota--jump::before {
     width: 64px;
     height: 96px;
+    bottom: -18px;
     background-image: url('../assets/Player/jump-goku.png');
     background-size: 512px 96px;
     animation: var(--sprite-anim);
@@ -175,6 +177,7 @@
     width: 96px;
     height: 96px;
     left: -16px;
+    bottom: -22px;
     background-image: url('../assets/Player/death-goku.png');
     background-size: 480px 96px;
     animation: var(--sprite-anim);
