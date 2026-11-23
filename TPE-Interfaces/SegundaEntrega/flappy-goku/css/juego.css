@@ -37,6 +37,11 @@
     isolation: isolate;
 }
 
+.gameBoardFlappy,
+.gameBoardFlappy * {
+    font-family: 'Press Start 2P', monospace;
+}
+
 /* Anclada a los cuatro bordes del tablero: asi las capas tienen un alto
    definido aunque el tablero lo saque de su aspect-ratio. */
 .flappyEscena {
@@ -371,7 +376,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 25;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
     color: #B8461D;
     /* Sombra dura, sin blur: el texto tambien es pixel. */
@@ -413,7 +418,7 @@
     width: auto;
     aspect-ratio: 1 / 1;
     box-sizing: border-box;
-    padding: 5% 5%;
+    padding: 4% 5%;
     background-image: url('../assets/UI/gameOver-menu.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -440,7 +445,7 @@
 }
 
 .flappyMenuTitulo {
-    font-size: clamp(13px, 1.7vw, 20px);
+    font-size: clamp(8px, 1.7vw, 20px);
 }
 
 .flappyMenuPuntos {
@@ -455,12 +460,13 @@
 }
 
 .flappyMenuPuntaje {
-    font-size: clamp(22px, 2.6vw, 32px);
+    font-size: clamp(20px, 2.6vw, 30px);
     color: inherit;
+    padding-top: 5px;
 }
 
 .flappyMenuReiniciar {
-    font-size: clamp(9px, 1vw, 12px);
+    font-size: clamp(5px, 1vw, 9px);
     white-space: nowrap;
 }
 
