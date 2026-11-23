@@ -22,7 +22,7 @@
 
 .gameBoardFlappy {
     --tile-ancho: 1200px;
-    --suelo-alto: 64px;
+    --suelo-alto: 85px;
     position: relative;
     /* Cielo de dia en franjas duras: un degradé suave delataria vector, y esto
        es pixelart. Mismo recorrido de color que antes, pero escalonado. */
@@ -409,32 +409,65 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 30;
-    padding: 16px 24px;
-    border: 3px solid #F4E3DD;
-    background-color: #0C122A;
-    text-align: center;
+    height: min(288px, 72%);
+    width: auto;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+    padding: 5% 5%;
+    background-image: url('../assets/UI/gameOver-menu.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    image-rendering: pixelated;
+    grid-template-rows: auto 1fr auto;
+    justify-items: center;
+    align-items: center;
     pointer-events: none;
 }
 
 .flappyMenu--visible {
-    display: block;
+    display: grid;
+}
+
+.flappyMenuTitulo,
+.flappyMenuTexto,
+.flappyMenuPuntaje {
+    margin: 0;
+    font-weight: 700;
+    color: #B8461D;
+    text-shadow: 0 3px 0 #0C122A;
+    text-align: center;
+    line-height: 1.1;
 }
 
 .flappyMenuTitulo {
-    margin: 0 0 8px;
-    font-size: 22px;
-    color: #F4E3DD;
+    font-size: clamp(13px, 1.7vw, 20px);
 }
 
-.flappyMenuTexto {
-    margin: 4px 0;
-    font-size: 15px;
-    color: #DCDEE5;
+.flappyMenuPuntos {
+    display: grid;
+    justify-items: center;
+    gap: 4%;
+}
+
+.flappyMenuPuntos .flappyMenuTexto {
+    font-size: clamp(10px, 1.1vw, 14px);
+    letter-spacing: 0.08em;
 }
 
 .flappyMenuPuntaje {
-    font-weight: 700;
-    color: #F5A623;
+    font-size: clamp(22px, 2.6vw, 32px);
+    color: inherit;
+}
+
+.flappyMenuReiniciar {
+    font-size: clamp(9px, 1vw, 12px);
+    white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+    .flappyMenuReiniciar {
+        white-space: normal;
+    }
 }
 
 /* Todas las capas y el suelo comparten este desplazamiento: un tile entero a
