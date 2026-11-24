@@ -30,12 +30,13 @@ class FlappyController {
     static POSICION_X = 0.22;
 
     /* El primer tubo arranca ya metido en el tablero, a esta distancia del
-       jugador. Si esperara en el borde derecho habria medio minuto de vuelo
-       libre antes del primer obstaculo. */
+       jugador. Si esperara en el borde derecho, con 220 px/s habria unos
+       6s (1344px / 220 px/s) de vuelo libre antes del primer obstaculo. */
     static DISTANCIA_PRIMER_TUBO = 400;
 
-    /* El mismo clic que mata puede reiniciar la partida en el frame siguiente.
-       Esta espera lo evita. */
+    /* El mismo clic/tecla que mata puede reiniciar en el frame siguiente.
+       Esta espera lo evita en `impulsar()`. Los botones del cartel de fin
+       llaman a `comenzar()` / `irAlMenu()` y no pasan por este delay. */
     static ESPERA_REINICIO = 700;
 
     constructor({ tablero, modelo, vistas, proyectil }) {
@@ -219,8 +220,10 @@ class FlappyController {
     };
 
     alPresionarTecla = (evento) => {
-        /* Con un menu abierto, Space activa el boton con foco: no tiene que
-           llegar al juego ni scrollear la pagina. */
+        /* Con el menu de inicio abierto el evento se descarta antes de
+           preventDefault: Space queda para el boton con foco y puede
+           scrollear la pagina. Con el cartel de fin, el foco dentro del
+           menu se corta por la clase .flappyMenu. */
         if (this.estado === FlappyController.INICIO) return;
         if (evento.target.closest && evento.target.closest('.flappyMenu')) return;
         if (evento.code !== 'Space' && evento.code !== 'ArrowUp') return;

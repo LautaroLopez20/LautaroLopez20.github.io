@@ -10,9 +10,10 @@
    todas las capas recorren el mismo tile, y la que tarda menos se mueve mas
    rapido (esta mas cerca).
 
-   Velocidad base del juego: 120 px/s. El factor de cada capa se traduce en una
-   duracion con duracion = ancho del tile / (120 px/s * factor). El factor global
-   que sube con el puntaje escala estas duraciones en bloque via playbackRate
+   El parallax tiene su propia base: con un tile de 1200px y la capa mas
+   cercana a 10s, recorre 120 px/s a factor 1. Los tubos usan 220 px/s
+   (`Mundo.VELOCIDAD`), asi que las bases no coinciden. El factor global que
+   sube con el puntaje escala estas duraciones en bloque via playbackRate
    (js/view/ParallaxView.js), no cambiando el CSS.
 
    Pixelart: los SVG de las capas miden 120 unidades de ancho, sobre una grilla
@@ -99,7 +100,7 @@
     z-index: 4;
     height: 240px;
     background-image: url('../assets/parallax/Background2.png');
-    animation-duration: 10s; /* factor 1: igual que el suelo y los tubos */
+    animation-duration: 10s; /* factor 1: 120 px/s; el suelo no se anima y los tubos van a 220 */
 }
 
 /* Suelo: capa propia, fuera del parallax. Un solo color, sin textura, asi que
@@ -335,8 +336,8 @@
 
 /* ============================== SENZU ================================= */
 
-/* Semilla curativa: aparece en el centro del hueco de uno de cada cinco tubos.
-   El PNG es un spritesheet de 4 frames de 11x14 con 14px de separacion entre
+/* Semilla curativa: aparece en el centro del hueco de aprox. uno de cada tres
+   tubos (33%). El PNG es un spritesheet de 4 frames de 11x14 con 14px de separacion entre
    ellos (92x17 en total, con 3px de margen a la izquierda y 2px arriba). Se
    dibuja a 2x, igual que los corazones, y la animacion de frames avanza de a
    un paso de 25px de origen (50px al doble). El tamano esta duplicado en

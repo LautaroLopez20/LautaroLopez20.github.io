@@ -4,23 +4,23 @@
    El jugador no vive aca adentro; el mundo lo recibe por parametro cuando hace
    falta (para puntuar y para probar colisiones).
 
-   VELOCIDAD es la base (120 px/s) y `factorVelocidad` la escala. La capa de
-   parallax mas cercana recorre 1200px en 10s a factor 1, o sea 120 px/s: si los
-   tubos y el parallax no usaran el mismo factor, patinarian entre si, y eso es
-   justo lo que la consigna pide evitar. La vista del parallax escala sus
-   animaciones con playbackRate al mismo factor, asi que las dos cosas siguen
-   pegadas.
+   VELOCIDAD es la base de los tubos (220 px/s) y `factorVelocidad` la escala.
+   El proyectil tiene su propia base (350 px/s) y usa el mismo factor. La capa
+   de parallax mas cercana recorre 1200px en 10s, o sea 120 px/s: comparte el
+   factor, pero no la base. ParallaxView escala sus animaciones con playbackRate
+   por ese factor; no iguala las velocidades base.
    ============================================================================ */
 
 class Mundo {
     static VELOCIDAD = 220;
 
     /* Cada tubo pasado acelera el desplazamiento un 25% sobre la base; cada
-       golpe reduce a la mitad el aumento acumulado (1.5 -> 1.25). */
+       golpe reduce a la mitad el aumento acumulado (1.25 -> 1.125). */
     static ACELERACION_POR_TUBO = 0.25;
 
-    /* El hueco arranca en el 50% del alto jugable y se achica 0.8 puntos
-       porcentuales por tubo pasado, hasta un piso del 25%. */
+    /* El hueco arranca en el 50% del alto jugable y se achica 2.5 puntos
+       porcentuales por tubo pasado (REDUCCION_POR_PUNTO = 0.025), hasta un
+       piso del 25%. */
     static HUECO_INICIAL = 0.5;
     static HUECO_MINIMO = 0.25;
     static REDUCCION_POR_PUNTO = 0.025;
@@ -33,7 +33,7 @@ class Mundo {
     static ESPACIADO_MIN = 300;
     static ESPACIADO_MAX = 460;
 
-    /* Uno de cada tres tubos trae una senzu en el hueco. */
+    /* Aprox. uno de cada tres tubos trae una senzu en el hueco (33%). */
     static PROBABILIDAD_SENZU = 0.33;
 
     /* Las dimensiones llegan en reiniciar(), cuando el controlador ya midio el
@@ -91,8 +91,9 @@ class Mundo {
             || (!!this.proyectil && this.proyectil.colisionaCon(caja));
     }
 
-    /* 5 tubos son 1.5x, un golpe deja 1.25x (+25%), no 0.75x. Se
-       reduce a la mitad el aumento sobre la base, nunca por debajo de 1. */
+    /* Con 5 tubos el factor queda en 2.25x (1 + 5 * 0.25); un golpe reduce
+       a la mitad el aumento acumulado: 1 + (2.25 - 1) / 2 = 1.625x. Nunca
+       baja de 1. */
     frenar() {
         this.factorVelocidad = 1 + (this.factorVelocidad - 1) / 2;
     }
