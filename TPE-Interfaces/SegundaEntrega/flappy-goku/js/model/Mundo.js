@@ -13,7 +13,7 @@
    ============================================================================ */
 
 class Mundo {
-    static VELOCIDAD = 120;
+    static VELOCIDAD = 220;
 
     /* Cada tubo pasado acelera el desplazamiento un 25% sobre la base; cada
        golpe reduce a la mitad el aumento acumulado (1.5 -> 1.25). */

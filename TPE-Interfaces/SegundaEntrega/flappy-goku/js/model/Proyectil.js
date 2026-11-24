@@ -53,7 +53,10 @@ class Proyectil {
 
     caja() {
         if (!this.activo) return null;
-        return { x: this.x, y: this.y, ancho: Proyectil.ANCHO, alto: Proyectil.ALTO };
+        return { x: this.x,
+                 y: this.y,    
+                 ancho: Proyectil.ANCHO - 20,  
+                 alto: Proyectil.ALTO - 16 };
     }
 
     colisionaCon(caja) {
