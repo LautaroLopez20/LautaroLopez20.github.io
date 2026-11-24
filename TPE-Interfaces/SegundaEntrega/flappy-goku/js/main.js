@@ -25,7 +25,25 @@ document.addEventListener('DOMContentLoaded', () => {
         parallax: new ParallaxView(document.querySelectorAll('.parallaxCapa')),
         menu: new MenuView(
             document.querySelector('.flappyMenu'),
-            document.querySelector('.flappyMenuPuntaje')
+            document.querySelector('.flappyMenuPuntaje'),
+            {
+                reiniciar: document.querySelector('#btnReiniciarFin'),
+                irAlMenu: document.querySelector('#btnIrAlMenu'),
+                onReiniciar: () => controller.comenzar(),
+                onIrAlMenu: () => controller.irAlMenu()
+            }
+        ),
+        menuInicio: new MenuInicioView(
+            {
+                inicio: document.querySelector('.flappyMenu--inicio'),
+                ayuda: document.querySelector('.flappyMenu--ayuda')
+            },
+            {
+                iniciar: document.querySelector('#btnIniciar'),
+                comoJugar: document.querySelector('#btnComoJugar'),
+                volver: document.querySelector('#btnVolverAyuda'),
+                onIniciar: () => controller.comenzar()
+            }
         )
     };
 

@@ -14,6 +14,7 @@
    ============================================================================ */
 
 class FlappyController {
+    static INICIO = 'inicio';
     static LISTO = 'listo';
     static JUGANDO = 'jugando';
     static FIN = 'fin';
@@ -57,6 +58,9 @@ class FlappyController {
         this.registrarEventos();
         this.reiniciarPartida();
 
+        this.estado = FlappyController.INICIO;
+        this.vistas.menuInicio.mostrarInicio();
+
         this.ultimoTiempo = performance.now();
         requestAnimationFrame(this.frame);
     }
@@ -77,6 +81,7 @@ class FlappyController {
         this.jugador.reiniciar();
         this.jugador.ubicar(x, y);
         this.vistas.jugador.reiniciar();
+        this.vistas.menuInicio.ocultar();
 
         this.estado = FlappyController.LISTO;
         this.vistas.menu.ocultar();
@@ -86,6 +91,8 @@ class FlappyController {
     /* Un solo punto de entrada para las tres formas de impulsar: clic, espacio
        y flecha arriba. */
     impulsar() {
+        if (this.estado === FlappyController.INICIO) return;
+
         if (this.estado === FlappyController.FIN) {
             if (performance.now() - this.finEn < FlappyController.ESPERA_REINICIO) return;
             this.reiniciarPartida();
@@ -97,6 +104,29 @@ class FlappyController {
 
         this.jugador.saltar();
         this.vistas.jugador.saltar();
+    }
+
+     /* El boton "Iniciar partida" llama aca. Si viene del menu, la partida
+       ya fue preparada por init(): reiniciar de nuevo cambiaria los tubos
+       que el jugador estaba viendo. */
+    comenzar() {
+        if (this.estado === FlappyController.INICIO) {
+            this.vistas.menuInicio.ocultar();
+            this.estado = FlappyController.LISTO;
+        } else {
+            this.reiniciarPartida();
+        }
+
+        document.activeElement.blur();
+        this.impulsar();
+    }
+
+    /* El boton "Ir al menu" del cartel de fin llama aca. */
+    irAlMenu() {
+        this.reiniciarPartida();
+        this.estado = FlappyController.INICIO;
+        document.activeElement.blur();
+        this.vistas.menuInicio.mostrarInicio();
     }
 
     actualizar(dt) {
@@ -183,11 +213,16 @@ class FlappyController {
         window.addEventListener('resize', this.alRedimensionar);
     }
 
-    alSenalar = () => {
+    alSenalar = (evento) => {
+        if (evento.target.closest('.flappyMenu')) return;
         this.impulsar();
     };
 
     alPresionarTecla = (evento) => {
+        /* Con un menu abierto, Space activa el boton con foco: no tiene que
+           llegar al juego ni scrollear la pagina. */
+        if (this.estado === FlappyController.INICIO) return;
+        if (evento.target.closest && evento.target.closest('.flappyMenu')) return;
         if (evento.code !== 'Space' && evento.code !== 'ArrowUp') return;
 
         /* Si el foco esta en el buscador o en el textarea de comentarios, el
@@ -207,11 +242,17 @@ class FlappyController {
     };
 
     alRedimensionar = () => {
-        /* Cambiar el tamano del tablero deja los tubos con una geometria que ya
-           no corresponde. Se vuelve a empezar en vez de intentar reacomodarlos. */
-        if (this.medir()) {
+        const cambio = this.medir();
+        if (!cambio) return;
+
+        if (this.estado === FlappyController.INICIO) {
             this.reiniciarPartida();
+            this.estado = FlappyController.INICIO;
+            this.vistas.menuInicio.mostrarInicio();
+            return;
         }
+
+        this.reiniciarPartida();
     };
 
     /* Devuelve si el tablero cambio de tamano, para no reiniciar la partida en

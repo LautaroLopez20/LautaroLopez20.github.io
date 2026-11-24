@@ -82,13 +82,34 @@
                 <div class="flappyVidas" aria-label="Vidas: 3"></div>
                 <div class="flappyPuntaje">0</div>
 
-                <div class="flappyMenu">
+                <div class="flappyMenu flappyMenu--fin">
                     <p class="flappyMenuTitulo">FIN DE LA PARTIDA</p>
                     <div class="flappyMenuPuntos">
                         <p class="flappyMenuTexto">PUNTOS</p>
                         <p class="flappyMenuPuntaje">0</p>
                     </div>
-                    <p class="flappyMenuTexto flappyMenuReiniciar">CLICK O ESPACIO PARA REINICIAR</p>
+                    <div class="flappyMenuAcciones">
+                        <button type="button" class="flappyMenuBoton" id="btnReiniciarFin">REINICIAR</button>
+                        <button type="button" class="flappyMenuBoton flappyMenuBoton--secundario" id="btnIrAlMenu">IR AL MENÚ</button>
+                    </div>
+                </div>
+
+                <div class="flappyMenu flappyMenu--inicio flappyMenu--visible" id="menuInicio" role="dialog" aria-modal="true" aria-labelledby="menuInicioTitulo">
+                    <h1 class="flappyMenuTitulo" id="menuInicioTitulo">FLAPPY GOKU</h1>
+                    <div class="flappyMenuAcciones">
+                        <button type="button" class="flappyMenuBoton" id="btnIniciar">INICIAR PARTIDA</button>
+                        <button type="button" class="flappyMenuBoton flappyMenuBoton--secundario" id="btnComoJugar">¿CÓMO SE JUEGA?</button>
+                    </div>
+                </div>
+
+                <div class="flappyMenu flappyMenu--ayuda" id="menuAyuda" role="dialog" aria-modal="true" aria-labelledby="menuAyudaTitulo">
+                    <p class="flappyMenuTitulo" id="menuAyudaTitulo">CÓMO SE JUEGA</p>
+                    <div class="flappyAyudaTexto">
+                        <p>Click, barra espaciadora o flecha arriba = un salto. <br>Cada pilar que pasás suma 1 punto.</p>
+                        <p>Agarrá una semilla senzu para recuperar una vida.</p>
+                        <p>Chocar un pilar te quita una vida; tocar el suelo termina la partida, cuidado con los proyectiles.</p>
+                    </div>
+                    <button type="button" class="flappyMenuBoton flappyMenuBoton--secundario" id="btnVolverAyuda">VOLVER</button>
                 </div>
             </div>
         </div>

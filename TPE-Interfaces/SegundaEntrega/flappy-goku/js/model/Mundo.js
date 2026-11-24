@@ -15,15 +15,15 @@
 class Mundo {
     static VELOCIDAD = 120;
 
-    /* Cada tubo pasado acelera el desplazamiento un 10% sobre la base; cada
+    /* Cada tubo pasado acelera el desplazamiento un 25% sobre la base; cada
        golpe reduce a la mitad el aumento acumulado (1.5 -> 1.25). */
-    static ACELERACION_POR_TUBO = 0.1;
+    static ACELERACION_POR_TUBO = 0.25;
 
-    /* El hueco arranca en el 42% del alto jugable y se achica 0.8 puntos
-       porcentuales por tubo pasado, hasta un piso del 26%. */
-    static HUECO_INICIAL = 0.42;
-    static HUECO_MINIMO = 0.26;
-    static REDUCCION_POR_PUNTO = 0.008;
+    /* El hueco arranca en el 50% del alto jugable y se achica 0.8 puntos
+       porcentuales por tubo pasado, hasta un piso del 25%. */
+    static HUECO_INICIAL = 0.5;
+    static HUECO_MINIMO = 0.25;
+    static REDUCCION_POR_PUNTO = 0.025;
 
     /* Aire que queda arriba y abajo para que el hueco nunca toque los bordes. */
     static MARGEN_VERTICAL = 24;

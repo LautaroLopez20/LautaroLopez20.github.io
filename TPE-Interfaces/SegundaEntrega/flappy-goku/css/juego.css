@@ -408,8 +408,8 @@
 
 /* ============================= MENU DEL FIN ============================= */
 
-/* pointer-events: none para que el clic que reinicia llegue al tablero: el
-   cartel cae justo en el medio, que es donde el jugador hace clic. */
+/* Cartel centrado sobre el tablero. El puntero lo captura cada menu cuando
+   esta visible, para que los botones no arrastren el clic al tablero. */
 .flappyMenu {
     display: none;
     position: absolute;
@@ -432,8 +432,15 @@
     pointer-events: none;
 }
 
+/* El cartel de fin suma puntaje y dos botones: con el alto base el bloque de
+   puntos queda comprimido. */
+.flappyMenu--fin {
+    height: min(360px, 80%);
+}
+
 .flappyMenu--visible {
     display: grid;
+    pointer-events: auto;
 }
 
 .flappyMenuTitulo,
@@ -468,15 +475,80 @@
     padding-top: 5px;
 }
 
-.flappyMenuReiniciar {
-    font-size: clamp(5px, 1vw, 9px);
-    white-space: nowrap;
+/* ==================== MENU DE INICIO / AYUDA ==================== */
+
+/* A diferencia del cartel de fin, acá hay botones: el clic tiene que
+   quedarse en el cartel, no llegar al tablero. */
+.flappyMenu--inicio,
+.flappyMenu--ayuda {
+    grid-template-rows: auto 1fr auto;
+    gap: 4%;
+    pointer-events: auto;
 }
 
-@media (max-width: 700px) {
-    .flappyMenuReiniciar {
-        white-space: normal;
-    }
+.flappyMenuAcciones {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+/* shortcut: alto automatico sin scroll por pedido; en tableros mas bajos que
+   el texto, se recorta. Agregar max-height + overflow si el texto crece. */
+.flappyMenu--ayuda.flappyMenu--visible {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    aspect-ratio: auto;
+    width: min(90%, 440px);
+    height: auto;
+}
+
+.flappyAyudaTexto {
+    font-size: clamp(9px, 1vw, 11px);
+    line-height: 1.5;
+    text-align: center;
+    color: #FFF2D5;
+    text-shadow: 0 1px 0 #0C122A;
+}
+
+.flappyAyudaTexto p {
+    margin: 0 0 8px;
+}
+
+.flappyMenuBoton {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 2px solid #0C122A;
+    border-radius: 0;
+    background: #B8461D;
+    color: #FFF2D5;
+    font: inherit;
+    font-size: clamp(6px, 1.1vw, 12px);
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #0C122A;
+}
+
+.flappyMenuBoton--secundario {
+    background: #0C122A;
+    color: #B8461D;
+}
+
+.flappyMenuBoton:hover {
+    filter: brightness(1.15);
+}
+
+.flappyMenuBoton:focus-visible {
+    outline: 3px solid #FFF2D5;
+    outline-offset: 2px;
+}
+
+.flappyMenuBoton:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #0C122A;
 }
 
 /* Todas las capas y el suelo comparten este desplazamiento: un tile entero a
