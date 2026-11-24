@@ -5,10 +5,6 @@
    Las magnitudes van en px/s y px/s^2, no en px por frame. Asi el salto mide
    lo mismo en un monitor de 60Hz que en uno de 144Hz, y el juego se comporta
    igual si la pestana estuvo en segundo plano.
-
-   Los numeros salen de codigo-base/js/flappy-anivia/model/Anivia.js, que los
-   tiene por frame (0.3 de gravedad, -6 de impulso, 15 de caida maxima).
-   Multiplicados por 60 (o por 60^2 la gravedad) dan los mismos px/s.
    ============================================================================ */
 
 class Jugador {
@@ -71,8 +67,8 @@ class Jugador {
 
         this.y += this.velocidad * dt;
 
-        /* Techo: se frena contra el borde en vez de morir, igual que el codigo
-           base. Matar contra el techo hace el juego injusto. */
+        /* Techo: se frena contra el borde en vez de morir.
+         Matar contra el techo hace el juego injusto. */
         if (this.y < 0) {
             this.y = 0;
             this.velocidad = 0;

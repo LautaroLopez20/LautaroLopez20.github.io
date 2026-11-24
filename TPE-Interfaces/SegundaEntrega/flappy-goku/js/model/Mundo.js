@@ -91,8 +91,7 @@ class Mundo {
             || (!!this.proyectil && this.proyectil.colisionaCon(caja));
     }
 
-    /* El ejemplo que mando el usuario manda sobre la lectura literal de "bajar
-       a la mitad": 5 tubos son 1.5x, un golpe deja 1.25x (+25%), no 0.75x. Se
+    /* 5 tubos son 1.5x, un golpe deja 1.25x (+25%), no 0.75x. Se
        reduce a la mitad el aumento sobre la base, nunca por debajo de 1. */
     frenar() {
         this.factorVelocidad = 1 + (this.factorVelocidad - 1) / 2;
